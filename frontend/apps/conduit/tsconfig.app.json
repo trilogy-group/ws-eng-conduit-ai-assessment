@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "types": [],
+    "target": "ES2022",
+    "useDefineForClassFields": false
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "exclude": [
+    "src/test-setup.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "jest.config.ts",
+    "**/*.stories.ts",
+    "**/*.stories.js"
+  ]
+}

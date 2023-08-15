@@ -1,0 +1,24 @@
+{
+  "name": "articles-feature-article",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/articles/feature-article/src",
+  "prefix": "cdt",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/articles/feature-article"],
+      "options": {
+        "jestConfig": "libs/articles/feature-article/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/articles/feature-article/src/**/*.ts", "libs/articles/feature-article/src/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

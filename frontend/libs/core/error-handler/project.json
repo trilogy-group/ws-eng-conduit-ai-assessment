@@ -1,0 +1,24 @@
+{
+  "name": "core-error-handler",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/core/error-handler/src",
+  "prefix": "cdt",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/core/error-handler"],
+      "options": {
+        "jestConfig": "libs/core/error-handler/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/core/error-handler/src/**/*.ts", "libs/core/error-handler/src/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

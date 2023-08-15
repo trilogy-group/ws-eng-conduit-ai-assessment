@@ -1,0 +1,20 @@
+<div class="auth-page">
+  <div class="container page">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 col-xs-12">
+        <h1 class="text-xs-center">Sign in</h1>
+        <p class="text-xs-center">
+          <a [routerLink]="['/register']">Need an account?</a>
+        </p>
+
+        <cdt-list-errors></cdt-list-errors>
+
+        <cdt-dynamic-form (updateForm)="updateForm($event)" [data$]="data$" [structure$]="structure$">
+        </cdt-dynamic-form>
+        <button data-e2e-id="sign-in" (click)="submit()" class="btn btn-lg btn-primary pull-xs-right" type="submit">
+          Sign in
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+dist
+temp
+
+# Logs
+logs
+*.log
+.DS_Store
+
+npm-debug.log*
+
+# Dependency directory
+node_modules
+
+# Optional npm cache directory
+.npm
+
+#IDEs
+.idea
+
+# code testing coverage
+coverage
+.yarn
