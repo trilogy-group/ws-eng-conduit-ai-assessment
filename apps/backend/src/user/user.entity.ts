@@ -2,7 +2,8 @@ import { IsEmail } from 'class-validator';
 import crypto from 'crypto';
 import {
   Collection,
-  Entity, EntityDTO,
+  Entity,
+  EntityDTO,
   EntityRepositoryType,
   ManyToMany,
   OneToMany,
@@ -15,7 +16,6 @@ import { UserRepository } from './user.repository';
 
 @Entity({ customRepository: () => UserRepository })
 export class User {
-
   [EntityRepositoryType]?: UserRepository;
 
   @PrimaryKey({ type: 'number' })
@@ -40,13 +40,21 @@ export class User {
   @ManyToMany({ entity: () => Article, hidden: true })
   favorites = new Collection<Article>(this);
 
-  @ManyToMany({ entity: () => User, inversedBy: u => u.followed, owner: true, pivotTable: 'user_to_follower', joinColumn: 'follower', inverseJoinColumn: 'following', hidden: true })
+  @ManyToMany({
+    entity: () => User,
+    inversedBy: (u) => u.followed,
+    owner: true,
+    pivotTable: 'user_to_follower',
+    joinColumn: 'follower',
+    inverseJoinColumn: 'following',
+    hidden: true,
+  })
   followers = new Collection<User>(this);
 
-  @ManyToMany(() => User, u => u.followers, { hidden: true })
+  @ManyToMany(() => User, (u) => u.followers, { hidden: true })
   followed = new Collection<User>(this);
 
-  @OneToMany(() => Article, article => article.author, { hidden: true })
+  @OneToMany(() => Article, (article) => article.author, { hidden: true })
   articles = new Collection<Article>(this);
 
   constructor(username: string, email: string, password: string) {
@@ -62,7 +70,6 @@ export class User {
 
     return o;
   }
-
 }
 
 interface UserDTO extends EntityDTO<User> {

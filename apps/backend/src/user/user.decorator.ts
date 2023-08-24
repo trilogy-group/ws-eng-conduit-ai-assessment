@@ -17,5 +17,4 @@ export const User = createParamDecorator((data, ctx: ExecutionContext) => {
     const decoded: any = jwt.verify(token[1], SECRET);
     return !!data ? decoded[data] : decoded.user;
   }
-
 });

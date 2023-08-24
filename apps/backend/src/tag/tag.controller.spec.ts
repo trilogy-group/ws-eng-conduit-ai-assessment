@@ -1,6 +1,6 @@
 import config from '../mikro-orm.config';
 import { Test } from '@nestjs/testing';
-import { MikroOrmModule } from '@mikro-orm/nestjs'
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { TagController } from './tag.controller';
 import { Tag } from './tag.entity';
 import { TagService } from './tag.service';

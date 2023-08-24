@@ -6,17 +6,14 @@ import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class ProfileService {
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly em: EntityManager,
-  ) {}
+  constructor(private readonly userRepository: UserRepository, private readonly em: EntityManager) {}
 
   async findAll(): Promise<User[]> {
     return this.userRepository.findAll();
   }
 
   async findOne(options?: FilterQuery<User>): Promise<IProfileRO> {
-    const user = await this.userRepository.findOne(options ?? {}) as any;
+    const user = (await this.userRepository.findOne(options ?? {})) as any;
 
     if (!user) {
       throw new HttpException('User cannot be found.', HttpStatus.BAD_REQUEST);
@@ -31,9 +28,12 @@ export class ProfileService {
   }
 
   async findProfile(id: number, followingUsername: string): Promise<IProfileRO> {
-    const foundProfile = await this.userRepository.findOne({ username: followingUsername }, {
-      populate: ['followers'],
-    });
+    const foundProfile = await this.userRepository.findOne(
+      { username: followingUsername },
+      {
+        populate: ['followers'],
+      },
+    );
     const follower = this.userRepository.getReference(id);
 
     if (!foundProfile) {
@@ -55,9 +55,12 @@ export class ProfileService {
       throw new HttpException('Follower email and username not provided.', HttpStatus.BAD_REQUEST);
     }
 
-    const followingUser = await this.userRepository.findOne({ username }, {
-      populate: ['followers'],
-    });
+    const followingUser = await this.userRepository.findOne(
+      { username },
+      {
+        populate: ['followers'],
+      },
+    );
     const followerUser = await this.userRepository.findOne({ email: followerEmail });
 
     if (!followingUser || !followerUser) {
@@ -86,9 +89,12 @@ export class ProfileService {
       throw new HttpException('FollowerId and username not provided.', HttpStatus.BAD_REQUEST);
     }
 
-    const followingUser = await this.userRepository.findOne({ username }, {
-      populate: ['followers'],
-    });
+    const followingUser = await this.userRepository.findOne(
+      { username },
+      {
+        populate: ['followers'],
+      },
+    );
     const followerUser = this.userRepository.getReference(followerId);
 
     if (!followingUser || !followerUser) {

@@ -10,13 +10,7 @@ import { UserModule } from './user/user.module';
 import ormConfig from '../mikro-orm.config';
 @Module({
   controllers: [AppController],
-  imports: [
-    MikroOrmModule.forRoot(ormConfig),
-    ArticleModule,
-    UserModule,
-    ProfileModule,
-    TagModule,
-  ],
+  imports: [MikroOrmModule.forRoot(ormConfig), ArticleModule, UserModule, ProfileModule, TagModule],
   providers: [],
 })
 export class AppModule implements NestModule, OnModuleInit {

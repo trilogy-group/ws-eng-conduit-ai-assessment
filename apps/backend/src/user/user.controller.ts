@@ -5,16 +5,12 @@ import { User } from './user.decorator';
 import { IUserRO } from './user.interface';
 import { UserService } from './user.service';
 
-import {
-  ApiBearerAuth,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @ApiTags('user')
 @Controller()
 export class UserController {
-
   constructor(private readonly userService: UserService) {}
 
   @Get('user')

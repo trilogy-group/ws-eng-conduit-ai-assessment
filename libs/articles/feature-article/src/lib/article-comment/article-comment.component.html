@@ -11,7 +11,7 @@
       {{ comment.author.username }}
     </a>
     <span class="date-posted">
-      {{ comment.createdAt | date: 'longDate' }}
+      {{ comment.createdAt | date : 'longDate' }}
     </span>
     <span class="mod-options" [hidden]="currentUser.username !== comment.author.username">
       <i class="ion-trash-a" (click)="delete.emit({ commentId: comment.id, slug: article.slug })"></i>

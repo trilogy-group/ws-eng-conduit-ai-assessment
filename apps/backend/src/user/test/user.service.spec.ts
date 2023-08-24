@@ -56,7 +56,7 @@ describe('UsersService', () => {
         {
           provide: EntityManager,
           useValue: mockEntityManager,
-        }
+        },
       ],
     }).compile();
 

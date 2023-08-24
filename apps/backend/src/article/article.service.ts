@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, QueryOrder, wrap } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs'
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/mysql';
 
 import { User } from '../user/user.entity';
@@ -11,7 +11,6 @@ import { CreateArticleDto, CreateCommentDto } from './dto';
 
 @Injectable()
 export class ArticleService {
-
   constructor(
     private readonly em: EntityManager,
     @InjectRepository(Article)
@@ -23,11 +22,10 @@ export class ArticleService {
   ) {}
 
   async findAll(userId: number, query: Record<string, string>): Promise<IArticlesRO> {
-    const user = userId ? await this.userRepository.findOne(userId, { populate: ['followers', 'favorites'] }) : undefined;
-    const qb = this.articleRepository
-      .createQueryBuilder('a')
-      .select('a.*')
-      .leftJoin('a.author', 'u');
+    const user = userId
+      ? await this.userRepository.findOne(userId, { populate: ['followers', 'favorites'] })
+      : undefined;
+    const qb = this.articleRepository.createQueryBuilder('a').select('a.*').leftJoin('a.author', 'u');
 
     if ('tag' in query) {
       qb.andWhere({ tagList: new RegExp(query.tag) });
@@ -68,24 +66,31 @@ export class ArticleService {
 
     const articles = await qb.getResult();
 
-    return { articles: articles.map(a => a.toJSON(user!)), articlesCount };
+    return { articles: articles.map((a) => a.toJSON(user!)), articlesCount };
   }
 
   async findFeed(userId: number, query: Record<string, string>): Promise<IArticlesRO> {
-    const user = userId ? await this.userRepository.findOne(userId, { populate: ['followers', 'favorites'] }) : undefined;
-    const res = await this.articleRepository.findAndCount({ author: { followers: userId } }, {
-      populate: ['author'],
-      orderBy: { createdAt: QueryOrder.DESC },
-      limit: +query.limit,
-      offset: +query.offset,
-    });
+    const user = userId
+      ? await this.userRepository.findOne(userId, { populate: ['followers', 'favorites'] })
+      : undefined;
+    const res = await this.articleRepository.findAndCount(
+      { author: { followers: userId } },
+      {
+        populate: ['author'],
+        orderBy: { createdAt: QueryOrder.DESC },
+        limit: +query.limit,
+        offset: +query.offset,
+      },
+    );
 
     console.log('findFeed', { articles: res[0], articlesCount: res[1] });
-    return { articles: res[0].map(a => a.toJSON(user!)), articlesCount: res[1] };
+    return { articles: res[0].map((a) => a.toJSON(user!)), articlesCount: res[1] };
   }
 
   async findOne(userId: number, where: Partial<Article>): Promise<IArticleRO> {
-    const user = userId ? await this.userRepository.findOneOrFail(userId, { populate: ['followers', 'favorites'] }) : undefined;
+    const user = userId
+      ? await this.userRepository.findOneOrFail(userId, { populate: ['followers', 'favorites'] })
+      : undefined;
     const article = await this.articleRepository.findOne(where, { populate: ['author'] });
     return { article: article && article.toJSON(user) } as IArticleRO;
   }
@@ -144,7 +149,10 @@ export class ArticleService {
   }
 
   async create(userId: number, dto: CreateArticleDto) {
-    const user = await this.userRepository.findOne({ id: userId }, { populate: ['followers', 'favorites', 'articles'] });
+    const user = await this.userRepository.findOne(
+      { id: userId },
+      { populate: ['followers', 'favorites', 'articles'] },
+    );
     const article = new Article(user!, dto.title, dto.description, dto.body);
     article.tagList.push(...dto.tagList);
     user?.articles.add(article);
@@ -154,7 +162,10 @@ export class ArticleService {
   }
 
   async update(userId: number, slug: string, articleData: any): Promise<IArticleRO> {
-    const user = await this.userRepository.findOne({ id: userId }, { populate: ['followers', 'favorites', 'articles'] });
+    const user = await this.userRepository.findOne(
+      { id: userId },
+      { populate: ['followers', 'favorites', 'articles'] },
+    );
     const article = await this.articleRepository.findOne({ slug }, { populate: ['author'] });
     wrap(article).assign(articleData);
     await this.em.flush();
@@ -165,5 +176,4 @@ export class ArticleService {
   async delete(slug: string) {
     return this.articleRepository.nativeDelete({ slug });
   }
-
 }
