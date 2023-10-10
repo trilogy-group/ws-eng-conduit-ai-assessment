@@ -1,0 +1,41 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Seed
+    init: |
+      WAIT_HOSTS=localhost:3000 WAIT_TIMEOUT=600 /usr/bin/wait 
+      npm run seed
+      exit
+    command: exit
+
+  - name: Readme
+    command: gp open README.md && exit
+
+  - name: App
+    init: |
+      npx -y yarn install
+      mysql -u root -e "CREATE USER 'conduit'@'localhost' IDENTIFIED WITH mysql_native_password BY 'conduit'"
+      mysql -u root -e "CREATE DATABASE conduit"
+      mysql -u root -e "GRANT ALL PRIVILEGES ON conduit.* TO 'conduit'@'localhost'"
+    command: npm start
+    env:
+      NX_DAEMON: false
+
+ports:
+  - port: 4200
+    visibility: public
+    onOpen: notify
+  - port: 3000
+    visibility: public
+    onOpen: ignore
+  - port: 9229
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - cweijan.vscode-mysql-client2@4.3.0
+    - esbenp.prettier-vscode
+    - dbaeumer.vscode-eslint
+    - caponetto.vscode-diff-viewer
+    - eamodio.gitlens
