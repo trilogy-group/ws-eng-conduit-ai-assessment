@@ -8,12 +8,10 @@ You can sign up for a free Gitpod account here: https://www.gitpod.io/ - which w
 
 After accessing the above link, your environment will eventually spin up and you'll have a browser-based VSCode at your disposal. Two terminal tasks are lanunched automatically:
 
-- "Seed": which waits for the abckend to be available and runs the database seed.
+- "Seed": which waits for the backend to be available and runs the database seed.
 - "App": which installs dependencies and starts both backend and frontend.
 
-Note that in this environment, "localhost" refers to the remote machine. All the ports of this machine are exposed to a Workspace-specific URL, which is atuomatically opened if you press any localhost link from the Gitpod terminal/output/readme/etc.
-
-To open the UI, you can press the `http://localhost:4200/` link in the App terminal (printed once the Angular app spins up). Alternatively, you can type `gp url 4200` in a new Gitpod terminal to find the URL manually.
+In this environment, "localhost" refers to the remote machine. All the ports of this machine are exposed to a Workspace-specific URL, which is automatically opened if you press any localhost link from the Gitpod terminal, output, editor, etc. To open the UI, you can press the `http://localhost:4200/` link in the App terminal (printed once the Angular app spins up). Alternatively, you can type `gp url 4200` in a new Gitpod terminal to find the URL manually.
 
 If you are inactive for a while, your Workspace will be "paused". All file changes that you have made to the repository will be saved. You can resume it by refreshing the link or by going here: https://gitpod.io/workspaces.
 
