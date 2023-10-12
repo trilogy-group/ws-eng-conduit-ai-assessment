@@ -24,7 +24,7 @@ You need to install the following software:
 - Code Editor (VSCode is recommended)
 
 Getting started:
-
+- Clone this Git repository locally.
 - Install the dependencies `npx yarn install`.
 - If you don't have a local MySQL installation, start one in docker: `docker run -d -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=conduit -e MYSQL_DATABASE=conduit -e MYSQL_USER=conduit -e MYSQL_PASSWORD=conduit mysql:8.1`
 - Adjust the `apps/backend/mikro-orm.config.ts` with your MySQL credentials (they already match the ones from the docker command above).
