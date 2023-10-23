@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@conduit/roster": ["libs/roster/src/index.ts"],
       "@default/*": ["apps/conduit/src/app/*"],
       "@env/*": ["apps/conduit/src/environments/*"],
       "@realworld/*": ["libs/*"],
