@@ -7,8 +7,7 @@ tasks:
     command: exit
 
   - name: MySQL
-    init: /etc/mysql/mysql-bashrc-launch.sh
-    command: exit
+    command: /etc/mysql/mysql-bashrc-launch.sh
 
   - name: Seed
     init: |
@@ -23,7 +22,7 @@ tasks:
       mysql -u root -e "CREATE USER 'conduit'@'localhost' IDENTIFIED WITH mysql_native_password BY 'conduit'"
       mysql -u root -e "CREATE DATABASE conduit"
       mysql -u root -e "GRANT ALL PRIVILEGES ON conduit.* TO 'conduit'@'localhost'"
-    command: npm start
+    command: gp ports await 3306 && npm start
     env:
       NX_DAEMON: false
 
