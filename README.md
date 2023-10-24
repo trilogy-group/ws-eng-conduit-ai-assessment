@@ -40,9 +40,11 @@ Getting started:
 
 ## Exporting your Changes
 
-Please make sure that all your changes are committed locally and then run the following command to export a patch of your changes:
+Please make sure that all your changes are committed locally and then export a git patch of your changes.
 
-```
+You can do this by running the `./create-patch.sh` script provided in this repository. If that doesn't work, you can use the following script:
+
+```bash
 git format-patch origin/master --stdout > submission.patch
 ```
 
