@@ -4,14 +4,14 @@ This repository contains a full-stack TypeScript application consisting of a Nes
 
 ## Running in Gitpod
 
-You can sign up for a free Gitpod account here: https://www.gitpod.io/ - which will give you 50 free hours of using a Cloud Development Environment. After you sign up, you can open the following link to launch your environment: https://www.gitpod.io/#https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/
+You can sign up for a free Gitpod account here: https://www.gitpod.io/ using your GitHub account. After you sign up, you can open the following link to launch your environment: https://www.gitpod.io/#https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/
 
-Your environment will eventually spin up and you'll have a browser-based VSCode at your disposal. Two terminal tasks are launched automatically:
+Once the environment spins up, you'll have a browser-based VSCode at your disposal. Two terminal tasks are launched automatically:
 
 - "Seed": which waits for the backend to be available and runs the database seed.
 - "App": which installs dependencies and starts both backend and frontend.
 
-In Gitpod, "localhost" refers to the remote machine. All the ports of this machine are exposed to a Workspace-specific URL, which is automatically opened if you press any localhost link from the Gitpod terminal, output, editor, etc. To open the UI, you can press the `http://localhost:4200/` link in the App terminal (printed once the Angular app spins up). Alternatively, you can type `gp url 4200` in a new terminal to find the URL manually.
+In Gitpod, "localhost" refers to the remote machine. All "localhost" ports are exposed to a Workspace-specific URL, which is automatically opened if you press any localhost link from the Gitpod terminal, output pane, editor, etc. To open the UI, you can press the `http://localhost:4200/` link in the App terminal (printed once the Angular app spins up) or, alternatively, you can type `gp url 4200` in a new terminal to find the URL manually.
 
 If you are inactive for a while, your Workspace will be "paused". All file changes that you have made to the repository will be saved. You can resume it by refreshing the link or by going here: https://gitpod.io/workspaces.
 
@@ -23,4 +23,4 @@ If you are inactive for a while, your Workspace will be "paused". All file chang
 
 ## Exporting your Changes
 
-If the assessment asks for a git patch, make sure that all your changes are committed locally and then export a git patch of your changes. You can do this by running the `./create-patch.sh` script provided in this repository. This will create a patch in the current folder. You can open it to ensure that all your changes are present (it's just a text file). On Gitpod, you can right-click to download it. You can then upload it to Google Drive and share it as part of your submission. Please make sure to share the file with "anyone with the link can view" permissions.
+If the assessment you are working on asks for a git patch, make sure that all your changes are committed locally and then export a git patch of your changes. You can do this by running the `./create-patch.sh` script provided in this repository. This will create a patch in the current folder. You can open it to ensure that all your changes are present (it's just a text file). On Gitpod, you can right-click to download it. You can then upload it to Google Drive and share it as part of your submission. Please make sure to share the file with "anyone with the link can view" permissions.
