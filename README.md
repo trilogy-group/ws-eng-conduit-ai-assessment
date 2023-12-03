@@ -21,6 +21,10 @@ If you are inactive for a while, your Workspace will be "paused". All file chang
 - You can also find the backend API spec at http://localhost:3000/docs.
 - You can run nx commands by running `npm run nx -- <command here>`, e.g., `npm run nx -- g @nx/angular:library something`.
 
+## Tests
+
+Note that while tests are essential to any real-life project, this repository does NOT include tests to keep the assessments short. Candidates are not required to write new tests.
+
 ## Exporting your Changes
 
 If the assessment you are working on asks for a git patch, make sure that all your changes are committed locally and then export a git patch of your changes. You can do this by running the `./create-patch.sh` script provided in this repository. This will create a patch in the current folder. You can open it to ensure that all your changes are present (it's just a text file). On Gitpod, you can right-click to download it. You can then upload it to Google Drive and share it as part of your submission. Please make sure to share the file with "anyone with the link can view" permissions.

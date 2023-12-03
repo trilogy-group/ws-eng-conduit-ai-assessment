@@ -8,8 +8,8 @@
     "start": "run-p -l start:frontend start:backend",
     "start:frontend": "nx run frontend:serve",
     "start:backend": "nx run backend:serve",
-    "build": "ng build",
-    "test": "ng test",
+    "build": "nx build",
+    "test": "nx run-many --all --target=test",
     "lint": "nx workspace-lint && ng lint",
     "seed": "mikro-orm seeder:run",
     "affected:apps": "nx affected:apps",
@@ -23,7 +23,6 @@
     "format:write": "nx format:write",
     "format:check": "nx format:check",
     "update": "nx migrate latest",
-    "update:check": "ng update",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "workspace-generator": "nx workspace-generator"
