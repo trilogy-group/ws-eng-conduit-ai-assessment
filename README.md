@@ -15,6 +15,8 @@ In Gitpod, "localhost" refers to the remote machine. All "localhost" ports are e
 
 If you are inactive for a while, your Workspace will be "paused". All file changes that you have made to the repository will be saved. You can resume it by refreshing the link or by going here: https://gitpod.io/workspaces.
 
+Note that some Firefox users might face a "Security Error" when opening Gitpod; see [this issue for details and workarounds](https://github.com/gitpod-io/gitpod/issues/9386).
+
 ## Hints
 
 - You can access the UI at http://localhost:4200 and log in with `jcosten0@purevolume.com` / `password`.
