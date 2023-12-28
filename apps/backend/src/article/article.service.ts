@@ -153,8 +153,22 @@ export class ArticleService {
       { id: userId },
       { populate: ['followers', 'favorites', 'articles'] },
     );
+    const tList = await this.em.find(Tag, {})
+    console.log(tList[0].tag);
     const article = new Article(user!, dto.title, dto.description, dto.body);
-    article.tagList.push(...dto.tagList);
+    var tags = dto.tagList.replace("/\s/g","").split(",");
+    tags.forEach(element => {
+      article.tagList.push(element);
+      var isnew = true;
+      for(var i = 0; i < tList.length; i++){
+        if (tList[i].tag == element){
+          var isnew = false;
+        }
+      }
+      if (isnew)
+        this.em.create(Tag, {tag: element});
+    });
+    
     user?.articles.add(article);
     await this.em.flush();
 
