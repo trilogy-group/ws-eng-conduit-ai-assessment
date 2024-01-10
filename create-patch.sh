@@ -1,8 +1,9 @@
 #!/bin/bash
 
-if [[ $(git diff --stat) != '' ]]; then
-  echo 'Your repository is dirty! Please commit all your changes before creating the patch.'
-else
-  NAME=$(git config user.name | sed s/[^[:alnum:]+._-]//g)
-  git format-patch origin/master --stdout > submission_${NAME:-code}.patch
-fi
+# Stage and commit all changes (including untracked files)
+git add --all
+git commit --allow-empty -am "chore(conduit): Generates patch."
+
+# Generate the diff
+NAME=$(git config user.name | sed s/[^[:alnum:]+._-]//g)
+git diff origin/master...HEAD --unified=0 -- . ':!*.patch' ':!yarn.lock' ':!package-lock.json' ':!**/tsconfig*.json' > "submission_${NAME:-code}.patch"

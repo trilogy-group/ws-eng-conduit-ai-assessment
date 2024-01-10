@@ -29,4 +29,4 @@ Note that while tests are essential to any real-life project, this repository do
 
 ## Exporting your Changes
 
-If the assessment you are working on asks for a git patch, make sure that all your changes are committed locally and then export a git patch of your changes. You can do this by running the `./create-patch.sh` script provided in this repository. This will create a patch in the current folder. You can open it to ensure that all your changes are present (it's just a text file). On Gitpod, you can right-click to download it. You can then upload it to Google Drive and share it as part of your submission. Please make sure to share the file with "anyone with the link can view" permissions.
+If the assessment you are working on asks for a git patch, you must export a git diff of your changes by running the `./create-patch.sh` script provided in this repository. This will create a patch in the current folder. Open it to ensure that all your changes are present (it's just a text file). On Gitpod, you can right-click to download it.

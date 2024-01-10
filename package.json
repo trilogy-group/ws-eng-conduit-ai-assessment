@@ -138,11 +138,6 @@
     "typescript": "5.1.6",
     "webpack": "^5.76.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run format:check"
-    }
-  },
   "mikro-orm": {
     "useTsNode": true,
     "tsConfigPath": "./apps/backend/tsconfig.json",
