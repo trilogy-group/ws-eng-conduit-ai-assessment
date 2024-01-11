@@ -6,4 +6,4 @@ git commit --allow-empty -am "chore(conduit): Generates patch."
 
 # Generate the diff
 NAME=$(git config user.name | sed s/[^[:alnum:]+._-]//g)
-git diff origin/master...HEAD --unified=0 -- . ':!*.patch' ':!yarn.lock' ':!package-lock.json' ':!**/tsconfig*.json' > "submission_${NAME:-code}.patch"
+git diff origin/master...HEAD -- . ':!*.patch' ':!yarn.lock' ':!package-lock.json' ':!**/tsconfig*.json' > "submission_${NAME:-code}.patch"
