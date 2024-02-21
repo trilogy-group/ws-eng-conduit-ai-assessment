@@ -43,11 +43,11 @@ This project can also be [run locally](./LOCAL.md); this will require up to 60 m
  - A "Conduit Roster" header,
  - A table containing the stats for each user as described below.
  - The stats would contain:
- - The user name & profile link,
- - The total number of articles authored (zero if none),
- - The total number of favorites received on their articles (zero if none),
- - The date of their first posted article (empty if no article was posted yet).
- - This list should be statically sorted based on the number of favorites received. 
+    - The user name & profile link,
+    - The total number of articles authored (zero if none),
+    - The total number of favorites received on their articles (zero if none),
+    - The date of their first posted article (empty if no article was posted yet).
+ - This table should be statically sorted based on the number of favorites received. 
 
 **Acceptance Test**:
 1. Given that you are logged in (any user),
