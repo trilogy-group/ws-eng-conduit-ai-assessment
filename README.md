@@ -60,9 +60,10 @@ This project can also be [run locally](./LOCAL.md); this will require up to 60 m
 1. Then you see the new post.
 
 ## Submitting your Work
-1. Capture screenshots that show that the acceptance tests pass and place them in the `submission` folder in your repository.
-1. Export the chat sessions used to fix the defect and place them in the `submission` folder in your repository.
-1. Copy the `root-causes.md` file into the `submission` folder in your repository and fill the answers to the questions provided.
+1. Capture screenshots that show that the acceptance tests pass and place them directly in the `submission` folder in your repository.
+1. Export the chat sessions used to fix the defect and place them directly in the `submission` folder in your repository.
+1. Copy the `root-causes.md` file directly into the `submission` folder in your repository and fill in the answers to the questions provided.
+1. Do NOT create subfolders in the `submission` folder. Please all of your files directly in this folder.
 1. Run `npm run submit` and follow the instructions.
 
 ## Evaluation Criteria
