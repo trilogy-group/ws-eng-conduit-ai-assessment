@@ -58,8 +58,9 @@ This project can also be [run locally](./LOCAL.md); this will require up to 60 m
 1. **Screenshot**: Then you see your total number of articles incremented accordingly.
 
 ## Submitting your Work
-1. Capture screenshots that show that the acceptance tests pass and place them in the `submission` folder in your repository.
-1. Export the chat sessions used to build the feature and place them in the `submission` folder in your repository.
+1. Capture screenshots that show that the acceptance tests pass and place them directly in the `submission` folder in your repository.
+1. Export the chat sessions used to build the feature and place them directly in the `submission` folder in your repository.
+1. Do NOT create subfolders in the `submission` folder. Please all of your files directly in this folder.
 1. Run `npm run submit` and follow the instructions.
 
 ## Evaluation Criteria
