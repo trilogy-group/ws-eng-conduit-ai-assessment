@@ -50,5 +50,5 @@ Once the project is running, you can access the UI at http://localhost:4200 and 
 
 ## Evaluation Criteria
 - **Correctness & Completeness**: The final code should be functional, produce the desired output without errors, defects, or limitations, and address all the requirements, with minimal inconsistencies between requirement specifications and outputs (e.g., related to behavior, formatting, etc.).
-- **Code Quality**: The code to fix the issues should be clean, efficient, consistent with the provided code, respect the existing architecture and responsibility decomposition, and adhere to typical SOLID/DRY coding practices, REST API design principles, and relational database best practices.
+- **Code Quality**: The code to implement the feature should be clean, efficient, consistent with the provided code, respect the existing architecture and responsibility decomposition, and adhere to typical SOLID/DRY coding practices, REST API design principles, and relational database best practices.
 - **AI Usage**: The AI should be guided properly, by giving appropriate context, clear inputs, instructions, quality rules, and feedback. 
