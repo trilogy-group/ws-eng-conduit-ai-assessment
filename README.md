@@ -6,7 +6,7 @@ This repository contains the project to be extended, which is a full-stack TypeS
 
 ## Assessment Steps
 
-1. [Start the code in Gitpod](#running-in-gitpod), and take a look at [the feature requirements](#feature-the-conduit-roster) and [the grading criteria](#evaluation-criteria) described below. 
+1. [Start the code in Gitpod](#running-in-gitpod), and take a look at [the feature requirements](#feature-the-conduit-roster) and [the grading criteria](#evaluation-criteria) described below. Please do NOT fork this repository. You will share your code changes as a git diff at the end.
 1. Use the GPT interface linked on the Crossover assessment to perform most of the research, design, write new code, etc. 
    - Imagine that GPT is a "junior" with little context about the project, but good general technical knowledge. 
    - We have included built-in prompts with general information about the project in the chat interface. Feel free to leverage these prompts.
