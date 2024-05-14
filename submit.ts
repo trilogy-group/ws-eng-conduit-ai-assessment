@@ -71,9 +71,10 @@ async function createGitDiff(): Promise<string> {
   );
   const diffPath = path.join(SUBMISSION_DIR, 'submission.patch');
   if (!diffOutput?.trim()) {
-    console.log("No code changes were detected. This may mean that ignored the instructions and you forked the repository.");
-    console.log(`If so, reset your git origin to '${REPO_GIT_URL}' by running 'git remote set-url origin ${REPO_GIT_URL}'.`);
-    console.log("Then please run the submit script again.");
+    console.log("No code changes were detected. This may mean that you forked or created your own copy of the repository.");
+    console.log(`If so, reset your git origin to '${REPO_GIT_URL}'.`);
+    console.log(`You can do so by running 'git remote set-url origin ${REPO_GIT_URL}'.`);
+    console.log("Afterward, please run the submit script again to properly detect your code changes.");
     process.exit(0);
   }
   await fs.writeFile(diffPath, diffOutput);
