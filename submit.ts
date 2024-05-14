@@ -61,6 +61,8 @@ async function countFilesByExtension(extensions = ['.json']): Promise<number> {
   }
 }
 
+const REPO_GIT_URL = 'https://github.com/trilogy-group/ws-eng-conduit-ai-assessment.git'
+
 async function createGitDiff(): Promise<string> {
   execCommand('git add --all');
   execCommand(`git commit --allow-empty -am "chore(conduit): Generates patch."`);
@@ -68,6 +70,12 @@ async function createGitDiff(): Promise<string> {
     `git diff origin/${ASSESSMENT_BRANCH}...HEAD -- . ":!*.patch" ":!yarn.lock" ":!package-lock.json" ":!**/tsconfig*.json"`,
   );
   const diffPath = path.join(SUBMISSION_DIR, 'submission.patch');
+  if (!diffOutput?.trim()) {
+    console.log("No code changes were detected. This may mean that ignored the instructions and you forked the repository.");
+    console.log(`If so, reset your git origin to '${REPO_GIT_URL}' by running 'git remote set-url origin ${REPO_GIT_URL}'.`);
+    console.log("Then please run the submit script again.");
+    process.exit(0);
+  }
   await fs.writeFile(diffPath, diffOutput);
   return diffPath;
 }
