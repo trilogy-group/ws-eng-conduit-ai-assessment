@@ -38,7 +38,7 @@ Once the project is running, you can access the UI at http://localhost:4200 and 
 **Acceptance Test**:
 1. Given that you are logged in (any user),
 1. When you open the "Roster" page,
-1. Then you see all the Conduit users with correct stats sorted correctly,
+1. Then you see all the Conduit users with correct stats,
 1. When you create a new article and you open the "Roster" page,
 1. (**Screenshot**) Then you see your total number of articles incremented accordingly.
 
