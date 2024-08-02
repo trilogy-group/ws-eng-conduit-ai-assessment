@@ -1,3 +1,3 @@
 export interface ITagsRO {
-  tags: string[];
+  tags: array[];
 }
