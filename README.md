@@ -6,7 +6,9 @@ This repository contains the project to be maintained, which is a full-stack Typ
 
 ## Assessment Steps
 
-1. [Start the code in Gitpod](#running-in-gitpod), and take a look at [the defect description](#defect-tags-are-broken-when-a-new-post-is-created) and [the grading criteria](#evaluation-criteria) described below. Please do NOT fork this repository. You will share your code changes as a git diff at the end.
+1. [Start the code in Gitpod](#running-in-gitpod), and take a look at [the defect description](#defect-tags-are-broken-when-a-new-post-is-created) and [the grading criteria](#evaluation-criteria) described below.
+   - Please do NOT fork this repository. You will share your code changes as a git diff at the end.
+   - When writing code, make sure to be on the `rwa/defect-resolution-v3` branch. Pull it regularly to ensure you have the latest changes from the remote.
 1. Use the GPT interface linked on the Crossover assessment to determine the root cause of each Problem and then fix it. 
    - Imagine that GPT is a "junior" with little context about the project, but good general technical knowledge. 
    - Pass instructions and any needed information to the "junior" (e.g., guidelines, code, database contents, network request payloads, error logs, doc snippets, etc.). 
