@@ -1,0 +1,24 @@
+<!-- src/app/articles/feature-roster/roster.component.html -->
+<div>
+    <h1>Conduit Roster</h1>
+    <table *ngIf="!(loading$ | async)">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Total Articles</th>
+          <th>Total Favorites</th>
+          <th>First Article Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of roster$ | async">
+          <td><a [routerLink]="user.profileLink">{{ user.username }}</a></td>
+          <td>{{ user.totalArticles }}</td>
+          <td>{{ user.totalFavorites }}</td>
+          <td>{{ user.firstArticleDate | date }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="loading$ | async">Loading...</div>
+  </div>
+  

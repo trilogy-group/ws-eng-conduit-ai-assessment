@@ -13,6 +13,11 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('users/roster')
+  async getRoster() {
+    return this.userService.getUserStats();
+  }
+
   @Get('user')
   async findMe(@User('email') email: string): Promise<IUserRO> {
     return this.userService.findByEmail(email);

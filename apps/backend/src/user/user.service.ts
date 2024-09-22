@@ -8,10 +8,33 @@ import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 import { User } from './user.entity';
 import { IUserRO } from './user.interface';
 import { UserRepository } from './user.repository';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { ArticleRepository } from '../article/article.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository, private readonly em: EntityManager) {}
+  constructor(
+    @InjectRepository(UserRepository) private readonly userRepository: UserRepository,
+    @InjectRepository(ArticleRepository) private readonly articleRepository: ArticleRepository,
+    private readonly em: EntityManager,
+  ) {}
+
+  async getUserStats() {
+    const users = await this.userRepository.findAll();
+    const stats = await Promise.all(users.map(async user => {
+      const articles = await this.articleRepository.find({ author: user.id });
+      const totalFavorites = articles.reduce((sum:number, article: any) => sum + article.favoritesCount, 0);
+      const firstArticleDate = articles.length > 0 ? articles[0].createdAt : null;
+      return {
+        username: user.username,
+        profileLink: `/profile/${user.username}`,
+        totalArticles: articles.length,
+        totalFavorites,
+        firstArticleDate,
+      };
+    }));
+    return stats;
+  }
 
   async findAll(): Promise<User[]> {
     return this.userRepository.findAll();
