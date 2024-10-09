@@ -4,6 +4,8 @@ In this assessment, you will be presented with a realistic task that closely res
 
 This repository contains the project to be maintained, which is a full-stack TypeScript application consisting of a NestJS backend and an Angular frontend. The project uses a stack similar to our products and we welcome you to leverage AI to fill any knowledge gaps. If you believe success hinges primarily on familiarity with specific technologies, our roles may not align with your approach.
 
+(Optional) You may refer to this introduction video for an overview of this assessment: https://www.loom.com/share/a2cc9efa5296485891c4459d1fd260aa
+
 ## Assessment Steps
 
 1. [Start the code in Gitpod](#running-in-gitpod), and take a look at [the defect description](#defect-tags-are-broken-when-a-new-post-is-created) and [the grading criteria](#evaluation-criteria) described below.
