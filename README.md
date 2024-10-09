@@ -4,6 +4,8 @@ In this assessment, you will work on a realistic task that closely resembles iss
 
 This repository contains the project to be extended, which is a full-stack TypeScript application consisting of a NestJS backend and an Angular frontend. The project uses a stack similar to our products and we welcome you to leverage AI to fill any knowledge gaps. If you believe success hinges primarily on familiarity with specific technologies, our roles may not align with your approach.
 
+(Optional) You may refer to this introduction video for an overview of this assessment: https://www.loom.com/share/430de9d934be4fcba8c0dc4ab9e2421c
+
 ## Assessment Steps
 
 1. [Start the code in Gitpod](#running-in-gitpod), and take a look at [the feature requirements](#feature-the-conduit-roster) and [the grading criteria](#evaluation-criteria) described below. 
