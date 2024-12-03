@@ -66,7 +66,7 @@ export class ArticleService {
 
     const articles = await qb.getResult();
 
-    return { articles: articles.map((a) => a.toJSON(user!)), articlesCount };
+    return { articles: articles.map((a: Article) => a.toJSON(user!)), articlesCount };
   }
 
   async findFeed(userId: number, query: Record<string, string>): Promise<IArticlesRO> {
@@ -84,7 +84,7 @@ export class ArticleService {
     );
 
     console.log('findFeed', { articles: res[0], articlesCount: res[1] });
-    return { articles: res[0].map((a) => a.toJSON(user!)), articlesCount: res[1] };
+    return { articles: res[0].map((a: Article) => a.toJSON(user!)), articlesCount: res[1] };
   }
 
   async findOne(userId: number, where: Partial<Article>): Promise<IArticleRO> {
@@ -161,7 +161,7 @@ export class ArticleService {
     return { article: article.toJSON(user!) };
   }
 
-  async update(userId: number, slug: string, articleData: any): Promise<IArticleRO> {
+  async update(userId: number, slug: string, articleData: Partial<Article>): Promise<IArticleRO> {
     const user = await this.userRepository.findOne(
       { id: userId },
       { populate: ['followers', 'favorites', 'articles'] },
@@ -177,3 +177,5 @@ export class ArticleService {
     return this.articleRepository.nativeDelete({ slug });
   }
 }
+
+

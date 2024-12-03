@@ -4,6 +4,7 @@ import { User } from '../user/user.decorator';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { ArticleService } from './article.service';
 import { CreateArticleDto, CreateCommentDto } from './dto';
+import { IsArray } from 'class-validator';
 
 @ApiBearerAuth()
 @ApiTags('articles')
@@ -40,8 +41,11 @@ export class ArticleController {
   @ApiResponse({ status: 201, description: 'The article has been successfully created.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Post()
-  async create(@User('id') userId: number, @Body('article') articleData: CreateArticleDto) {
-    return this.articleService.create(userId, articleData);
+  async create(@User('id') userId: number, @Body() createArticleDto: CreateArticleDto) {
+    if (!Array.isArray(createArticleDto.tags)) {
+      throw new Error('Tags should be an array');
+    }
+    return this.articleService.create(userId, createArticleDto);
   }
 
   @ApiOperation({ summary: 'Update article' })
