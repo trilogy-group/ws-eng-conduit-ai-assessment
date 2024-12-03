@@ -21,5 +21,5 @@ export class CreateArticleDto {
   readonly tagList: string[];
 
   @IsArray()
-  readonly tags: string[]; // Use one consistent name for tags
+  readonly tags: string[];
 }
