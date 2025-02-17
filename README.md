@@ -42,7 +42,18 @@ Once you are ready, press the link within the Crossover assessment to receive th
 
 ## Evaluation Criteria
 
-- **Correctness & Completeness**: The final code should be functional, produce the desired output without errors, defects, or limitations, and address all the requirements, with minimal inconsistencies between requirement specifications and outputs (e.g., related to behavior, formatting, etc.).
-- **Code Quality**: The code to implement the feature should be clean, efficient, consistent with the provided code, respect the existing architecture and responsibility decomposition, and adhere to typical SOLID/DRY coding practices, REST API design principles, and relational database best practices.
-- **AI Usage**: The AI should be guided properly, by giving appropriate context, clear inputs, instructions, quality rules, and feedback.
-- **Velocity**: Once the user story requirements are provided, you should be able to complete the task in a timely manner. We expect great engineers to be able to complete the task in 2-3 hours.
+- **Plan soundness, code quality, and correctness.**: The code to implement the feature should be clean, efficient, consistent with the provided code, respect the existing architecture and responsibility decomposition, and adhere to typical SOLID/DRY coding practices, REST API design principles, and relational database best practices. 
+   - 0 stars: You did not submit a plan and/or your code does not work at all and/or does not respect any quality standards.
+   - 1 star: Your plan is incomplete, shallow or vague and/or your code works, but does not respect quality standards.
+   - 2 stars: Your plan doesn't include clear rationale for the choices made and/or your code works, and mostly adheres to quality standards, with a few issues.
+   - 3 stars: Your plan is clear and complete and your code works, has no bugs, is clean, and fully adheres to quality standards.
+- **AI usage and effectiveness**: The AI should be guided properly, by giving appropriate context, clear inputs, instructions, quality rules, and feedback.
+   - 0 stars: You did not use AI at all.
+   - 1 star: You used AI, purely to ask basic questions (basically as a Google substitute).
+   - 2 stars: You used AI, passing good context and instructions, with some hiccups.
+   - 3 stars: You used AI, passing good context, instructions, giving it clear guidance on your quality standards.
+- **Velocity**: Once the user story requirements are provided, you should be able to complete the task in a timely manner.
+   - 0 stars: You did not complete the task at all.
+   - 1 star: You completed the task, and it took multiple days.
+   - 2 stars: You completed the task, and it took <= 6 hours.
+   - 3 stars: You completed the task, and it took <= 3 hours.
