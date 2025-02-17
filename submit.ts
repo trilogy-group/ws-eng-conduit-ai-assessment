@@ -7,8 +7,8 @@ import FormData from 'form-data';
 import { execSync } from 'child_process';
 
 const SUBMISSION_DIR = 'submission';
-const ASSESSMENT_TYPE = 'feature-development';
-const ASSESSMENT_VERSION = 'v3';
+const ASSESSMENT_TYPE = 'design-and-implement';
+const ASSESSMENT_VERSION = 'v1';
 const ASSESSMENT_BRANCH = `rwa/${ASSESSMENT_TYPE}-${ASSESSMENT_VERSION}`;
 const API_URL = 'iyuja327ulc6hq3xsypufut7bh0lygdq.ynzoqn-hey.hf-rnfg-1.ba.njf';
 

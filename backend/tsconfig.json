@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "types": ["node"],
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "target": "es2021",
+    "noEmit": true
+  },
+  "include": ["src/**/*.ts", "mikro-orm.config.ts"]
+}

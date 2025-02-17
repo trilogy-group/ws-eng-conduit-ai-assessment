@@ -1,0 +1,11 @@
+{
+  "extends": ["../.eslintrc.json", "plugin:react/recommended"],
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "18"
+    }
+  }
+}
