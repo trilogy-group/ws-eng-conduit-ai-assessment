@@ -22,6 +22,7 @@ Before starting the assessment, you should:
 1. Access the ChatGPT interface linked on the Crossover assessment.
    - Open it and send a test message to ensure it's working.
    - Look at the built-in prompts to understand their utility.
+1. Look at the ./plan.md file to understand how you should structure your implementation plan for this assessment.
 1. Check out and acknowledge the grading criteria.
 
 Notes:
