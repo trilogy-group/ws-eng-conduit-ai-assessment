@@ -45,9 +45,9 @@ Once you are ready, press the link within the Crossover assessment to receive th
 
 - **Plan soundness, code quality, and correctness.**: The code to implement the feature should be clean, efficient, consistent with the provided code, respect the existing architecture and responsibility decomposition, and adhere to typical SOLID/DRY coding practices, REST API design principles, and relational database best practices. 
    - 0 stars: You did not submit a plan and/or your code does not work at all and/or does not respect any quality standards.
-   - 1 star: Your plan is incomplete, shallow or vague and/or your code works, but does not respect quality standards.
-   - 2 stars: Your plan doesn't include clear rationale for the choices made and/or your code works, and mostly adheres to quality standards, with a few issues.
-   - 3 stars: Your plan is clear and complete and your code works, has no bugs, is clean, and fully adheres to quality standards.
+   - 1 star: Your plan is incomplete, shallow or vague and/or you only implemented BASIC features and/or your code does not respect quality standards.
+   - 2 stars: Your plan doesn't include clear rationale for the choices made and/or you implemented ADVANCED features with bugs and/or your code mostly adheres to quality standards, with a few issues.
+   - 3 stars: Your plan is clear and complete and you implemented ADVANCED features with no bugs and your code has no bugs, is clean, and fully adheres to quality standards.
 - **AI usage and effectiveness**: The AI should be guided properly, by giving appropriate context, clear inputs, instructions, quality rules, and feedback.
    - 0 stars: You did not use AI at all.
    - 1 star: You used AI, purely to ask basic questions (basically as a Google substitute).
