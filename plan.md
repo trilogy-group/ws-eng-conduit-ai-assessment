@@ -19,3 +19,7 @@ The top 2-3 decision you have taken, plus the alternatives and rationale for you
   - Alternative: Use a local development environment.
   - Alternative: Use Gitpod for the development environment.
   - Rationale: Setting up a local environment is time-consuming and error-prone. Gitpod "Clasic" (hosted in the cloud) will be sunset on April 2025, and GitHub Codespaces allows leveraging Dev Containers - which can also be used locally if really needed. Hence we select GitHub Codespaces as it's the most future-proof and flexible option.
+
+## Notes
+
+Any additional notes that you think are relevant to the plan. For example, do we need to perform any changes to the AWS architecture to support the new feature? Briefly describe the changes you would need to make.
