@@ -6,6 +6,12 @@ Your submission should not reflect the capabilities of the AI but should showcas
 
 This repository contains the project to be extended, which is a full-stack TypeScript application consisting of a NestJS backend and an React frontend. The project uses a stack similar to our products and we welcome you to leverage AI to fill any knowledge gaps. If you believe success hinges primarily on familiarity with specific technologies, our roles may not align with your approach.
 
+Your mindset should be that of a senior software engineer who is responsible for delivering this user story, while having complete, long-term ownership of the codebase. Hence the code that you write should not damage your ability to extend the codebase in the future.
+
+In Production, this application is deployed on AWS following the architecture below. Any changes you make must work within this architecture, otherwise once your story is released, it will not properly work.
+
+![Architecture Diagram](./diagram.png)
+
 ## Preparation Steps
 
 Before starting the assessment, you should:
@@ -30,31 +36,22 @@ Notes:
 - About the repository:
   - Please do NOT fork this repository. You will share your code changes as a git diff at the end.
   - When writing code, make sure to be on the `rwa/design-and-implementation-v1` branch.
-  - Pull regularly to ensure you have the latest changes from the remote.
 - About the project:
   - You can find the backend API spec at http://localhost:3000/docs.
   - The project doesn't include tests, and you're not required to write any.
 - About using AI:
   - Imagine that GPT is a "junior" with little context about the project, but good general technical knowledge.
   - We have included built-in prompts with general information about the project in the chat interface. Feel free to leverage these prompts.
-  - The chat purposefully does NOT support uploading the whole codebase or screenshots; you must clearly provide concise instructions to succeed.
+  - The chat purposefully does NOT support uploading the whole codebase or screenshots; you must clearly provide concise instructions.
 
 Once you are ready, press the link within the Crossover assessment to receive the user story requirements.
 
 ## Evaluation Criteria
 
-- **Plan soundness, code quality, and correctness.**: The code to implement the feature should be clean, efficient, consistent with the provided code, respect the existing architecture and responsibility decomposition, and adhere to typical SOLID/DRY coding practices, REST API design principles, and relational database best practices. 
-   - 0 stars: You did not submit a plan and/or your code does not work at all and/or does not respect any quality standards.
-   - 1 star: Your plan is incomplete, shallow or vague and/or you only implemented BASIC features and/or your code does not respect quality standards.
-   - 2 stars: Your plan doesn't include clear rationale for the choices made and/or you implemented ADVANCED features with bugs and/or your code mostly adheres to quality standards, with a few issues.
-   - 3 stars: Your plan is clear and complete and you implemented ADVANCED features with no bugs and your code has no bugs, is clean, and fully adheres to quality standards.
-- **AI usage and effectiveness**: The AI should be guided properly, by giving appropriate context, clear inputs, instructions, quality rules, and feedback.
-   - 0 stars: You did not use AI at all.
-   - 1 star: You used AI, purely to ask basic questions (basically as a Google substitute).
-   - 2 stars: You used AI, passing good context and instructions, with some hiccups.
-   - 3 stars: You used AI, passing good context, instructions, giving it clear guidance on your quality standards.
-- **Velocity**: Once the user story requirements are provided, you should be able to complete the task in a timely manner.
-   - 0 stars: You did not complete the task at all.
-   - 1 star: You completed the task, and it took multiple days.
-   - 2 stars: You completed the task, and it took <= 6 hours.
-   - 3 stars: You completed the task, and it took <= 3 hours.
+| Criteria | Description | 0 Stars | 1 Star | 2 Stars | 3 Stars |
+|----------|-------------|---------|---------|----------|---------|
+| **Plan Soundness** | The implementation plan should be clear, complete and include rationale for technical choices | No plan submitted | Plan is incomplete, shallow or vague | Plan doesn't include clear rationale for choices | Plan is clear, complete with good rationale |
+| **Code Quality** | Code should be clean, efficient, consistent with existing code, respect architecture and follow SOLID/DRY principles | Code does not respect any quality standards | Code does not respect quality standards | Code mostly adheres to standards with some issues | Code is clean and fully adheres to standards |
+| **Correctness and Completeness** | Features should work correctly and meet requirements | Code does not work at all | Only BASIC features implemented | ADVANCED features with bugs, limitations or small missing edge cases | ADVANCED features with no bugs, limitations, etc. |
+| **AI Usage** | AI should be guided with proper context, clear inputs, instructions, quality rules and feedback | Did not use AI | Used AI only for basic questions | Used AI with good context but some hiccups | Used AI effectively with clear guidance |
+| **Velocity** | Time taken to complete the task after requirements are provided | Did not complete | Took multiple days | Took <= 6 hours | Took <= 3 hours |
