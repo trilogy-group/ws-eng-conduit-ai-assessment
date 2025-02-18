@@ -11,6 +11,14 @@ const ASSESSMENT_TYPE = 'design-and-implement';
 const ASSESSMENT_VERSION = 'v1';
 const ASSESSMENT_BRANCH = `rwa/${ASSESSMENT_TYPE}-${ASSESSMENT_VERSION}`;
 const API_URL = 'iyuja327ulc6hq3xsypufut7bh0lygdq.ynzoqn-hey.hf-rnfg-1.ba.njf';
+const REPO_GIT_URL = 'https://github.com/trilogy-group/ws-eng-conduit-ai-assessment.git';
+
+if (process.argv.length !== 3) {
+  console.error('Please provide the assessment ID as an argument');
+  process.exit(1);
+}
+
+const assessmentId = process.argv[2];
 
 function decode(s: string): string {
   const input = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -25,7 +33,7 @@ function execCommand(command: string): string {
     return execSync(command).toString().trim();
   } catch (error) {
     console.error(`Error executing command: ${command}`, error);
-    process.exit(1);
+    return '';
   }
 }
 
@@ -56,12 +64,10 @@ async function countFilesByExtension(extensions = ['.json']): Promise<number> {
     return (await fs.readdir(SUBMISSION_DIR))
       .filter((file) => extensions.includes(path.extname(file).toLowerCase()))
       .map((file) => path.join(SUBMISSION_DIR, file)).length;
-  } catch (error) {
+  } catch {
     return 0;
   }
 }
-
-const REPO_GIT_URL = 'https://github.com/trilogy-group/ws-eng-conduit-ai-assessment.git'
 
 async function createGitDiff(): Promise<string> {
   execCommand('git add --all');
@@ -75,10 +81,45 @@ async function createGitDiff(): Promise<string> {
     console.log(`If so, reset your git origin to '${REPO_GIT_URL}'.`);
     console.log(`You can do so by running 'git remote set-url origin ${REPO_GIT_URL}'.`);
     console.log("Afterward, please run the submit script again to properly detect your code changes.");
-    process.exit(0);
   }
-  await fs.writeFile(diffPath, diffOutput);
+  await fs.writeFile(diffPath, diffOutput || '');
   return diffPath;
+}
+
+async function getSubmissionWarnings(diffPath: string): Promise<string[]> {
+  const warnings: string[] = [];
+  const diffSize = (await fs.stat(diffPath)).size;
+  
+  if (diffSize < 100) {
+    warnings.push('WARNING: Code Quality & Correctness - Your code submission is likely incomplete (patch file is very small). This will affect your evaluation score.');
+  }
+
+  if (await countFilesByExtension(['.jpg', '.jpeg', '.png', '.gif', '.bmp']) === 0) {
+    warnings.push('WARNING: Completeness - No screenshots found. Without visual proof of implementation, we cannot properly evaluate feature completeness.');
+  }
+
+  const aiderFiles = ['.aider.chat.history.md', '.aider.input.history'];
+  for (const file of aiderFiles) {
+    try {
+      const stats = await fs.stat(file);
+      if (stats.size < 100) {
+        warnings.push(`WARNING: AI Usage - ${file} is very small. This suggests limited AI interaction, which will affect your AI Usage score.`);
+      }
+    } catch {
+      warnings.push(`WARNING: AI Usage - ${file} not found. Missing AI interaction history will result in 0 stars for AI Usage.`);
+    }
+  }
+
+  try {
+    const planStats = await fs.stat('plan.md');
+    if (planStats.size < 100) {
+      warnings.push('WARNING: Plan Soundness - plan.md is very small. A thorough implementation plan is required for a good evaluation score.');
+    }
+  } catch {
+    warnings.push('WARNING: Plan Soundness - No plan.md found. Missing implementation plan will result in 0 stars for Plan Soundness.');
+  }
+
+  return warnings;
 }
 
 async function confirmSubmission({ name, email, diffPath }: { name: string; email: string; diffPath: string }) {
@@ -87,10 +128,16 @@ async function confirmSubmission({ name, email, diffPath }: { name: string; emai
   console.log(` Name:        ${name}`);
   console.log(` Email:       ${email}`);
   console.log(` Code:        ${diffPath} (size = ${(await fs.stat(diffPath)).size})`);
-  console.log(` Chats:       ${await countFilesByExtension(['.json'])} files`);
   console.log(` Screenshots: ${await countFilesByExtension(['.jpg', '.jpeg', '.png', '.gif', '.bmp'])} files`);
   console.log('');
   console.log('Please ensure that all your changes are reflected in the patch file.');
+
+  const warnings = await getSubmissionWarnings(diffPath);
+  if (warnings.length > 0) {
+    console.log('\nWarnings:');
+    warnings.forEach(warning => console.log(warning));
+    console.log('');
+  }
 
   const confirm = await prompts({
     type: 'confirm',
@@ -105,39 +152,56 @@ async function confirmSubmission({ name, email, diffPath }: { name: string; emai
   }
 }
 
+async function addFileToZip(zip: JSZip, filePath: string, zipPath: string): Promise<void> {
+  const fileContent = await fs.readFile(filePath);
+  console.log(`Adding "${zipPath}" (size = ${fileContent.byteLength}) to submission...`);
+  zip.file(zipPath, fileContent);
+}
+
+async function addSubmissionFiles(zip: JSZip): Promise<void> {
+  const files = await fs.readdir(SUBMISSION_DIR);
+  for (const file of files) {
+    await addFileToZip(zip, path.join(SUBMISSION_DIR, file), file);
+  }
+  return files.includes('plan.md') ? Promise.resolve() : addRootPlanMd(zip);
+}
+
+async function addRootPlanMd(zip: JSZip): Promise<void> {
+  try {
+    await addFileToZip(zip, 'plan.md', 'plan.md');
+  } catch {
+    console.warn('No plan.md file found in root directory');
+  }
+}
+
+async function addAiderFiles(zip: JSZip): Promise<void> {
+  const aiderFiles = ['.aider.chat.history.md', '.aider.input.history'];
+  for (const file of aiderFiles) {
+    try {
+      await addFileToZip(zip, file, file);
+    } catch {
+      console.warn(`${file} not found in root directory`);
+    }
+  }
+}
+
 async function createZip(): Promise<Buffer> {
   console.log('');
-  const files = await fs.readdir(SUBMISSION_DIR);
   const zip = new JSZip();
-  for (const file of files) {
-    const filePath = path.join(SUBMISSION_DIR, file);
-    const fileContent = await fs.readFile(filePath);
-    console.log(`Adding "${file}" (size = ${fileContent.byteLength}) to submission...`);
-    zip.file(file, fileContent);
-  }
+  await addSubmissionFiles(zip);
+  await addAiderFiles(zip);
   const result = await zip.generateAsync({ type: 'nodebuffer' });
   console.log(`Submission archive size: ${result.byteLength} bytes`);
   console.log('');
   return result;
 }
 
-async function handleSubmission() {
-  const { name, email } = await getInputs();
-  const diffPath = await createGitDiff();
-  await confirmSubmission({ name, email, diffPath });
-  const zip = await createZip();
-
+async function uploadSubmission(zip: Buffer, name: string, email: string): Promise<void> {
   const apiUrl = `https://${decode(API_URL)}/`;
-  const jsonBody = {
-    name,
-    email,
-    size: zip.byteLength,
-    type: ASSESSMENT_TYPE,
-  };
+  const jsonBody = { name, email, size: zip.byteLength, type: ASSESSMENT_TYPE, assessmentId };
 
   try {
     const { data } = await axios.post(apiUrl, jsonBody, { headers: { 'Content-Type': 'application/json' } });
-
     const form = new FormData();
     Object.entries(data.upload.fields || {}).forEach(([key, value]) => form.append(key, value));
     form.append('file', zip);
@@ -151,6 +215,14 @@ async function handleSubmission() {
     console.error('Failed to upload submission. If you cannot resolve the issue, please contact support.', error);
     process.exit(1);
   }
+}
+
+async function handleSubmission() {
+  const { name, email } = await getInputs();
+  const diffPath = await createGitDiff();
+  await confirmSubmission({ name, email, diffPath });
+  const zip = await createZip();
+  await uploadSubmission(zip, name, email);
 }
 
 handleSubmission().catch(console.error);

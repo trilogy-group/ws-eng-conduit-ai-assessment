@@ -7,11 +7,6 @@ import { Comment } from '../article/comment.entity';
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    em.nativeDelete(Article, {});
-    em.nativeDelete(Comment, {});
-    em.nativeDelete(User, {});
-    em.nativeDelete(Tag, {});
-
     const tags = this.getTags(em);
     const authors = this.getAuthors(em);
     authors.john.followed.add(authors.bennie);

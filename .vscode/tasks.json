@@ -1,0 +1,78 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install Root Dependencies",
+      "type": "shell",
+      "command": "[ ! -d \"node_modules\" ] && npm ci || echo \"node_modules exists, skipping install\"",
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "Install Frontend Dependencies",
+      "type": "shell",
+      "command": "cd frontend && ([ ! -d \"node_modules\" ] && npm ci || echo \"node_modules exists, skipping install\")",
+      "problemMatcher": [],
+    },
+    {
+      "label": "Install Backend Dependencies",
+      "type": "shell",
+      "command": "cd backend && ([ ! -d \"node_modules\" ] && npm ci --legacy-peer-deps || echo \"node_modules exists, skipping install\")",
+      "problemMatcher": [],
+    },
+    {
+      "label": "Start Backend",
+      "type": "npm",
+      "script": "start",
+      "path": "backend",
+      "isBackground": true,
+      "dependsOn": ["Install Backend Dependencies"],
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Starting Nest application.*$",
+          "endsPattern": "^.*Nest application successfully started.*$"
+        }
+      },
+      "runOptions": {
+        "runOn": "folderOpen",
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "Start Frontend",
+      "type": "shell",
+      "command": "cd frontend && wait-for-it localhost:3000 -t 300 && npm run start",
+      "isBackground": true,
+      "dependsOn": ["Install Frontend Dependencies"],
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*VITE v.*$",
+          "endsPattern": "^.*Local:.*$"
+        }
+      },
+      "runOptions": {
+        "runOn": "folderOpen",
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "Run Seed",
+      "type": "shell",
+      "command": "cd backend && wait-for-it localhost:3000 -t 300 && npm run seed",
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}

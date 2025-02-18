@@ -11,7 +11,5 @@
       ]
     }
   },
-  "forwardPorts": [3000, 3001, 3306],
-  "postCreateCommand": "npm ci && cd frontend && npm ci && cd ../backend && npm ci --legacy-peer-deps",
-  "postStartCommand": "wait-for-it localhost:3306 -t 60 -- npm start"
+  "forwardPorts": [3000, 3001, 3306]
 }
