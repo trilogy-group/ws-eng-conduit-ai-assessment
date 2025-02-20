@@ -1,5 +1,9 @@
 # Conduit - AI Augmented Design and Implementation
 
+You may watch this video to get an overview of the assessment: https://drive.google.com/file/d/1sVMJHExraDkgBiflrBc9MRm-rhWybRv-/view
+
+## Overview
+
 In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. You will extend a full-stack TypeScript project. The project has a NestJS backend and a React frontend. Your task is to add a new user story using the AI tool. The goal is to show your skills in planning and guiding the AI while keeping long-term code quality in mind.
 
 In Production, this application is deployed on AWS following the architecture below. Any changes you make must work within this architecture, otherwise once your story is released, it will not properly work.

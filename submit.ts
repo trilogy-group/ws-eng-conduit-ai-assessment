@@ -9,7 +9,7 @@ import { execSync } from 'child_process';
 const SUBMISSION_DIR = 'submission';
 const ASSESSMENT_TYPE = 'design-and-implement';
 const ASSESSMENT_VERSION = 'v1';
-const ASSESSMENT_BRANCH = `rwa/${ASSESSMENT_TYPE}-${ASSESSMENT_VERSION}`;
+const ASSESSMENT_BRANCH = `rwa/design-and-implementation-${ASSESSMENT_VERSION}`;
 const API_URL = 'iyuja327ulc6hq3xsypufut7bh0lygdq.ynzoqn-hey.hf-rnfg-1.ba.njf';
 const REPO_GIT_URL = 'https://github.com/trilogy-group/ws-eng-conduit-ai-assessment.git';
 
@@ -18,7 +18,7 @@ if (process.argv.length !== 3) {
   process.exit(1);
 }
 
-const assessmentId = process.argv[2];
+const asr = process.argv[2];
 
 function decode(s: string): string {
   const input = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -198,7 +198,7 @@ async function createZip(): Promise<Buffer> {
 
 async function uploadSubmission(zip: Buffer, name: string, email: string): Promise<void> {
   const apiUrl = `https://${decode(API_URL)}/`;
-  const jsonBody = { name, email, size: zip.byteLength, type: ASSESSMENT_TYPE, assessmentId };
+  const jsonBody = { name, email, size: zip.byteLength, type: ASSESSMENT_TYPE, asr };
 
   try {
     const { data } = await axios.post(apiUrl, jsonBody, { headers: { 'Content-Type': 'application/json' } });

@@ -12,14 +12,15 @@
     "format": "run-p -l format:*",
     "format:frontend": "prettier --write frontend",
     "format:backend": "prettier --write backend",
-    "seed": "cd backend && npm run seed"
+    "seed": "cd backend && npm run seed",
+    "submit": "tsx submit.ts"
   },
   "private": true,
   "devDependencies": {
     "@types/prompts": "^2.4.9",
     "@typescript-eslint/eslint-plugin": "8.24.0",
     "@typescript-eslint/parser": "8.24.0",
-    "axios": "^0.21.1",
+    "axios": "^1.6.7",
     "cross-env": "^7.0.3",
     "dotenv": "10.0.0",
     "eslint": "8.57.1",
@@ -29,6 +30,7 @@
     "prettier": "^2.3.2",
     "prompts": "^2.4.2",
     "tslib": "^2.8.1",
+    "tsx": "^4.19.3",
     "typescript": "^4.3.5"
   }
 }
