@@ -1,12 +1,6 @@
 # Conduit - AI Augmented Design and Implementation
 
-In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. Your challenge in this assignment is to guide AI to extend an existing project with a new user story.
-
-Your submission should not reflect the capabilities of the AI but should showcase your skills in guiding and leveraging it to fulfill the given requirements. Make sure to provide instructions and context to the AI based on your knowledge, ensuring that the solution generated is something you are comfortable attaching your name to.
-
-This repository contains the project to be extended, which is a full-stack TypeScript application consisting of a NestJS backend and an React frontend. The project uses a stack similar to our products and we welcome you to leverage AI to fill any knowledge gaps. If you believe success hinges primarily on familiarity with specific technologies, our roles may not align with your approach.
-
-Your mindset should be that of a senior software engineer who is responsible for delivering this user story, while having complete, long-term ownership of the codebase. Hence the code that you write should not damage your ability to extend the codebase in the future.
+In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. You will extend a full-stack TypeScript project. The project has a NestJS backend and a React frontend. Your task is to add a new user story using the AI tool. The goal is to show your skills in planning and guiding the AI while keeping long-term code quality in mind.
 
 In Production, this application is deployed on AWS following the architecture below. Any changes you make must work within this architecture, otherwise once your story is released, it will not properly work.
 
@@ -16,47 +10,69 @@ In Production, this application is deployed on AWS following the architecture be
 
 Before starting the assessment, you should:
 
-1. Familiarize yourself with the technologies.
-1. Start the code in GitHub Codespaces:
-   - Sign up for a free GitHub Codespaces account here: https://github.com/settings/codespaces using your GitHub account.
-   - Open the following link to launch a browser-based VSCode environment: https://github.com/codespaces/new?repo=678723453&ref=rwa/design-and-implementation-v1.
-   - This will automatically install the project dependencies, seed the database, and start the backend and frontend servers.
-   - Once these are done, you can access the UI at http://localhost:3001 and log in with `jcosten0@purevolume.com` / `password`.
-   - The environment comes with a pre-configured Aider AI CLI chat interface. You must use this tool for all AI interactions.
-1. Walk through the project and understand the codebase:
-   - The React frontend is in the `frontend` folder.
-   - The NestJS backend is in the `backend` folder, including the database migrations.
-1. As mentioned, you will use Aider as the sole AI tool for this assessment. 
-   - The [official docs](https://aider.chat/docs/usage/tutorials.html) to get started.
-   - The command to launch the Aider CLI with an assessment-specific API key is provided on the Crossover assessment page.
-   - This key will allow you to use Aider for about 100 messages. If you run out of messages, please submit your progress until that point.
-   - Please make sure to not delete the `.aider.chat.history.md` and `.aider.input.history` files. These will be part of your submission.
-1. Look at the [plan.md](./plan.md) file to understand how you should structure your implementation plan for this assessment.
-1. Check out and acknowledge the grading criteria.
+1. **Learn the Technologies:**
+
+   - Review the project's technologies (NestJS, React, TypeScript, AWS).
+   - Understand the architecture from the provided diagram.
+
+2. **Set Up GitHub Codespaces:**
+
+   - Create a free GitHub Codespaces account at [GitHub Codespaces](https://github.com/settings/codespaces).
+   - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/design-and-implementation-v1).
+   - Your environment will automatically install all dependencies, seed the database, and start both the backend and frontend servers.
+   - Visit [http://localhost:3001](http://localhost:3001) in your browser. Log in with:
+     - **Email:** jcosten0@purevolume.com
+     - **Password:** password
+
+3. **Review the Codebase:**
+
+   - **Frontend:** Located in the `frontend` folder.
+   - **Backend:** Located in the `backend` folder (includes database migrations).
+   - Spend time exploring the code to understand its structure and logic.
+
+4. **Use Aider:**
+
+   - You must use the pre-installed Aider CLI for all your AI interactions.
+   - Follow the [Aider documentation](https://aider.chat/docs/usage/tutorials.html) to learn how to use the tool.
+   - You will use an assessment-specific API key (provided on the Crossover page) which allows about 100 messages.
+   - **Important:** Do not delete the files `.aider.chat.history.md` or `.aider.input.history`.
+
+5. **Understand how to Plan:**
+
+   - Read the [plan.md](./plan.md) file to know how to structure your implementation plan.
+
+6. **Review Evaluation Criteria:**
+   - Check the criteria to know how your work will be graded.
+   - Focus on clarity, code quality, correctness, effective AI usage, and speed of delivery.
+
+## Mandatory Rules
+
+- **Do Not Fork**: Work on the provided repository. The submission script will malfunction if you fork the repository and push to it.
+- **Use the Correct Branch**: There are other assessment branches in the repository. You must be on rwa/design-and-implementation-v1.
+- **Start with a Plan**: When implementing, first derive your plan from the user story. If you submit without a plan, you'll get 0 stars.
+- **Single AI Tool**: Use Aider exclusively for AI interactions.
+- **Preserve Aider Files**: Do not delete .aider.chat.history.md or .aider.input.history. If you submit without these files, you'll get 0 stars.
 
 ## Notes
 
-- About the repository:
-  - Please do NOT fork this repository. You will share your code changes as a git diff at the end.
-  - When writing code, make sure to be on the `rwa/design-and-implementation-v1` branch.
-- About the project:
-  - You can find the backend API spec at http://localhost:3000/docs.
-  - The project doesn't include tests, and you're not required to write any.
-- About using Aider:
-  - Imagine that it is a "junior" with little context about the project, but good general technical knowledge.
-  - You can easily reference files in the project by mentioning them by name, ask it to edit them, etc.
-  - But Aider on its own will not know what great code looks like. YOU need to guide it.
+- **API Docs:** You can find the API documentation at [http://localhost:3000/docs](http://localhost:3000/docs).
+
+- **Testing:** The project does not include tests. You are not required to write any tests for this task.
+
+- **Aider:** Think of Aider as a junior developer with good general knowledge but little context about the project. Provide clear instructions and reference specific files when asking for changes.
+
+- **Environment:** If you cannot use Codespaces, you can set up a local development environment by following [these steps](https://www.perplexity.ai/search/what-are-the-concise-precise-s-khlwVDwQTMODLaC6wB_7DQ).
 
 ## Evaluation Criteria
 
-| Criteria | Description | 0 Stars | 1 Star | 2 Stars | 3 Stars |
-|----------|-------------|---------|---------|----------|---------|
-| **Plan Soundness** | The implementation plan should be clear, complete and include rationale for technical choices | No plan submitted | Plan is incomplete, shallow or vague | Plan doesn't include clear rationale for choices | Plan is clear, complete with good rationale |
-| **Code Quality** | Code should be clean, efficient, consistent with existing code, respect architecture and follow SOLID/DRY principles | Code does not respect any quality standards | Code does not respect quality standards | Code mostly adheres to standards with some issues | Code is clean and fully adheres to standards |
-| **Correctness and Completeness** | Features should work correctly and meet requirements | Code does not work at all | Only BASIC features implemented | ADVANCED features with bugs, limitations or small missing edge cases | ADVANCED features with no bugs, limitations, etc. |
-| **AI Usage** | AI should be guided with proper context, clear inputs, instructions, quality rules and feedback | Did not use AI | Used AI only for basic questions | Used AI with good context but some hiccups | Used AI effectively with clear guidance |
-| **Velocity** | Time taken to complete the task after requirements are provided | Did not complete | Took multiple days | Took <= 6 hours | Took <= 3 hours |
+| **Criteria**       | **Description**                                    | **0 Stars**           | **1 Star**                    | **2 Stars**                                 | **3 Stars**                                          |
+| ------------------ | -------------------------------------------------- | --------------------- | ----------------------------- | ------------------------------------------- | ---------------------------------------------------- |
+| **Plan Soundness** | How clear and complete your plan is.               | No plan submitted     | Plan is incomplete or unclear | Some details missing and unclear rationale  | Clear, complete plan with detailed technical reasons |
+| **Code Quality**   | Code cleanliness, efficiency, and maintainability. | Code is very messy    | Code quality is poor          | Mostly clean with minor issues              | Clean, efficient, and follows best practices         |
+| **Correctness**    | Does the feature work as required?                 | Feature does not work | Only BASIC features work | ADVANCED features work with some bugs       | Fully functional with no bugs                        |
+| **AI Usage**       | How well you guide and use the AI tool.            | AI not used at all    | Basic or unclear usage        | Mostly clear instructions with minor issues | Clear, effective, and well-guided AI usage           |
+| **Velocity**       | Time taken to complete the task.                   | Task not finished     | Took several days             | Completed in 6 hours or less                | Completed in 3 hours or less                         |
 
 ## Next Steps
 
-Once you are ready, press the link within the Crossover assessment to receive the user story requirements.
+Once you are ready, click the link on the Crossover assessment page to get the user story requirements. Create your plan, follow it, work carefully within the architecture, and ensure your changes integrate smoothly with the existing project.
