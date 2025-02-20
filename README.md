@@ -6,3 +6,4 @@ Please checkout the branch corresponding to the assessment you are taking:
 
 - https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/defect-resolution-v3
 - https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/feature-development-v3
+- https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/design-and-implementation-v1
