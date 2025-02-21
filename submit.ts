@@ -14,7 +14,7 @@ const API_URL = 'iyuja327ulc6hq3xsypufut7bh0lygdq.ynzoqn-hey.hf-rnfg-1.ba.njf';
 const REPO_GIT_URL = 'https://github.com/trilogy-group/ws-eng-conduit-ai-assessment.git';
 
 if (process.argv.length !== 3) {
-  console.error('Please provide the assessment ID as an argument');
+  console.error('❌ Please use the command from the instructions to submit!');
   process.exit(1);
 }
 
@@ -32,7 +32,7 @@ function execCommand(command: string): string {
   try {
     return execSync(command).toString().trim();
   } catch (error) {
-    console.error(`Error executing command: ${command}`, error);
+    console.error(`❌ Error executing command: ${command}`, error);
     return '';
   }
 }
@@ -74,11 +74,11 @@ async function createGitDiff(): Promise<string> {
   execCommand(`git commit --allow-empty -am "chore(conduit): Generates patch."`);
   const remoteName = execCommand('git remote').split('\n')[0]?.trim() || 'origin';
   const diffOutput = execCommand(
-    `git diff ${remoteName}/${ASSESSMENT_BRANCH}...HEAD -- . ":!*.patch" ":!yarn.lock" ":!package-lock.json" ":!**/tsconfig*.json"`,
+    `git diff ${remoteName}/${ASSESSMENT_BRANCH}...HEAD -- . ":!plan.md" ":!*.patch" ":!yarn.lock" ":!package-lock.json" ":!**/tsconfig*.json"`,
   );
   const diffPath = path.join(SUBMISSION_DIR, 'submission.patch');
   if (!diffOutput?.trim()) {
-    console.log("No code changes were detected. This may mean that you forked or created your own copy of the repository.");
+    console.log("⚠️ No code changes were detected. This may mean that you forked or created your own copy of the repository.");
     console.log(`If so, reset your git origin to '${REPO_GIT_URL}'.`);
     console.log(`You can do so by running 'git remote set-url origin ${REPO_GIT_URL}'.`);
     console.log("Afterward, please run the submit script again to properly detect your code changes.");
@@ -92,11 +92,11 @@ async function getSubmissionWarnings(diffPath: string): Promise<string[]> {
   const diffSize = (await fs.stat(diffPath)).size;
   
   if (diffSize < 100) {
-    warnings.push('WARNING: Code Quality & Correctness - Your code submission is likely incomplete (patch file is very small). This will affect your evaluation score.');
+    warnings.push('⚠️ WARNING: Code Quality & Correctness - Your code submission is likely incomplete (patch file is very small). This will affect your evaluation score.');
   }
 
   if (await countFilesByExtension(['.jpg', '.jpeg', '.png', '.gif', '.bmp']) === 0) {
-    warnings.push('WARNING: Completeness - No screenshots found. Without visual proof of implementation, we cannot properly evaluate feature completeness.');
+    warnings.push('⚠️ WARNING: Completeness - No screenshots found. Without visual proof of implementation, we cannot properly evaluate feature completeness.');
   }
 
   const aiderFiles = ['.aider.chat.history.md', '.aider.input.history'];
@@ -104,20 +104,20 @@ async function getSubmissionWarnings(diffPath: string): Promise<string[]> {
     try {
       const stats = await fs.stat(file);
       if (stats.size < 100) {
-        warnings.push(`WARNING: AI Usage - ${file} is very small. This suggests limited AI interaction, which will affect your AI Usage score.`);
+        warnings.push(`⚠️ WARNING: AI Usage - ${file} is very small. This suggests limited AI interaction, which will affect your AI Usage score.`);
       }
     } catch {
-      warnings.push(`WARNING: AI Usage - ${file} not found. Missing AI interaction history will result in 0 stars for AI Usage.`);
+      warnings.push(`⚠️ WARNING: AI Usage - ${file} not found. Missing AI interaction history will result in 0 stars for AI Usage.`);
     }
   }
 
   try {
     const planStats = await fs.stat('plan.md');
     if (planStats.size < 100) {
-      warnings.push('WARNING: Plan Soundness - plan.md is very small. A thorough implementation plan is required for a good evaluation score.');
+      warnings.push('⚠️ WARNING: Plan Soundness - plan.md is very small. A thorough implementation plan is required for a good evaluation score.');
     }
   } catch {
-    warnings.push('WARNING: Plan Soundness - No plan.md found. Missing implementation plan will result in 0 stars for Plan Soundness.');
+    warnings.push('⚠️ WARNING: Plan Soundness - No plan.md found. Missing implementation plan will result in 0 stars for Plan Soundness.');
   }
 
   return warnings;
@@ -136,7 +136,7 @@ async function confirmSubmission({ name, email, diffPath }: { name: string; emai
   const warnings = await getSubmissionWarnings(diffPath);
   if (warnings.length > 0) {
     console.log('\nWarnings:');
-    warnings.forEach(warning => console.log(warning));
+    warnings.forEach(warning => console.warn(warning));
     console.log('');
   }
 
@@ -171,7 +171,7 @@ async function addRootPlanMd(zip: JSZip): Promise<void> {
   try {
     await addFileToZip(zip, 'plan.md', 'plan.md');
   } catch {
-    console.warn('No plan.md file found in root directory');
+    console.warn('⚠️ WARNING: No plan.md file found in root directory');
   }
 }
 
@@ -181,7 +181,7 @@ async function addAiderFiles(zip: JSZip): Promise<void> {
     try {
       await addFileToZip(zip, file, file);
     } catch {
-      console.warn(`${file} not found in root directory`);
+      console.warn(`⚠️ WARNING: ${file} not found in root directory`);
     }
   }
 }
@@ -213,7 +213,7 @@ async function uploadSubmission(zip: Buffer, name: string, email: string): Promi
       'Please copy-paste this ID into the Crossover assessment page. You may resubmit your work as many times as you need, but only the submission with the ID recorded into the Crossover assessment page will be considered.',
     );
   } catch (error) {
-    console.error('Failed to upload submission. If you cannot resolve the issue, please contact support.', error);
+    console.error('❌ Failed to upload submission. If you cannot resolve the issue, please contact support.', error);
     process.exit(1);
   }
 }
