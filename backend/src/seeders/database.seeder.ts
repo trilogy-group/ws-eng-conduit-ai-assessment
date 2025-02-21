@@ -3,10 +3,15 @@ import { Seeder } from '@mikro-orm/seeder';
 import { Article } from '../article/article.entity';
 import { Tag } from '../tag/tag.entity';
 import { User } from '../user/user.entity';
-import { Comment } from '../article/comment.entity';
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
+
+    if ((await em.count(User)) > 0) {
+      console.warn('Database is not empty, skipping seed.');
+      return;
+    }
+
     const tags = this.getTags(em);
     const authors = this.getAuthors(em);
     authors.john.followed.add(authors.bennie);
