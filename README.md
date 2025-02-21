@@ -16,12 +16,12 @@ Before starting the assessment, you should:
 
 1. **Learn the Technologies:**
 
-   - Review the project's technologies (NestJS, React, TypeScript, AWS).
+   - Review the project's technologies (NestJS, React, TypeScript, MySQL, AWS).
    - Understand the architecture from the provided diagram.
 
 2. **Set Up GitHub Codespaces:**
 
-   - Create a free GitHub Codespaces account at [GitHub Codespaces](https://github.com/settings/codespaces).
+   - Create a free GitHub account at [GitHub](https://github.com/signup).
    - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/design-and-implementation-v1).
    - Your environment will automatically install all dependencies, seed the database, and start both the backend and frontend servers.
    - Visit [http://localhost:3001](http://localhost:3001) in your browser. Log in with:

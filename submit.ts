@@ -72,8 +72,9 @@ async function countFilesByExtension(extensions = ['.json']): Promise<number> {
 async function createGitDiff(): Promise<string> {
   execCommand('git add --all');
   execCommand(`git commit --allow-empty -am "chore(conduit): Generates patch."`);
+  const remoteName = execCommand('git remote').split('\n')[0]?.trim() || 'origin';
   const diffOutput = execCommand(
-    `git diff origin/${ASSESSMENT_BRANCH}...HEAD -- . ":!*.patch" ":!yarn.lock" ":!package-lock.json" ":!**/tsconfig*.json"`,
+    `git diff ${remoteName}/${ASSESSMENT_BRANCH}...HEAD -- . ":!*.patch" ":!yarn.lock" ":!package-lock.json" ":!**/tsconfig*.json"`,
   );
   const diffPath = path.join(SUBMISSION_DIR, 'submission.patch');
   if (!diffOutput?.trim()) {
