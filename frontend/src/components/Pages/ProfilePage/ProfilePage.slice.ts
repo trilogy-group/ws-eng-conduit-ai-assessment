@@ -1,14 +1,13 @@
-import { None, Option, Some } from '@hqoss/monads';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Profile } from '../../../types/profile';
 
 export interface ProfilePageState {
-  profile: Option<Profile>;
+  profile: Profile | null;
   submitting: boolean;
 }
 
 const initialState: ProfilePageState = {
-  profile: None,
+  profile: null,
   submitting: false,
 };
 
@@ -18,7 +17,7 @@ const slice = createSlice({
   reducers: {
     initializeProfile: () => initialState,
     loadProfile: (state, { payload: profile }: PayloadAction<Profile>) => {
-      state.profile = Some(profile);
+      state.profile = profile;
       state.submitting = false;
     },
     startSubmitting: (state) => ({ ...state, submitting: true }),

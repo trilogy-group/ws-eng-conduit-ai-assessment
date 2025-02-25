@@ -72,35 +72,32 @@ function Tab({ tab, active, onClick }: { tab: string; active: boolean; onClick: 
 }
 
 function ArticleList({ articles }: { articles: ArticleViewerState['articles'] }) {
-  return articles.match({
-    none: () => (
-      <div className='article-preview' key={1}>
-        Loading articles...
-      </div>
-    ),
-    some: (articles) => (
-      <Fragment>
-        {articles.length === 0 && (
-          <div className='article-preview' key={1}>
-            No articles are here... yet.
-          </div>
-        )}
-        {articles.map(({ article, isSubmitting }, index) => (
-          <ArticlePreview
-            key={article.slug}
-            article={article}
-            isSubmitting={isSubmitting}
-            onFavoriteToggle={isSubmitting ? undefined : onFavoriteToggle(index, article)}
-          />
-        ))}
-      </Fragment>
-    ),
-  });
+  return articles.length === 0 ? (
+    <div className='article-preview' key={1}>
+      Loading articles...
+    </div>
+  ) : (
+    <Fragment>
+      {articles.length === 0 && (
+        <div className='article-preview' key={1}>
+          No articles are here... yet.
+        </div>
+      )}
+      {articles.map(({ article, isSubmitting }, index) => (
+        <ArticlePreview
+          key={article.slug}
+          article={article}
+          isSubmitting={isSubmitting}
+          onFavoriteToggle={isSubmitting ? undefined : onFavoriteToggle(index, article)}
+        />
+      ))}
+    </Fragment>
+  );
 }
 
 function onFavoriteToggle(index: number, { slug, favorited }: Article) {
   return async () => {
-    if (store.getState().app.user.isNone()) {
+    if (!store.getState().app.user) {
       location.hash = '#/login';
       return;
     }

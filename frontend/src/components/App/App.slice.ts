@@ -1,14 +1,13 @@
-import { None, Option, Some } from '@hqoss/monads';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../types/user';
 
 export interface AppState {
-  user: Option<User>;
+  user: User | null;
   loading: boolean;
 }
 
 const initialState: AppState = {
-  user: None,
+  user: null,
   loading: true,
 };
 
@@ -18,11 +17,11 @@ const slice = createSlice({
   reducers: {
     initializeApp: () => initialState,
     loadUser: (state, { payload: user }: PayloadAction<User>) => {
-      state.user = Some(user);
+      state.user = user;
       state.loading = false;
     },
     logout: (state) => {
-      state.user = None;
+      state.user = null;
     },
     endLoad: (state) => {
       state.loading = false;

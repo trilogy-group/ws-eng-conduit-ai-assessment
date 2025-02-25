@@ -11,10 +11,10 @@ export function EditArticle() {
   const { loading } = useStore(({ editor }) => editor);
 
   useEffect(() => {
-    _loadArticle(slug);
+    _loadArticle(slug!);
   }, [slug]);
 
-  return <Fragment>{!loading && <ArticleEditor onSubmit={onSubmit(slug)} />}</Fragment>;
+  return <Fragment>{!loading && <ArticleEditor onSubmit={onSubmit(slug!)} />}</Fragment>;
 }
 
 async function _loadArticle(slug: string) {
@@ -22,7 +22,7 @@ async function _loadArticle(slug: string) {
   try {
     const { title, description, body, tagList, author } = await getArticle(slug);
 
-    if (author.username !== store.getState().app.user.unwrap().username) {
+    if (author.username !== store.getState().app.user?.username) {
       location.hash = '#/';
       return;
     }

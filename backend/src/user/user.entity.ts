@@ -21,20 +21,20 @@ export class User {
   @PrimaryKey({ type: 'number' })
   id: number;
 
-  @Property()
+  @Property({ fieldName: 'username' })
   username: string;
 
-  @Property({ hidden: true })
+  @Property({ hidden: true, fieldName: 'email' })
   @IsEmail()
   email: string;
 
-  @Property()
+  @Property({ fieldName: 'bio' })
   bio = '';
 
-  @Property()
+  @Property({ fieldName: 'image' })
   image = '';
 
-  @Property({ hidden: true })
+  @Property({ hidden: true, fieldName: 'password' })
   password: string;
 
   @ManyToMany({ entity: () => Article, hidden: true })
@@ -66,12 +66,12 @@ export class User {
   toJSON(user?: User) {
     const o = wrap<User>(this).toObject() as UserDTO;
     o.image = this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg';
-    o.following = user && user.followers.isInitialized() ? user.followers.contains(this) : false; // TODO or followed?
+    o.following = user && user.followers?.isInitialized() ? user.followers.contains(this) : false; // TODO or followed?
 
     return o;
   }
 }
 
-interface UserDTO extends EntityDTO<User> {
+export interface UserDTO extends EntityDTO<User> {
   following?: boolean;
 }

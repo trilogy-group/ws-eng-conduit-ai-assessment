@@ -13,7 +13,11 @@ High-level step by step plan of what you will do. For example:
 
 ## Decisions
 
-The top 2-3 decision you have taken, plus the alternatives and rationale for your choices. For example:
+The top 2-3 decisions you have taken, plus the alternatives and rationale for your choices. Each alternative listed must be feasible (i.e., do not list alternatives would not even work). 
+
+You should include a decision for cases where you either: change the data model, select a third-party library (or build something from scratch), or create a new mechanism/pattern. 
+
+For example:
 
 - Decision: Use GitHub Codespaces for the development environment.
   - Alternative: Use a local development environment.

@@ -13,7 +13,7 @@ export function UserInfo({
   onEditSettings?: () => void;
 }) {
   const { user } = useStore(({ app }) => app);
-  const sessionUsername = user.map((x) => x.username).unwrapOr('');
+  const sessionUsername = user?.username ?? '';
 
   return (
     <div className='user-info'>

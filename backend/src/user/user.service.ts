@@ -1,11 +1,11 @@
+import { EntityManager, wrap } from '@mikro-orm/core';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { validate } from 'class-validator';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { EntityManager, wrap } from '@mikro-orm/core';
 import { SECRET } from '../config';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
-import { User } from './user.entity';
+import { User, UserDTO } from './user.entity';
 import { IUserRO } from './user.interface';
 import { UserRepository } from './user.repository';
 
@@ -113,5 +113,23 @@ export class UserService {
     };
 
     return { user: userRO };
+  }
+
+  async findAllWithPagination(query: Record<string, string>): Promise<{ users: UserDTO[]; usersCount: number }> {
+    const qb = this.userRepository.createQueryBuilder('u');
+    
+    qb.orderBy({ id: 'DESC' });
+    const usersCount = await qb.clone().count('id', true).execute('get');
+
+    if ('limit' in query) {
+      qb.limit(+query.limit);
+    }
+
+    if ('offset' in query) {
+      qb.offset(+query.offset);
+    }
+
+    const users = await qb.getResult();
+    return { users: users.map((user) => user.toJSON()), usersCount: usersCount.count };
   }
 }

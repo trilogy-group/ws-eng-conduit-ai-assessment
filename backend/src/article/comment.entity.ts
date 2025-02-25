@@ -7,19 +7,19 @@ export class Comment {
   @PrimaryKey({ type: 'number' })
   id: number;
 
-  @Property({ type: 'date' })
+  @Property({ type: 'date', fieldName: 'created_at' })
   createdAt = new Date();
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
+  @Property({ type: 'date', onUpdate: () => new Date(), fieldName: 'updated_at' })
   updatedAt = new Date();
 
-  @Property()
+  @Property({ fieldName: 'body' })
   body: string;
 
-  @ManyToOne(() => Article)
+  @ManyToOne(() => Article, { fieldName: 'article_id' })
   article: Article;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { fieldName: 'author_id' })
   author: User;
 
   constructor(author: User, article: Article, body: string) {

@@ -27,7 +27,7 @@ function createUserOnlyRoute(path: string, element: JSX.Element, userIsLogged: b
 export function App() {
   const { loading, user } = useStoreWithInitializer(({ app }) => app, load);
 
-  const userIsLogged = user.isSome();
+  const userIsLogged = !!user;
 
   return (
     <HashRouter>

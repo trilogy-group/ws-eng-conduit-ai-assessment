@@ -22,21 +22,16 @@ export function ProfilePage() {
 
   return (
     <div className='profile-page'>
-      {profile.match({
-        none: () => (
-          <div className='article-preview' key={1}>
-            Loading profile...
-          </div>
-        ),
-        some: (profile) => (
-          <UserInfo
-            user={profile}
-            disabled={submitting}
-            onFollowToggle={onFollowToggle(profile)}
-            onEditSettings={() => redirect('settings')}
-          />
-        ),
-      })}
+      {profile ? (
+        <UserInfo
+          user={profile}
+          disabled={submitting}
+          onFollowToggle={onFollowToggle(profile)}
+          onEditSettings={() => redirect('settings')}
+        />
+      ) : (
+        <div>Loading profile...</div>
+      )}
 
       <div className='container'>
         <div className='row'>
@@ -78,7 +73,7 @@ async function getArticlesByType(username: string, favorites: boolean) {
 function onFollowToggle(profile: Profile): () => void {
   return async () => {
     const { user } = store.getState().app;
-    if (user.isNone()) {
+    if (!user) {
       redirect('register');
       return;
     }

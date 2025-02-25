@@ -1,18 +1,18 @@
-import { Decoder, iso8601, number, object, string } from 'decoders';
+import { Decoder, number, object, string } from 'decoders';
 import { Profile, profileDecoder } from './profile';
 
 export interface Comment {
   id: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   body: string;
   author: Profile;
 }
 
 export const commentDecoder: Decoder<Comment> = object({
   id: number,
-  createdAt: iso8601,
-  updatedAt: iso8601,
+  createdAt: string,
+  updatedAt: string,
   body: string,
   author: profileDecoder,
 });

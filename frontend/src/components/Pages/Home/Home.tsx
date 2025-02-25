@@ -1,4 +1,3 @@
-import { Option } from '@hqoss/monads';
 import { getArticles, getFeed, getTags } from '../../../services/conduit';
 import { store } from '../../../state/store';
 import { useStoreWithInitializer } from '../../../state/storeHooks';
@@ -37,7 +36,7 @@ async function load() {
   store.dispatch(startLoadingArticles());
   store.dispatch(startLoadingTags());
 
-  if (store.getState().app.user.isSome()) {
+  if (store.getState().app.user) {
     store.dispatch(changeTab('Your Feed'));
   }
 
@@ -62,7 +61,7 @@ function renderBanner() {
 function buildTabsNames(selectedTab: string) {
   const { user } = store.getState().app;
 
-  return Array.from(new Set([...(user.isSome() ? ['Your Feed'] : []), 'Global Feed', selectedTab]));
+  return Array.from(new Set([...(user ? ['Your Feed'] : []), 'Global Feed', selectedTab]));
 }
 
 async function onPageChange(index: number) {
@@ -92,24 +91,22 @@ async function getFeedOrGlobalArticles(filters: FeedFilters = {}) {
   );
 }
 
-function HomeSidebar({ tags }: { tags: Option<string[]> }) {
+function HomeSidebar({ tags }: { tags: string[] }) {
   return (
     <div className='sidebar'>
       <p>Popular Tags</p>
 
-      {tags.match({
-        none: () => <span>Loading tags...</span>,
-        some: (tags) => (
-          <div className='tag-list'>
-            {' '}
-            {tags.map((tag) => (
-              <a key={tag} href='#' className='tag-pill tag-default' onClick={() => onTabChange(`# ${tag}`)}>
-                {tag}
-              </a>
-            ))}{' '}
-          </div>
-        ),
-      })}
+      {tags.length === 0 ? (
+        <span>Loading tags...</span>
+      ) : (
+        <div className='tag-list'>
+          {tags.map((tag) => (
+            <a key={tag} href='#' className='tag-pill tag-default' onClick={() => onTabChange(`# ${tag}`)}>
+              {tag}&nbsp;
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

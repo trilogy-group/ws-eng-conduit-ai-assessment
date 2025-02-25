@@ -5,6 +5,6 @@ export class Tag {
   @PrimaryKey({ type: 'number' })
   id: number;
 
-  @Property()
+  @Property({ fieldName: 'tag' })
   tag: string;
 }

@@ -14,10 +14,7 @@ export function Header() {
         </a>
         <ul className='nav navbar-nav pull-xs-right'>
           <NavItem text='Home' href='/' />
-          {user.match({
-            none: () => <GuestLinks />,
-            some: (user) => <UserLinks user={user} />,
-          })}
+          {user ? <UserLinks user={user} /> : <GuestLinks />}
         </ul>
       </div>
     </nav>

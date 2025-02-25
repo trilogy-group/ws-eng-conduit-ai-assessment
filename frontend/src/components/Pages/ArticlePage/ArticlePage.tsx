@@ -1,4 +1,3 @@
-import { Option } from '@hqoss/monads';
 import { format } from 'date-fns';
 import React, { Fragment, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -50,29 +49,28 @@ export function ArticlePage() {
     onLoad(slug!);
   }, [slug]);
 
-  return article.match({
-    none: () => <div>Loading article...</div>,
-    some: (article) => (
-      <div className='article-page'>
-        <ArticlePageBanner {...{ article, metaSection, user }} />
+  return article ? (
+    <div className='article-page'>
+      <ArticlePageBanner {...{ article, metaSection, user }} />
 
-        <div className='container page'>
-          <div className='row article-content'>
-            <div className='col-md-12'>{article.body}</div>
-            <TagList tagList={article.tagList} />
-          </div>
-
-          <hr />
-
-          <div className='article-actions'>
-            <ArticleMeta {...{ article, metaSection, user }} />
-          </div>
-
-          <CommentSection {...{ user, commentSection, article }} />
+      <div className='container page'>
+        <div className='row article-content'>
+          <div className='col-md-12'>{article.body}</div>
+          <TagList tagList={article.tagList} />
         </div>
+
+        <hr />
+
+        <div className='article-actions'>
+          <ArticleMeta {...{ article, metaSection, user }} />
+        </div>
+
+        <CommentSection {...{ user, commentSection, article }} />
       </div>
-    ),
-  });
+    </div>
+  ) : (
+    <div>Loading article...</div>
+  );
 }
 
 async function onLoad(slug: string) {
@@ -89,7 +87,7 @@ async function onLoad(slug: string) {
   }
 }
 
-function ArticlePageBanner(props: { article: Article; metaSection: MetaSectionState; user: Option<User> }) {
+function ArticlePageBanner(props: { article: Article; metaSection: MetaSectionState; user: User | null }) {
   return (
     <div className='banner'>
       <div className='container'>
@@ -108,13 +106,13 @@ function ArticleMeta({
 }: {
   article: Article;
   metaSection: MetaSectionState;
-  user: Option<User>;
+  user: User | null;
 }) {
   return (
     <div className='article-meta'>
       <ArticleAuthorInfo article={article} />
 
-      {user.isSome() && user.unwrap().username === article.author.username ? (
+      {user && user.username === article.author.username ? (
         <OwnerArticleMetaActions article={article} deletingArticle={deletingArticle} />
       ) : (
         <NonOwnerArticleMetaActions
@@ -199,7 +197,7 @@ function NonOwnerArticleMetaActions({
 }
 
 async function onFollow(username: string, following: boolean) {
-  if (store.getState().app.user.isNone()) {
+  if (!store.getState().app.user) {
     redirect('register');
     return;
   }
@@ -211,7 +209,7 @@ async function onFollow(username: string, following: boolean) {
 }
 
 async function onFavorite(slug: string, favorited: boolean) {
-  if (store.getState().app.user.isNone()) {
+  if (!store.getState().app.user) {
     redirect('register');
     return;
   }
@@ -259,39 +257,36 @@ function CommentSection({
   article,
   commentSection: { submittingComment, commentBody, comments },
 }: {
-  user: Option<User>;
+  user: User | null;
   article: Article;
   commentSection: CommentSectionState;
 }) {
   return (
     <div className='row'>
       <div className='col-xs-12 col-md-8 offset-md-2'>
-        {user.match({
-          none: () => (
-            <p style={{ display: 'inherit' }}>
-              <Link to='/login'>Sign in</Link> or <Link to='/register'>sign up</Link> to add comments on this article.
-            </p>
-          ),
-          some: (user) => (
-            <CommentForm
-              user={user}
-              slug={article.slug}
-              submittingComment={submittingComment}
-              commentBody={commentBody}
-            />
-          ),
-        })}
-
-        {comments.match({
-          none: () => <div>Loading comments...</div>,
-          some: (comments) => (
-            <Fragment>
-              {comments.map((comment, index) => (
-                <ArticleComment key={comment.id} comment={comment} slug={article.slug} user={user} index={index} />
-              ))}
-            </Fragment>
-          ),
-        })}
+        {user ? (
+          <CommentForm
+            user={user}
+            slug={article.slug}
+            submittingComment={submittingComment}
+            commentBody={commentBody}
+          />
+        ) : (
+          <p>
+            <Link to='/login'>Sign in</Link> or <Link to='/register'>sign up</Link> to add comments on this article.
+          </p>
+        )}
+      </div>
+      <div className='col-xs-12 col-md-8 offset-md-2'>
+        {comments.length === 0 ? (
+          <div>No comments yet...</div>
+        ) : (
+          <Fragment>
+            {comments.map((comment, index) => (
+              <ArticleComment key={comment.id} comment={comment} slug={article.slug} user={user} index={index} />
+            ))}
+          </Fragment>
+        )}
       </div>
     </div>
   );
@@ -358,7 +353,7 @@ function ArticleComment({
   comment: Comment;
   slug: string;
   index: number;
-  user: Option<User>;
+  user: User | null;
 }) {
   return (
     <div className='card'>
@@ -374,7 +369,7 @@ function ArticleComment({
           {username}
         </Link>
         <span className='date-posted'>{format(createdAt, 'PP')}</span>
-        {user.isSome() && user.unwrap().username === username && (
+        {user && user.username === username && (
           <span className='mod-options'>
             <i
               className='ion-trash-a'

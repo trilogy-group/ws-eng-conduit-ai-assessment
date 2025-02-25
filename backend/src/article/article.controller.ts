@@ -14,8 +14,8 @@ export class ArticleController {
   @ApiOperation({ summary: 'Get all articles' })
   @ApiResponse({ status: 200, description: 'Return all articles.' })
   @Get()
-  async findAll(@User('id') user: number, @Query() query: Record<string, string>): Promise<IArticlesRO> {
-    return this.articleService.findAll(+user, query);
+  async findAll(@User('id') userId: number, @Query() query: Record<string, string>): Promise<IArticlesRO> {
+    return this.articleService.findAll(+userId, query);
   }
 
   @ApiOperation({ summary: 'Get article feed' })
@@ -53,7 +53,6 @@ export class ArticleController {
     @Param() params: Record<string, string>,
     @Body('article') articleData: CreateArticleDto,
   ) {
-    // Todo: update slug also when title gets changed
     return this.articleService.update(+user, params.slug, articleData);
   }
 

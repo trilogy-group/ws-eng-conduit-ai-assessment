@@ -19,34 +19,34 @@ export class Article {
   @PrimaryKey({ type: 'number' })
   id: number;
 
-  @Property()
+  @Property({ fieldName: 'slug' })
   slug: string;
 
-  @Property()
+  @Property({ fieldName: 'title' })
   title: string;
 
-  @Property()
+  @Property({ fieldName: 'description' })
   description = '';
 
-  @Property()
+  @Property({ fieldName: 'body' })
   body = '';
 
-  @Property({ type: 'date' })
+  @Property({ type: 'date', fieldName: 'created_at' })
   createdAt = new Date();
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
+  @Property({ type: 'date', onUpdate: () => new Date(), fieldName: 'updated_at' })
   updatedAt = new Date();
 
-  @Property({ type: ArrayType })
+  @Property({ type: ArrayType, fieldName: 'tag_list' })
   tagList: string[] = [];
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { fieldName: 'author_id' })
   author: User;
 
   @OneToMany(() => Comment, (comment) => comment.article, { eager: true, orphanRemoval: true })
   comments = new Collection<Comment>(this);
 
-  @Property({ type: 'number' })
+  @Property({ type: 'number', fieldName: 'favorites_count' })
   favoritesCount = 0;
 
   constructor(author: User, title: string, description: string, body: string) {

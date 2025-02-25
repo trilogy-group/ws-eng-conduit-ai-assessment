@@ -1,4 +1,4 @@
-import { array, boolean, Decoder, iso8601, number, object, string } from 'decoders';
+import { array, boolean, Decoder, number, object, string } from 'decoders';
 import { Profile, profileDecoder } from './profile';
 
 export interface Article {
@@ -7,8 +7,8 @@ export interface Article {
   description: string;
   body: string;
   tagList: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   favorited: boolean;
   favoritesCount: number;
   author: Profile;
@@ -20,8 +20,8 @@ export const articleDecoder: Decoder<Article> = object({
   description: string,
   body: string,
   tagList: array(string),
-  createdAt: iso8601,
-  updatedAt: iso8601,
+  createdAt: string,
+  updatedAt: string,
   favorited: boolean,
   favoritesCount: number,
   author: profileDecoder,

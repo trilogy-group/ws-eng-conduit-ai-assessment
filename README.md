@@ -6,6 +6,8 @@ You may watch this video to get an overview of the assessment: https://drive.goo
 
 In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. You will extend a full-stack TypeScript project. The project has a NestJS backend and a React frontend. Your task is to add a new user story using the AI tool. The goal is to show your skills in planning and guiding the AI while keeping long-term code quality in mind.
 
+The user story is around creating and editing articles, requiring you to change the data model and introduce a new technical pattern. Once the user story requirements are shown, your implementation time will be tracked. Before revealing the requirements, make sure to go through the content below and understand the codebase.
+
 In Production, this application is deployed on AWS following the architecture below. Any changes you make must work within this architecture, otherwise once your story is released, it will not properly work.
 
 ![Architecture Diagram](./diagram.png)
@@ -14,12 +16,20 @@ In Production, this application is deployed on AWS following the architecture be
 
 Before starting the assessment, you should:
 
-1. **Learn the Technologies:**
+1. **Understand the Technologies:**
 
    - Review the project's technologies (NestJS, React, TypeScript, MySQL, AWS).
    - Understand the architecture from the provided diagram.
 
-2. **Set Up GitHub Codespaces:**
+2. **Review the Codebase:**
+
+   - **Frontend:** Located in the `frontend` folder.
+   - **Backend:** Located in the `backend` folder (includes database migrations).
+   - Spend time exploring the code to understand its structure and logic.
+   - Understand how to: extend the data model, expose an API, consume an API in the frontend.
+   - Understand how the current article creation and editing works.
+
+3. **Set Up GitHub Codespaces:**
 
    - Create a free GitHub account at [GitHub](https://github.com/signup).
    - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/design-and-implementation-v1).
@@ -27,12 +37,6 @@ Before starting the assessment, you should:
    - Visit [http://localhost:3001](http://localhost:3001) in your browser. Log in with:
      - **Email:** jcosten0@purevolume.com
      - **Password:** password
-
-3. **Review the Codebase:**
-
-   - **Frontend:** Located in the `frontend` folder.
-   - **Backend:** Located in the `backend` folder (includes database migrations).
-   - Spend time exploring the code to understand its structure and logic.
 
 4. **Use Aider:**
 
@@ -79,10 +83,15 @@ Before starting the assessment, you should:
 | ------------------ | -------------------------------------------------- | --------------------- | ----------------------------- | ------------------------------------------- | ---------------------------------------------------- |
 | **Plan Soundness** | How clear and complete your plan is.               | No plan submitted     | Plan is incomplete or unclear | Some details missing and unclear rationale  | Clear, complete plan with detailed technical reasons |
 | **Code Quality**   | Code cleanliness, efficiency, and maintainability. | Code is very messy    | Code quality is poor          | Mostly clean with minor issues              | Clean, efficient, and follows best practices         |
-| **Correctness**    | Does the feature work as required?                 | Feature does not work | Only BASIC features work | ADVANCED features work with some bugs       | Fully functional with no bugs                        |
+| **Correctness**    | Does the feature work as required?                 | Feature does not work | Only BASIC features work      | ADVANCED features work with some bugs       | Fully functional with no bugs                        |
 | **AI Usage**       | How well you guide and use the AI tool.            | AI not used at all    | Basic or unclear usage        | Mostly clear instructions with minor issues | Clear, effective, and well-guided AI usage           |
 | **Velocity**       | Time taken to complete the task.                   | Task not finished     | Took several days             | Completed in 6 hours or less                | Completed in 3 hours or less                         |
 
 ## Next Steps
 
-Once you are ready, click the link on the Crossover assessment page to get the user story requirements. Create your plan, follow it, work carefully within the architecture, and ensure your changes integrate smoothly with the existing project.
+Once you are ready, click the link on the Crossover assessment page to reveal the user story requirements. Create your plan, follow it, work carefully within the architecture, and ensure your changes integrate smoothly with the existing project. We recommend the following time budget:
+
+- 0:30: Create your plan.
+- 0:45: Implement the data model changes plus related frontend changes.
+- 1:30: Add the new technical pattern, with the related backend and frontend changes.
+- 0:15: Run the acceptance tests and submit your work.
