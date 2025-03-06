@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    network_mode: service:db
+
+  db:
+    image: mysql:8.1
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: conduit
+      MYSQL_DATABASE: conduit
+      MYSQL_USER: conduit
+      MYSQL_PASSWORD: conduit
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data: 

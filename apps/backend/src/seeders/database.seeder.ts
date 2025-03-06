@@ -6,6 +6,12 @@ import { User } from '../user/user.entity';
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
+  
+    if ((await em.count(User)) > 0) {
+      console.warn('Database is not empty, skipping seed.');
+      return;
+    }
+
     const tags = this.getTags(em);
     const authors = this.getAuthors(em);
     authors.john.followed.add(authors.bennie);
