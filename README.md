@@ -1,6 +1,6 @@
 # Conduit - AI Augmented Feature Development
 
-In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. You will extend a full-stack TypeScript project. The project has a NestJS backend and an Angular frontend. Your task is to add a new feature using the AI tool. The goal is to show your skills in building features and guiding the AI while keeping long-term code quality in mind.
+In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. You will extend a full-stack TypeScript project. The project has a NestJS backend and an Angular frontend. Your task is to add a new feature using an AI tool. The goal is to show your skills in building features and guiding the AI while keeping long-term code quality in mind.
 
 (Optional) You may watch this video to get an overview of the assessment: <TODO>
 
@@ -25,7 +25,7 @@ In this assessment, you will work on a realistic task that closely resembles iss
    - **Backend:** Located in the `apps/backend` folder (includes database migrations).
    - Spend time exploring the code to understand its structure and logic.
    - Understand how to: extend the data model, expose an API, consume an API in the frontend.
-   - Review the requirements for [the feature you will build](##feature-the-conduit-roster).
+   - Review the requirements for [the feature you will build](#feature-the-conduit-roster).
 
 4. **Review the Evaluation Criteria:**
 
