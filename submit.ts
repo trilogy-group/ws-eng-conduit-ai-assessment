@@ -164,10 +164,10 @@ async function addSubmissionFiles(zip: JSZip): Promise<void> {
   for (const file of files) {
     await addFileToZip(zip, path.join(SUBMISSION_DIR, file), file);
   }
-  return files.includes('plan.md') ? Promise.resolve() : addRootPlanMd(zip);
+  await addPlanMd(zip);
 }
 
-async function addRootPlanMd(zip: JSZip): Promise<void> {
+async function addPlanMd(zip: JSZip): Promise<void> {
   try {
     await addFileToZip(zip, 'plan.md', 'plan.md');
   } catch {
