@@ -1,58 +1,91 @@
 # Conduit - AI Augmented Feature Development
 
-In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. Your challenge in this assignment is to guide GPT to extend an existing project with a new feature. Your submission should not reflect the capabilities of the AI but should showcase your skills in guiding and leveraging it to fulfill the given requirements. Make sure to provide instructions and context to the AI based on your knowledge, ensuring that the solution generated is something you are comfortable attaching your name to. 
+In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. You will extend a full-stack TypeScript project. The project has a NestJS backend and an Angular frontend. Your task is to add a new feature using the AI tool. The goal is to show your skills in building features and guiding the AI while keeping long-term code quality in mind.
 
-This repository contains the project to be extended, which is a full-stack TypeScript application consisting of a NestJS backend and an Angular frontend. The project uses a stack similar to our products and we welcome you to leverage AI to fill any knowledge gaps. If you believe success hinges primarily on familiarity with specific technologies, our roles may not align with your approach.
-
-(Optional) You may refer to this introduction video for an overview of this assessment: https://www.loom.com/share/430de9d934be4fcba8c0dc4ab9e2421c
+(Optional) You may watch this video to get an overview of the assessment: <TODO>
 
 ## Assessment Steps
 
-1. [Start the code in Gitpod](#running-in-gitpod), and take a look at [the feature requirements](#feature-the-conduit-roster) and [the grading criteria](#evaluation-criteria) described below. 
-   - Please do NOT fork this repository. You will share your code changes as a git diff at the end.
-   - When writing code, make sure to be on the `rwa/feature-development-v3` branch. Pull it regularly to ensure you have the latest changes from the remote.
-1. Use the GPT interface linked on the Crossover assessment to perform most of the research, design, write new code, etc. 
-   - Imagine that GPT is a "junior" with little context about the project, but good general technical knowledge. 
-   - We have included built-in prompts with general information about the project in the chat interface. Feel free to leverage these prompts.
-   - The chat purposefully does NOT support uploading the whole codebase or screenshots; you must use your ability to clearly provide concise instructions to succeed.
-1. Perform the necessary code adjustments to fulfill the requirements of the feature.
-1. [Submit your work](#submitting-your-work) by following the instructions below.
+1. **Set Up GitHub Codespaces:**
 
-*Note: The project doesn't include tests, and you're not required to write any.*
+   - Create a free GitHub account at [GitHub](https://github.com/signup).
+   - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/feature-development-v4).
+   - Your environment will automatically install all dependencies, seed the database, and start both the backend and frontend servers.
+   - Visit [http://localhost:4200](http://localhost:4200) in your browser. Log in with:
+     - **Email:** jcosten0@purevolume.com
+     - **Password:** password
 
-## Running in Gitpod
+2. **Understand the Technologies:**
 
-You can sign up for a free Gitpod account here: https://www.gitpod.io/ using your GitHub account. After you sign up, open the following link to launch a browser-based VSCode environment: https://www.gitpod.io/#https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/feature-development-v3 . You may refer to the [running in Gitpod](./GITPOD.md) doc for hints about using Gitpod.
+   - Review the project's technologies (NestJS, Angular, TypeScript, MySQL).
 
-This project can also be [run locally](./LOCAL.md); this will require up to 60 minutes of set-up time. We only recommend using this if you have technical impediments in using Gitpod.
+3. **Review the Codebase and Requirements:**
 
-Once the project is running, you can access the UI at http://localhost:4200 and log in with `jcosten0@purevolume.com` / `password`. You can also find the backend API spec at http://localhost:3000/docs.
+   - **Frontend:** Located in the `apps/frontend` and `libs` folders.
+   - **Backend:** Located in the `apps/backend` folder (includes database migrations).
+   - Spend time exploring the code to understand its structure and logic.
+   - Understand how to: extend the data model, expose an API, consume an API in the frontend.
+   - Review the requirements for [the feature you will build](##feature-the-conduit-roster).
 
-## Feature: The Conduit Roster 
+4. **Review the Evaluation Criteria:**
+
+   - Check the [evaluation criteria](#evaluation-criteria) to know how your work will be graded.
+
+5. **Use Aider to implement the feature:**
+
+   - You must use the pre-installed Aider CLI for AI. You can check out the [Aider documentation](https://aider.chat/docs/usage/tutorials.html) to learn how to use it.
+   - You will use an assessment-specific Aider API key (provided on the Crossover page) which allows about 100 messages.
+   - Perform the necessary code adjustments to fulfill the requirements of the feature.
+   - Use Aider to perform most of the research, design, write new code, etc.
+
+6. **Submit your work:**
+   - Run the acceptance tests, capture the indicated screenshots and place them directly in the `submission` folder in your repository.
+   - Do NOT create subfolders in the `submission` folder. Please add all of your files directly in the `submission` folder.
+   - Run `npm run submit` and follow the instructions.
+
+## Mandatory Rules
+
+- **Do Not Fork**: Work on the provided repository. The submission script will malfunction if you fork the repository and push to it.
+- **Use the Correct Branch**: Other assessment branches are in the repository. You must be on rwa/feature-development-v4.
+- **Single AI Tool**: Use Aider exclusively for AI interactions.
+- **Include Screenshots**: Include screenshots of the acceptance tests passing. If you submit without screenshots, you'll get 0 stars.
+- **Preserve Aider Files**: Do not delete .aider.chat.history.md or .aider.input.history. If you submit without these files, you'll get 0 stars.
+
+## Notes
+
+- **API Docs:** You can find the API documentation at [http://localhost:3000/docs](http://localhost:3000/docs).
+- **Testing:** The project does not include tests. You don't need to write any tests for this task.
+- **Aider:** Think of Aider as a junior developer with good general knowledge but little context about the project. Provide clear instructions and reference specific files when asking for changes.
+- **Tasks**: You can use the [Tasks](.vscode/tasks.json) ([docs](https://code.visualstudio.com/docs/editor/tasks)) and [Debug Launch Configurations](.vscode/launch.json) ([docs](https://code.visualstudio.com/docs/editor/debugging)) to start the app.
+- **Codespaces**: Your codespace will stop after 30 minutes of inactivity. You can restart it from [here](https://github.com/codespaces) (your changes will be saved). It will be automatically deleted after 30 days of being stopped.
+- **Database**: You can connect to the database using [these credentials](./backend/mikro-orm.config.ts). The Codespace has a MySQL extension that can connect to the database.
+- **Environment:** If you cannot use Codespaces, you can [set up a local development environment](https://www.perplexity.ai/search/what-are-the-concise-precise-s-khlwVDwQTMODLaC6wB_7DQ).
+
+## Feature: The Conduit Roster
+
 **Summary**: As a reader, I want to view a rank-ordered list of authors, such that I can find and follow the most popular authors on the site.
 
 **Requirements**:
-- [Already Done] Create a new Roster page and link it in the top navigation after the "Home" page link. 
+
+- [Already Done] Create a new Roster page and link it in the top navigation after the "Home" page link.
 - On this page, include a "Conduit Roster" header and a table or list containing stats for each user as described below:
-    - The user name & profile link,
-    - The total number of articles authored (zero if none),
-    - The total number of favorites received on their articles (zero if none),
-    - The date of their first posted article (empty if no article was posted yet).
+  - The user name & profile link,
+  - The total number of articles authored (zero if none),
+  - The total number of favorites received on their articles (zero if none),
+  - The date of their first posted article (empty if no article was posted yet).
 
 **Acceptance Test**:
+
 1. Given that you are logged in (any user),
 1. When you open the "Roster" page,
 1. Then you see all the Conduit users with correct stats,
 1. When you create a new article and you open the "Roster" page,
 1. (**Screenshot**) Then you see your total number of articles incremented accordingly.
 
-## Submitting your Work
-1. Capture screenshots indicated above and place them directly in the `submission` folder in your repository.
-1. Export the chat sessions used to build the feature and place them directly in the `submission` folder in your repository.
-1. Do NOT create subfolders in the `submission` folder. Please add all of your files directly in the `submission` folder.
-1. Run `npm run submit` and follow the instructions.
-
 ## Evaluation Criteria
-- **Correctness & Completeness**: The final code should be functional, produce the desired output without errors, defects, or limitations, and address all the requirements, with minimal inconsistencies between requirement specifications and outputs (e.g., related to behavior, formatting, etc.).
-- **Code Quality**: The code to implement the feature should be clean, efficient, consistent with the provided code, respect the existing architecture and responsibility decomposition, and adhere to typical SOLID/DRY coding practices, REST API design principles, and relational database best practices.
-- **AI Usage**: The AI should be guided properly, by giving appropriate context, clear inputs, instructions, quality rules, and feedback. 
+
+| **Criteria**       | **Description**                                    | **0 Stars**           | **1 Star**                    | **2 Stars**                                 | **3 Stars**                                          |
+| ------------------ | -------------------------------------------------- | --------------------- | ----------------------------- | ------------------------------------------- | ---------------------------------------------------- |
+| **Code Quality**   | Code cleanliness, efficiency, and maintainability. | Code is very messy    | Code quality is poor          | Mostly clean with minor issues              | Clean, efficient, and follows best practices         |
+| **Correctness**    | Does the feature work as required?                 | Feature does not work | At least a list of users is shown      | The stats are shown, but with small issues       | Fully functional with no bugs                        |
+| **AI Usage**       | How well you guide and use the AI tool.            | AI not used at all    | Basic or unclear usage        | Mostly clear instructions with minor issues | Clear, effective, and well-guided AI usage           |
