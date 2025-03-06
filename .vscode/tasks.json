@@ -1,0 +1,83 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Install Dependencies",
+        "type": "shell",
+        "command": "npx -y yarn install",
+        "problemMatcher": [],
+        "runOptions": {
+          "instanceLimit": 1
+        }
+      },
+      {
+        "label": "Start Backend",
+        "type": "npm",
+        "script": "start:backend",
+        "isBackground": true,
+        "dependsOn": ["Install Dependencies"],
+        "problemMatcher": {
+          "pattern": {
+            "regexp": "."
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*Starting Nest application.*$",
+            "endsPattern": "^.*Nest application successfully started.*$"
+          }
+        },
+        "runOptions": {
+          "runOn": "folderOpen",
+          "instanceLimit": 1
+        }
+      },
+      {
+        "label": "Wait for Backend",
+        "type": "shell",
+        "command": "wait-for-it localhost:3000 -t 900",
+        "isBackground": false,
+        "dependsOn": [],
+        "problemMatcher": {
+          "pattern": {
+            "regexp": "."
+          }
+        },
+        "runOptions": {
+          "runOn": "folderOpen",
+          "instanceLimit": 1
+        }
+      },
+      {
+        "label": "Start Frontend",
+        "type": "shell",
+        "command": "npm run start:frontend",
+        "isBackground": true,
+        "dependsOn": ["Wait for Backend"],
+        "problemMatcher": {
+          "pattern": {
+            "regexp": "."
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*Angular Live Development Server is listening.*$",
+            "endsPattern": "^.*(Compiled successfully|Application bundle generation complete).*$"
+          }
+        },
+        "runOptions": {
+          "runOn": "folderOpen",
+          "instanceLimit": 1
+        }
+      },
+      {
+        "label": "Run Seed",
+        "type": "shell",
+        "command": "npm run seed",
+        "problemMatcher": [],
+        "dependsOn": ["Wait for Backend"],
+        "runOptions": {
+          "runOn": "folderOpen",
+          "instanceLimit": 1
+        }
+      }
+    ]
+  }

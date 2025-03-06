@@ -1,0 +1,16 @@
+{
+    "name": "Conduit Dev Container",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "dbaeumer.vscode-eslint",
+          "esbenp.prettier-vscode",
+          "cweijan.vscode-mysql-client2"
+        ]
+      }
+    },
+    "forwardPorts": [3000, 4200, 3306]
+  }
