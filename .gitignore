@@ -45,3 +45,4 @@ Thumbs.db
 
 # Some candidates use npm instead of yarn, generating a huge diff.
 package-lock.json
+.aider*
