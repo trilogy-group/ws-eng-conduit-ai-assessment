@@ -11,7 +11,7 @@ In this assessment, you will work on a realistic task that closely resembles iss
    - Create a free GitHub account at [GitHub](https://github.com/signup).
    - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/defect-resolution-v4).
    - Your environment will automatically install all dependencies, seed the database, and start both the backend and frontend servers.
-   - Visit [http://localhost:4200](http://localhost:4200) in your browser. Log in with:
+   - Open [http://localhost:4200](http://localhost:4200) (note that in Codespaces, the URL will differ as it [automatically forwards ports](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace)). Log in with:
      - **Email:** jcosten0@purevolume.com
      - **Password:** password
 
@@ -59,7 +59,7 @@ In this assessment, you will work on a realistic task that closely resembles iss
 - **Testing:** The project does not include tests. You don't need to write any tests for this task.
 - **Aider:** Think of Aider as a junior developer with good general knowledge but little context about the project. Provide clear instructions and reference specific files when asking for changes.
 - **Tasks**: You can use the [Tasks](.vscode/tasks.json) ([docs](https://code.visualstudio.com/docs/editor/tasks)) and [Debug Launch Configurations](.vscode/launch.json) ([docs](https://code.visualstudio.com/docs/editor/debugging)) to start the app.
-- **Codespaces**: Your codespace will stop after 30 minutes of inactivity. You can restart it from [here](https://github.com/codespaces) (your changes will be saved). It will be automatically deleted after 30 days of being stopped.
+- **Codespaces**: Your codespace will stop after 30 minutes of inactivity. You can restart it from [here](https://github.com/codespaces) (your changes will be saved). It will be automatically deleted after 30 days of being stopped. Any "localhost" URLs will be forwarded automatically by Codespaces to a [URL accessible from the internet](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
 - **Database**: You can connect to the database using [these credentials](./backend/mikro-orm.config.ts). The Codespace has a MySQL extension that can connect to the database.
 - **Environment:** If you cannot use Codespaces, you can [set up a local development environment](https://www.perplexity.ai/search/what-are-the-concise-precise-s-khlwVDwQTMODLaC6wB_7DQ).
 
