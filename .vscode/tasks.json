@@ -7,13 +7,14 @@
         "command": "npx -y yarn install",
         "problemMatcher": [],
         "runOptions": {
+          "runOn": "folderOpen",
           "instanceLimit": 1
         }
       },
       {
         "label": "Start Backend",
-        "type": "npm",
-        "script": "start:backend",
+        "type": "shell",
+        "command": "npm run start:backend",
         "isBackground": true,
         "dependsOn": ["Install Dependencies"],
         "problemMatcher": {
@@ -42,10 +43,7 @@
             "regexp": "."
           }
         },
-        "runOptions": {
-          "runOn": "folderOpen",
-          "instanceLimit": 1
-        }
+        "runOptions": {}
       },
       {
         "label": "Start Frontend",
