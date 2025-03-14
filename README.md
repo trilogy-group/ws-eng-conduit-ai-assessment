@@ -2,7 +2,7 @@
 
 In this assessment, you will work on a realistic task that closely resembles issues you may face on the job. You will modify a full-stack TypeScript project. The project has a NestJS backend and an Angular frontend. Your task is to fix a bug using an AI tool. The goal is to show your skills in fixing bugs and guiding the AI while keeping long-term code quality in mind.
 
-(Optional) You may watch this video to get an overview of the assessment: <TODO>
+(Optional) You may watch this video to get an overview of the assessment: https://drive.google.com/file/d/1ASq8CnhU8zs7EWshtZojDjpzerr3tvW5/view
 
 ## Assessment Steps
 
@@ -60,7 +60,7 @@ In this assessment, you will work on a realistic task that closely resembles iss
 - **Aider:** Think of Aider as a junior developer with good general knowledge but little context about the project. Provide clear instructions and reference specific files when asking for changes.
 - **Tasks**: You can use the [Tasks](.vscode/tasks.json) ([docs](https://code.visualstudio.com/docs/editor/tasks)) and [Debug Launch Configurations](.vscode/launch.json) ([docs](https://code.visualstudio.com/docs/editor/debugging)) to start the app.
 - **Codespaces**: Your codespace will stop after 30 minutes of inactivity. You can restart it from [here](https://github.com/codespaces) (your changes will be saved). It will be automatically deleted after 30 days of being stopped. Any "localhost" URLs will be forwarded automatically by Codespaces to a [URL accessible from the internet](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
-- **Database**: You can connect to the database using [these credentials](./backend/mikro-orm.config.ts). The Codespace has a MySQL extension that can connect to the database.
+- **Database**: You can connect to the database using [these credentials](./apps/backend/mikro-orm.config.ts). The Codespace has a MySQL extension that can connect to the database.
 - **Environment:** If you cannot use Codespaces, you can [set up a local development environment](https://www.perplexity.ai/search/what-are-the-concise-precise-s-khlwVDwQTMODLaC6wB_7DQ).
 
 ## Defect: Tags are broken when a new post is created
