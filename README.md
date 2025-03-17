@@ -19,7 +19,7 @@ Before starting the assessment, you should:
 1. **Set Up GitHub Codespaces:**
 
    - Create a free GitHub account at [GitHub](https://github.com/signup).
-   - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/design-and-implementation-v1).
+   - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/design-and-implementation-v1&machine=standardLinux32gb).
    - Your environment will automatically install all dependencies, seed the database, and start both the backend and frontend servers.
    - Open [http://localhost:3001](http://localhost:3001) (note that in Codespaces, the URL will differ as it [automatically forwards ports](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace)). Log in with:
      - **Email:** jcosten0@purevolume.com
@@ -40,7 +40,7 @@ Before starting the assessment, you should:
 4. **Use Aider:**
 
    - You must use the pre-installed Aider CLI for AI. You can check out the [Aider documentation](https://aider.chat/docs/usage/tutorials.html) to learn how to use it.
-   - You will use an assessment-specific API key (provided on the Crossover page), which allows about 100 messages.
+   - You will use an assessment-specific API key (provided on the Crossover page), which allows about 200 messages.
 
 5. **Understand how to Plan:**
 
@@ -64,7 +64,10 @@ Before starting the assessment, you should:
 - **Testing:** The project does not include tests. You don't need to write any tests for this task.
 - **Aider:** Think of Aider as a junior developer with good general knowledge but little context about the project. Provide clear instructions and reference specific files when asking for changes.
 - **Tasks**: You can use the [Tasks](.vscode/tasks.json) ([docs](https://code.visualstudio.com/docs/editor/tasks)) and [Debug Launch Configurations](.vscode/launch.json) ([docs](https://code.visualstudio.com/docs/editor/debugging)) to start the app.
-- **Codespaces**: Your codespace will stop after 30 minutes of inactivity. You can restart it from [here](https://github.com/codespaces) (your changes will be saved). It will be automatically deleted after 30 days of being stopped. Any "localhost" URLs will be forwarded automatically by Codespaces to a [URL accessible from the internet](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
+- **Codespaces**:
+  - Inactivity:Your codespace will stop after 30 minutes of inactivity. You can restart it from [here](https://github.com/codespaces) (your changes will be saved). It will be automatically deleted after 30 days of being stopped.
+  - Forwarding: Any "localhost" URLs will be forwarded automatically by Codespaces to a [URL accessible from the internet](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
+  - Costs: Github Codespaces is free for the first 120 CPU hours per month. You may decide to launch either a 4-CPU or a 2-CPU machine giving you 60 and 30 hours of free usage per month respectively. We recommend using the 4-CPU machine type.
 - **Database**: You can connect to the database using [these credentials](./backend/mikro-orm.config.ts). The Codespace has a MySQL extension that can connect to the database.
 - **Environment:** If you cannot use Codespaces, you can [set up a local development environment](https://www.perplexity.ai/search/what-are-the-concise-precise-s-khlwVDwQTMODLaC6wB_7DQ).
 
@@ -76,7 +79,7 @@ Before starting the assessment, you should:
 | **Code Quality**   | Code cleanliness, efficiency, and maintainability. | Code is very messy    | Code quality is poor          | Mostly clean with minor issues              | Clean, efficient, and follows best practices         |
 | **Correctness**    | Does the feature work as required?                 | Feature does not work | Only BASIC features work      | ADVANCED features work with some bugs       | Fully functional with no bugs                        |
 | **AI Usage**       | How well you guide and use the AI tool.            | AI not used at all    | Basic or unclear usage        | Mostly clear instructions with minor issues | Clear, effective, and well-guided AI usage           |
-| **Velocity**       | Time taken to complete the task.                   | Task not finished     | Took several days             | Completed in 6 hours or less                | Completed in 3 hours or less                         |
+| **Velocity**       | Time taken to complete the task.                   | Task not finished     | Took several days             | Completed in a day or less                  | Completed in ~4 hours or less                         |
 
 ## Next Steps
 
