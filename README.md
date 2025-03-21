@@ -21,9 +21,10 @@ Before starting the assessment, you should:
    - Create a free GitHub account at [GitHub](https://github.com/signup).
    - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/design-and-implementation-v1&machine=standardLinux32gb).
    - Your environment will automatically install all dependencies, seed the database, and start both the backend and frontend servers.
-   - Open [http://localhost:3001](http://localhost:3001) (note that in Codespaces, the URL will differ as it [automatically forwards ports](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace)). Log in with:
-     - **Email:** jcosten0@purevolume.com
-     - **Password:** password
+   - Open [http://localhost:3001](http://localhost:3001).
+     - Log in with: **Email:** jcosten0@purevolume.com **Password:** password
+     - Note that in Codespaces, the URL will differ as it [automatically forwards ports](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
+     - Sometimes, CodeSpaces will return 502 Bad Gateway errors although the servers are running. If this happens, go to the Ports view, right click on the port(s) and toggle the visibility of the port(s) between "Public" and "Private".
 
 2. **Understand the Technologies:**
 

@@ -5,12 +5,24 @@
   "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "cweijan.vscode-mysql-client2"
-      ]
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "cweijan.vscode-mysql-client2"]
     }
   },
-  "forwardPorts": [3000, 3001, 3306]
+  "forwardPorts": [3000, 3001, 3306],
+  "portsAttributes": {
+    "3000": {
+      "label": "Backend",
+      "onAutoForward": "silent",
+      "protocol": "http"
+    },
+    "3001": {
+      "label": "Frontend",
+      "onAutoForward": "openBrowserOnce",
+      "protocol": "http"
+    },
+    "3306": {
+      "label": "Database",
+      "onAutoForward": "ignore"
+    }
+  }
 }
