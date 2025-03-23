@@ -153,13 +153,27 @@ export class ArticleService {
       { id: userId },
       { populate: ['followers', 'favorites', 'articles'] },
     );
-    const article = new Article(user!, dto.title, dto.description, dto.body);
-    article.tagList.push(...dto.tagList);
-    user?.articles.add(article);
+  
+    if (!user) {
+      throw new Error('User not found');
+    }
+  
+    const article = new Article(user, dto.title, dto.description, dto.body, dto.summary ?? ''); // ✅ Default empty string
+  
+    if (dto.tagList && Array.isArray(dto.tagList)) {
+      article.tagList.push(...dto.tagList);
+    }
+  
+    article.createdAt = new Date();
+    article.updatedAt = new Date();
+    user.articles.add(article);
+  
     await this.em.flush();
-
-    return { article: article.toJSON(user!) };
+  
+    return { article: article.toJSON(user) };
   }
+  
+  
 
   async update(userId: number, slug: string, articleData: Partial<Article>): Promise<IArticleRO> {
     const user = await this.userRepository.findOne(
@@ -167,7 +181,7 @@ export class ArticleService {
       { populate: ['followers', 'favorites', 'articles'] },
     );
     const article = await this.articleRepository.findOne({ slug }, { populate: ['author'] });
-    wrap(article).assign(articleData);
+    wrap(article).assign({ ...articleData, updatedAt: new Date() });
     await this.em.flush();
 
     return { article: article!.toJSON(user!) };
