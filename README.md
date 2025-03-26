@@ -41,7 +41,7 @@ In this assessment, you will work on a realistic task that closely resembles iss
    - Use Aider to perform most of the research, troubleshooting, design, write new code, etc.
 
 6. **Submit your work:**
-   - Run the acceptance tests, capture the indicated screenshots and place them directly in the `submission` folder in your repository.
+   - Run the acceptance tests, capture the indicated screenshots and place them directly in the `submission` folder in your repository. In CodeSpaces, you can upload files to the repository by right clicking on the `submission` folder and selecting "Upload".
    - Do NOT create subfolders in the `submission` folder. Please add all of your files directly in the `submission` folder.
    - Run `npm run submit` and follow the instructions.
 

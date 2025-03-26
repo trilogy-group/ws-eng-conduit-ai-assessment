@@ -63,6 +63,12 @@ async function countFilesByExtension(extensions = ['.json']): Promise<number> {
 }
 
 async function createGitDiff(): Promise<string> {
+  try {
+    console.log("Disabling GPG signing - this is safe because we're not pushing our commits.");
+    execCommand('git config commit.gpgsign false');
+  } catch {
+    console.log("⚠️ Unable to disable signing. If you get errors about GPG signing, please disable signing in your git config.");
+  }
   execCommand('git add --all');
   execCommand(`git commit --allow-empty -am "chore(conduit): Generates patch."`);
   const remoteName = execCommand('git remote').split('\n')[0]?.trim() || 'origin';
