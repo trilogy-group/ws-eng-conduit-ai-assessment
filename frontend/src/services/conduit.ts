@@ -16,6 +16,7 @@ import { GenericErrors, genericErrorsDecoder } from '../types/error';
 import { objectToQueryString } from '../types/object';
 import { Profile, profileDecoder } from '../types/profile';
 import { User, userDecoder, UserForRegistration, UserSettings } from '../types/user';
+import { array } from 'decoders';
 
 axios.defaults.baseURL = settings.baseApiUrl;
 
@@ -26,6 +27,11 @@ export async function getArticles(filters: ArticlesFilters = {}): Promise<Multip
     ...filters,
   };
   return multipleArticlesDecoder.verify((await axios.get(`articles?${objectToQueryString(finalFilters)}`)).data);
+}
+
+export async function getUsers(): Promise<User[]> {
+  const { data } = await axios.get('users');
+  return array(userDecoder).verify(data);
 }
 
 export async function getTags(): Promise<{ tags: string[] }> {

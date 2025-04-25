@@ -6,12 +6,18 @@ import { IUserRO } from './user.interface';
 import { UserService } from './user.service';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UserService } from './user.service';
 
 @ApiBearerAuth()
 @ApiTags('user')
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get('users')
+  async findAllUsers(): Promise<User[]> {
+    return this.userService.findAll();
+  }
 
   @Get('user')
   async findMe(@User('email') email: string): Promise<IUserRO> {
