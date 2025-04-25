@@ -154,9 +154,30 @@ export class ArticleService {
       { populate: ['followers', 'favorites', 'articles'] },
     );
     const article = new Article(user!, dto.title, dto.description, dto.body);
+    // if (dto.coAuthors) {
+    //   const coAuthors: User[] = await this.userRepository.find({
+    //     id: { $in: dto.coAuthors.map(Number) },
+    //   });
+    //   article.coAuthors.add(...coAuthors); // ✅ No error now
+    // }
+    // if (dto.coAuthors) {
+    //   const coAuthors = await this.userRepository.find({ id: { $in: dto.coAuthors } });
+    //   article.coAuthors.add(...Array.from(coAuthors));  // Ensure coAuthors is treated as an array
+    // }
+    // if (dto.coAuthors) {
+    //   const coAuthors = await this.userRepository.find({ id: { $in: dto.coAuthors.map(Number) } });
+    
+    //   // Explicitly cast to User[] if needed
+    //   article.coAuthors.add(...(coAuthors as User[]));
+    // }
     if (dto.coAuthors) {
-      const coAuthors = await this.userRepository.find({ id: { $in: dto.coAuthors } });
-      article.coAuthors.add(...coAuthors);
+      // Ensure coAuthors is an array of User entities
+      const coAuthors = await this.userRepository.find({ id: { $in: dto.coAuthors.map(Number) } });
+    
+      // Ensure it's treated as an array of User entities, and then add them
+      //article.coAuthors.add(...Array.from(coAuthors));
+      console.log(coAuthors);
+      //article.coAuthors.add(...(coAuthors as User[]));
     }
     article.tagList.push(...dto.tagList);
     user?.articles.add(article);
@@ -173,8 +194,20 @@ export class ArticleService {
     const article = await this.articleRepository.findOne({ slug }, { populate: ['author'] });
     wrap(article).assign(articleData);
     if (articleData.coAuthors) {
-      const coAuthors = await this.userRepository.find({ id: { $in: articleData.coAuthors } });
+     // const coAuthors = await this.userRepository.find({ id: { $in: articleData.coAuthors } });
+    //  const coAuthors = await this.userRepository.find({
+    //   id: { $in: articleData.coAuthors.map((id: string) => Number(id)) },  // Convert to numbers if needed
+    // }) 
+    const coAuthorsIds = articleData.coAuthors.getItems().map((user: User) => user.id);
+    const coAuthors = await this.userRepository.find({
+      id: { $in: coAuthorsIds },
+    });
+    // article.coAuthors.set(coAuthors);
+    if (article) {
       article.coAuthors.set(coAuthors);
+    } else {
+      throw new Error('Article not found');
+    }
     }
     await this.em.flush();
 
@@ -183,5 +216,33 @@ export class ArticleService {
 
   async delete(slug: string) {
     return this.articleRepository.nativeDelete({ slug });
+  }
+  async lockArticle(userId: number, slug: string): Promise<IArticleRO> {
+    const user = await this.userRepository.findOneOrFail(userId);
+    const article = await this.articleRepository.findOneOrFail({ slug }, { populate: ['author', 'lockedBy'] });
+  
+    if (article.lockedBy && article.lockedBy.id !== user.id) {
+      throw new Error(`Article is already locked by another user.`);
+    }
+  
+    article.lockedBy = user;
+    article.lockedAt = new Date();
+    await this.em.flush();
+  
+    return { article: article.toJSON(user) };
+  }
+  async unlockArticle(userId: number, slug: string): Promise<IArticleRO> {
+    const user = await this.userRepository.findOneOrFail(userId);
+    const article = await this.articleRepository.findOneOrFail({ slug }, { populate: ['author', 'lockedBy'] });
+  
+    if (article.lockedBy?.id !== user.id) {
+      throw new Error(`You cannot unlock an article locked by another user.`);
+    }
+  
+    article.lockedBy = null;
+    article.lockedAt = null;
+    await this.em.flush();
+  
+    return { article: article.toJSON(user) };
   }
 }

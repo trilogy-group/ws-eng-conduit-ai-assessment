@@ -6,7 +6,7 @@ import { IUserRO } from './user.interface';
 import { UserService } from './user.service';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserService } from './user.service';
+//import { UserService } from './user.service';
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -14,10 +14,19 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('users')
-  async findAllUsers(): Promise<User[]> {
-    return this.userService.findAll();
-  }
+  // @Get('users')
+  // async findAllUsers(): Promise<User[]> {
+  //   return this.userService.findAll();
+  // }
+
+  // @Get('users')
+  // async findAll(@Query() query?: Record<string, string>) {
+  //   if (Object.keys(query).length === 0) {
+  //     return this.userService.findAll(); // No query params = get all
+  //   }
+  //   return this.userService.findAllWithPagination(query); // With pagination
+  // }
+
 
   @Get('user')
   async findMe(@User('email') email: string): Promise<IUserRO> {

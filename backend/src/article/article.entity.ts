@@ -10,9 +10,8 @@ import {
   wrap,
 } from '@mikro-orm/core';
 import slug from 'slug';
-
-import { Collection, ManyToMany } from '@mikro-orm/core';
-import { User } from '../user/user.entity';
+import {  ManyToMany } from '@mikro-orm/core';
+import { User, UserDTO } from '../user/user.entity';
 import { Comment } from './comment.entity';
 
 @Entity()
@@ -52,6 +51,14 @@ export class Article {
 
   @Property({ type: 'number', fieldName: 'favorites_count' })
   favoritesCount = 0;
+//   @ManyToOne(() => User, { nullable: true })
+// lockedBy?: User;
+@Property({ nullable: true })
+lockedBy: User | null = null;
+
+@Property({ nullable: true })
+lockedAt?: Date | null = null;
+
 
   constructor(author: User, title: string, description: string, body: string) {
     this.author = author;
@@ -65,6 +72,9 @@ export class Article {
     const o = wrap<Article>(this).toObject() as ArticleDTO;
     o.favorited = user && user.favorites.isInitialized() ? user.favorites.contains(this) : false;
     o.author = this.author.toJSON(user);
+    o.coAuthors = this.coAuthors.isInitialized()
+    ? this.coAuthors.getItems().map((u) => u.toJSON())
+    : [];
 
     return o;
   }
@@ -72,4 +82,6 @@ export class Article {
 
 export interface ArticleDTO extends EntityDTO<Article> {
   favorited?: boolean;
+  //coAuthors?: ReturnType<User['toJSON']>[];
+  coAuthors: UserDTO[];
 }

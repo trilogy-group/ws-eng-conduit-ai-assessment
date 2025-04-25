@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { format } from 'date-fns';
 import React, { Fragment, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -9,8 +10,10 @@ import {
   followUser,
   getArticle,
   getArticleComments,
+  lockArticle,
   unfavoriteArticle,
   unfollowUser,
+  unlockArticle,
 } from '../../../services/conduit';
 import { store } from '../../../state/store';
 import { useStore } from '../../../state/storeHooks';
@@ -33,9 +36,15 @@ import {
   updateAuthor,
   updateCommentBody,
 } from './ArticlePage.slice';
+//import { useParams } from 'react-router-dom';  // Make sure you import useParams
 
+//import { lockArticle, unlockArticle } from '@/services/conduit';
+
+const { slug } = useParams<{ slug: string }>();
 export function ArticlePage() {
-  const { slug } = useParams<{ slug: string }>();
+  
+  //const { slug }: { slug: string | undefined } = useParams();
+ // const { slug } = useParams<{ slug: string | undefined }>(); 
 
   const {
     articlePage: { article, commentSection, metaSection },
@@ -242,10 +251,41 @@ function OwnerArticleMetaActions({
         <i className='ion-heart'></i>
         &nbsp; Delete Article
       </button>
+      <button
+  className='btn btn-outline-warning btn-sm'
+  onClick={() => onLockArticle(slug)}
+>
+  <i className='ion-lock'></i>
+  &nbsp; Lock Article
+</button>
+&nbsp;
+<button
+  className='btn btn-outline-success btn-sm'
+  onClick={() => onUnlockArticle(slug)}
+>
+  <i className='ion-unlocked'></i>
+  &nbsp; Unlock Article
+</button>
     </Fragment>
   );
 }
+async function onLockArticle(slug: string) {
+  try {
+    await lockArticle(slug);
+    alert('Article locked successfully');
+  } catch (error) {
+    alert('Failed to lock article');
+  }
+}
 
+async function onUnlockArticle(slug: string) {
+  try {
+    await unlockArticle(slug);
+    alert('Article unlocked successfully');
+  } catch (error) {
+    alert('Failed to unlock article');
+  }
+}
 async function onDeleteArticle(slug: string) {
   store.dispatch(startDeletingArticle());
   await deleteArticle(slug);
@@ -387,3 +427,59 @@ async function onDeleteComment(slug: string, id: number) {
   await deleteComment(slug, id);
   store.dispatch(loadComments(await getArticleComments(slug)));
 }
+
+const [isLocked, setIsLocked] = useState(false);
+
+// useEffect(() => {
+//   const checkLockStatus = async () => {
+//     const response = await fetch(`/api/articles/locked/${slug}`);
+//     const data = await response.json();
+//     setIsLocked(data.isLocked);
+//   };
+
+//   checkLockStatus();
+// }, [slug]);
+
+// // Handle locking/unlocking the article
+// const toggleLock = async () => {
+//   if (isLocked) {
+//     await fetch(`/api/articles/unlock/${slug}`, { method: 'POST' });
+//     setIsLocked(false);
+//   } else {
+//     await fetch(`/api/articles/lock/${slug}`, { method: 'POST' });
+//     setIsLocked(true);
+//   }
+useEffect(() => {
+  if (!slug) {
+    console.error("Slug is undefined");
+    return;
+  }
+
+  const checkLockStatus = async () => {
+    try {
+      const response = await fetch(`/api/articles/locked/${slug}`);
+      const data = await response.json();
+      setIsLocked(data.isLocked);
+    } catch (error) {
+      console.error("Error checking lock status:", error);
+    }
+  };
+
+  checkLockStatus();
+}, [slug]);
+
+const toggleLock = async () => {
+  if (!slug) {
+    console.error("Slug is undefined");
+    return;
+  }
+
+  try {
+    const endpoint = isLocked ? 'unlock' : 'lock';
+    await fetch(`/api/articles/${endpoint}/${slug}`, { method: 'POST' });
+    setIsLocked(!isLocked);
+  } catch (error) {
+    console.error("Error toggling lock:", error);
+  }
+};
+

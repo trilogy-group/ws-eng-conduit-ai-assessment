@@ -8,5 +8,5 @@
     "target": "es2021",
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "mikro-orm.config.ts"]
+  "include": ["src/**/*.ts", "mikro-orm.config.ts","src/express.d.ts"]
 }

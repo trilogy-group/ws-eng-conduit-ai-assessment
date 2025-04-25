@@ -44,6 +44,7 @@ export function App() {
             <Route path='/article/:slug' element={<ArticlePage />} />
             <Route path='/' element={<Home />} />
             <Route path='*' element={<Redirect to='/' />} />
+            <Route path='/articles/:slug' element={<ArticlePage />} />
           </Switch>
           <Footer />
         </Fragment>

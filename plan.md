@@ -1,29 +1,36 @@
-# Implementation Plan
+To implement the user story of adding co-authors to articles, we need to make changes across the backend  
+and frontend. Here's a step-by-step plan:                                                                 
 
-This document will contain the plan for the implementation of the user story, which you should fill BEFORE you start coding. Replace the placeholder/example text below with your actual plan, while retaining the structure.
+ 1 Backend Data Model Changes:                                                                            
+    • Modify the Article entity to include a relationship with a User entity for co-authors.              
+    • Create a new join table or use an existing one to manage the many-to-many relationship between      
+      articles and users.                                                                                 
+ 2 API Changes:                                                                                           
+    • Update the article creation and update endpoints to handle co-authors.                              
+    • Add a new endpoint to fetch potential co-authors (i.e., existing users).                            
+ 3 Frontend UI Changes:                                                                                   
+    • Update the article editor UI to include a multi-select dropdown for choosing co-authors.            
+    • Display the list of co-authors on the article page.                                                 
+ 4 Locking Mechanism for Editing:                                                                         
+    • Implement a locking mechanism to prevent multiple users from editing the same article               
+      simultaneously.                                                                                     
+    • Use a timestamp or a flag in the database to manage locks.                                          
+ 5 Handling Co-author List as Multi-select:                                                               
+    • Use a multi-select component in the frontend to allow users to select co-authors from a list of     
+      existing users.                                                                                     
+ 6 Save Logic When Editing:                                                                               
+    • Ensure that the save logic updates the co-authors list in the database.                             
+    • Handle the logic for adding and removing co-authors.                                                
+ 7 Error Handling:                                                                                        
+    • Implement error handling for lock failures or timeouts.                                             
+    • Provide user feedback if an article is locked by another user.                                      
 
-## Plan
+To proceed, we will likely need to edit the following files:                                              
 
-High-level step by step plan of what you will do. For example:
+ • backend/src/article/article.entity.ts for data model changes.                                          
+ • backend/src/article/article.service.ts for API logic changes.                                          
+ • backend/src/article/article.controller.ts for API endpoint changes.                                    
+ • frontend/src/components/ArticleEditor/ArticleEditor.tsx for UI changes.                                
+ • frontend/src/services/conduit.ts for API calls.                                                        
 
-- Add a new table for chat messages,
-- Implement a repo, service and controller for reading and creating chat messages,
-- Update the React frontend to allow users to send and view messages,
-- ...
 
-## Decisions
-
-The top 2-3 decisions you have taken, plus the alternatives and rationale for your choices. Each alternative listed must be feasible (i.e., do not list alternatives would not even work). 
-
-You should include a decision for cases where you either: change the data model, select a third-party library (or build something from scratch), or create a new mechanism/pattern. 
-
-For example:
-
-- Decision: Use GitHub Codespaces for the development environment.
-  - Alternative: Use a local development environment.
-  - Alternative: Use Gitpod for the development environment.
-  - Rationale: Setting up a local environment is time-consuming and error-prone. Gitpod "Clasic" (hosted in the cloud) will be sunset on April 2025, and GitHub Codespaces allows leveraging Dev Containers - which can also be used locally if really needed. Hence we select GitHub Codespaces as it's the most future-proof and flexible option.
-
-## Notes
-
-Any additional notes that you think are relevant to the plan. For example, do we need to perform any changes to the AWS architecture to support the new feature? Briefly describe the changes you would need to make.

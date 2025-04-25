@@ -1,6 +1,6 @@
 import { Err, Ok, Result } from '@hqoss/monads';
 import axios, { AxiosError } from 'axios';
-import { array, object, string } from 'decoders';
+import {  object, string } from 'decoders';
 import settings from '../config/settings';
 import {
   Article,
@@ -18,7 +18,9 @@ import { Profile, profileDecoder } from '../types/profile';
 import { User, userDecoder, UserForRegistration, UserSettings } from '../types/user';
 import { array } from 'decoders';
 
+
 axios.defaults.baseURL = settings.baseApiUrl;
+
 
 export async function getArticles(filters: ArticlesFilters = {}): Promise<MultipleArticles> {
   const finalFilters: ArticlesFilters = {
@@ -146,4 +148,25 @@ export async function createComment(slug: string, body: string): Promise<Comment
 
 export async function deleteArticle(slug: string): Promise<void> {
   await axios.delete(`articles/${slug}`);
+}
+export async function lockArticle(slug: string): Promise<void> {
+  const res = await fetch(`/api/articles/${slug}/lock`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('jwt')}`,
+    },
+  });
+
+  if (!res.ok) throw new Error('Failed to lock article');
+}
+
+export async function unlockArticle(slug: string): Promise<void> {
+  const res = await fetch(`/api/articles/${slug}/unlock`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('jwt')}`,
+    },
+  });
+
+  if (!res.ok) throw new Error('Failed to unlock article');
 }

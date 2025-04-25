@@ -5,6 +5,14 @@ import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { ArticleService } from './article.service';
 import { CreateArticleDto, CreateCommentDto, UpdateArticleDto } from './dto';
 
+
+import {  Req, UseGuards } from '@nestjs/common';
+
+import { AuthGuard } from '../user/auth.guard';
+import { Request } from 'express'
+import { RequestWithUser } from '../types/request-with-user';
+//import { RequestWithUser } from '../types/request-with-user'; 
+
 @ApiBearerAuth()
 @ApiTags('articles')
 @Controller('articles')
@@ -35,6 +43,7 @@ export class ArticleController {
   async findComments(@Param('slug') slug: string): Promise<ICommentsRO> {
     return this.articleService.findComments(slug);
   }
+  
 
   @ApiOperation({ summary: 'Create article' })
   @ApiResponse({ status: 201, description: 'The article has been successfully created.' })
@@ -75,6 +84,25 @@ export class ArticleController {
   ) {
     return this.articleService.addComment(user, slug, commentData);
   }
+  // @Post(':slug/lock')
+  // @UseGuards(AuthGuard)
+  // async lock(@Req() req, @Param('slug') slug: string) {
+  //   return await this.articleService.lockArticle(req.user.id, slug);
+  // }
+  @Post(':slug/lock')
+@UseGuards(AuthGuard)
+async lock(@Req() req: Request, @Param('slug') slug: string) {
+  //const user = req.user as any; // Replace `any` with your User interface if you have one
+  const { user } = req as RequestWithUser;
+//const userId = user.id;
+  return await this.articleService.lockArticle(user.id, slug);
+}
+
+@Post(':slug/unlock')
+@UseGuards(AuthGuard)
+async unlock(@Req() req: RequestWithUser, @Param('slug') slug: string) {
+  return await this.articleService.unlockArticle(req.user.id, slug);
+}
 
   @ApiOperation({ summary: 'Delete comment' })
   @ApiResponse({ status: 201, description: 'The article has been successfully deleted.' })
