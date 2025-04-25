@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { User } from '../user/user.decorator';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { ArticleService } from './article.service';
-import { CreateArticleDto, CreateCommentDto } from './dto';
+import { CreateArticleDto, CreateCommentDto, UpdateArticleDto } from './dto';
 
 @ApiBearerAuth()
 @ApiTags('articles')
@@ -51,7 +51,7 @@ export class ArticleController {
   async update(
     @User('id') user: number,
     @Param() params: Record<string, string>,
-    @Body('article') articleData: CreateArticleDto,
+    @Body('article') articleData: UpdateArticleDto,
   ) {
     return this.articleService.update(+user, params.slug, articleData);
   }

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUsers } from '../../services/conduit';
 import { store } from '../../state/store';
 import { useStore } from '../../state/storeHooks';
 import { buildGenericFormField } from '../../types/genericFormField';
@@ -8,6 +9,15 @@ import { addTag, EditorState, removeTag, updateField } from './ArticleEditor.sli
 
 export function ArticleEditor({ onSubmit }: { onSubmit: (ev: React.FormEvent) => void }) {
   const { article, submitting, tag, errors } = useStore(({ editor }) => editor);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const users = await getUsers();
+      setUsers(users);
+    }
+    fetchUsers();
+  }, []);
 
   return (
     <div className='editor-page'>
@@ -37,6 +47,13 @@ export function ArticleEditor({ onSubmit }: { onSubmit: (ev: React.FormEvent) =>
                 placeholder: 'Enter the tag name and press enter',
                 listName: 'tagList',
                 fieldType: 'list',
+                lg: false,
+              }),
+              buildGenericFormField({
+                name: 'coAuthors',
+                placeholder: 'Select co-authors',
+                fieldType: 'multi-select',
+                options: users.map((user) => ({ value: user.id, label: user.username })),
                 lg: false,
               }),
             ]}

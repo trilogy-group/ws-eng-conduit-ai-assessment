@@ -11,6 +11,7 @@ import {
 } from '@mikro-orm/core';
 import slug from 'slug';
 
+import { Collection, ManyToMany } from '@mikro-orm/core';
 import { User } from '../user/user.entity';
 import { Comment } from './comment.entity';
 
@@ -42,6 +43,9 @@ export class Article {
 
   @ManyToOne(() => User, { fieldName: 'author_id' })
   author: User;
+
+  @ManyToMany(() => User, 'articles', { owner: true })
+  coAuthors = new Collection<User>(this);
 
   @OneToMany(() => Comment, (comment) => comment.article, { eager: true, orphanRemoval: true })
   comments = new Collection<Comment>(this);

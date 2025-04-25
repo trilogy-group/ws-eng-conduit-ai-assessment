@@ -154,6 +154,10 @@ export class ArticleService {
       { populate: ['followers', 'favorites', 'articles'] },
     );
     const article = new Article(user!, dto.title, dto.description, dto.body);
+    if (dto.coAuthors) {
+      const coAuthors = await this.userRepository.find({ id: { $in: dto.coAuthors } });
+      article.coAuthors.add(...coAuthors);
+    }
     article.tagList.push(...dto.tagList);
     user?.articles.add(article);
     await this.em.flush();
@@ -168,6 +172,10 @@ export class ArticleService {
     );
     const article = await this.articleRepository.findOne({ slug }, { populate: ['author'] });
     wrap(article).assign(articleData);
+    if (articleData.coAuthors) {
+      const coAuthors = await this.userRepository.find({ id: { $in: articleData.coAuthors } });
+      article.coAuthors.set(coAuthors);
+    }
     await this.em.flush();
 
     return { article: article!.toJSON(user!) };
