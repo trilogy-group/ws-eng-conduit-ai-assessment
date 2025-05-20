@@ -3,13 +3,17 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { User } from '../user/user.decorator';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { ArticleService } from './article.service';
+import { TagService } from '../tag/tag.service';
 import { CreateArticleDto, CreateCommentDto } from './dto';
 
 @ApiBearerAuth()
 @ApiTags('articles')
 @Controller('articles')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    private readonly tagService: TagService,
+  ) {}
 
   @ApiOperation({ summary: 'Get all articles' })
   @ApiResponse({ status: 200, description: 'Return all articles.' })
@@ -41,7 +45,9 @@ export class ArticleController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Post()
   async create(@User('id') userId: number, @Body('article') articleData: CreateArticleDto) {
-    return this.articleService.create(userId, articleData);
+    const articleInJson =  this.articleService.create(userId, articleData);
+    const result = this.tagService.create(articleData.tagList);
+    return articleInJson;
   }
 
   @ApiOperation({ summary: 'Update article' })

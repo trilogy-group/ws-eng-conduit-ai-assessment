@@ -7,7 +7,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 @Module({
   controllers: [TagController],
-  exports: [],
+  exports: [TagService],
   imports: [MikroOrmModule.forFeature({ entities: [Tag] }), UserModule],
   providers: [TagService],
 })
