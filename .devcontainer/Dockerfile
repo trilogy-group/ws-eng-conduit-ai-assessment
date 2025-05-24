@@ -6,7 +6,8 @@ RUN npm install -g npm@11.1.0
 RUN apt-get install -y python3 python3-pip
 RUN pip3 install uv
 ENV PATH="/root/.local/bin:${PATH}"
-RUN uv tool install --python python3.12 aider-chat==0.83.1
+RUN uv tool install --python python3.12
+RUN uv pip install git+https://github.com/lpender/aider.git@main
 RUN uv tool update-shell
 
 RUN node -v && \
