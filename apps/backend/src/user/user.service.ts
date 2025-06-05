@@ -20,26 +20,14 @@ export class UserService {
   async getRosterStatistics() {
     const users = await this.findAll();
     
-    return users.map((user, index) => {
-      const articlesCount = Math.floor(Math.random() * 5); // 0-4 articles
-      const totalFavorites = articlesCount > 0 ? Math.floor(Math.random() * 20) : 0;
-      
-      // Generate a random date in the past 6 months if user has articles
-      let firstArticleDate = null;
-      if (articlesCount > 0) {
-        const sixMonthsAgo = new Date();
-        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-        const randomTime = sixMonthsAgo.getTime() + Math.random() * (Date.now() - sixMonthsAgo.getTime());
-        firstArticleDate = new Date(randomTime);
-      }
-      
+    return users.map((user) => {
       return {
         id: user.id,
         username: user.username,
         email: user.email,
-        articlesCount,
-        totalFavorites,
-        firstArticleDate
+        articlesCount: 0, // We'll fix this to get real data
+        totalFavorites: 0, // We'll fix this to get real data  
+        firstArticleDate: null // We'll fix this to get real data
       };
     });
   }
