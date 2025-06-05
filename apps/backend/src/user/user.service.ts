@@ -20,14 +20,20 @@ export class UserService {
   async getRosterStatistics() {
     const users = await this.findAll();
     
-    return users.map((user, index) => ({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      articlesCount: Math.floor(Math.random() * 5), // fake data 0-4 articles
-      totalFavorites: Math.floor(Math.random() * 20), // fake data 0-19 favorites
-      firstArticleDate: index === 0 ? new Date('2024-01-15') : null // fake data
-    }));
+    return users.map((user, index) => {
+      const articlesCount = Math.floor(Math.random() * 5); // 0-4 articles
+      const totalFavorites = articlesCount > 0 ? Math.floor(Math.random() * 20) : 0; // only favorites if has articles
+      const firstArticleDate = articlesCount > 0 ? new Date('2024-01-15') : null; // only date if has articles
+      
+      return {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        articlesCount,
+        totalFavorites,
+        firstArticleDate
+      };
+    });
   }
 
   async findOne(loginUserDto: LoginUserDto): Promise<User> {
