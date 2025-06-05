@@ -10,15 +10,15 @@
             <th>Articles</th>
             <th>Total Favorites</th>
             <th>First Article Date</th>
-            <td>{{ user.articlesCount }}</td>
-            <td>{{ user.totalFavorites }}</td>
-            <td>{{ user.firstArticleDate | date:'shortDate' }}</td>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let user of users$ | async">
             <td><a [routerLink]="['/profile', user.username]">{{ user.username }}</a></td>
             <td>{{ user.email }}</td>
+            <td>{{ user.articlesCount }}</td>
+            <td>{{ user.totalFavorites }}</td>
+            <td>{{ user.firstArticleDate | date:'shortDate' }}</td>
           </tr>
         </tbody>
       </table>
