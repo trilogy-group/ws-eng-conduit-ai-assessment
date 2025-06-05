@@ -52,10 +52,25 @@ export class UserController {
   @Get('roster')
   async getRoster() {
     const users = await this.userService.findAll();
-    return users.map(user => ({
-      id: user.id,
-      username: user.username,
-      email: user.email
-    }));
+    
+    const usersWithStats = await Promise.all(
+      users.map(async (user) => {
+        const articles = await this.em.find('Article', { author: user.id });
+        const articlesCount = articles.length;
+        const totalFavorites = articles.reduce((sum, article) => sum + (article.favoritesCount || 0), 0);
+        const firstArticleDate = articles.length > 0 ? articles[0].createdAt : null;
+        
+        return {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          articlesCount,
+          totalFavorites,
+          firstArticleDate
+        };
+      })
+    );
+    
+    return usersWithStats;
   }
 }
