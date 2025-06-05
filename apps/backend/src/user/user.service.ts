@@ -22,8 +22,16 @@ export class UserService {
     
     return users.map((user, index) => {
       const articlesCount = Math.floor(Math.random() * 5); // 0-4 articles
-      const totalFavorites = articlesCount > 0 ? Math.floor(Math.random() * 20) : 0; // only favorites if has articles
-      const firstArticleDate = articlesCount > 0 ? new Date('2024-01-15') : null; // only date if has articles
+      const totalFavorites = articlesCount > 0 ? Math.floor(Math.random() * 20) : 0;
+      
+      // Generate a random date in the past 6 months if user has articles
+      let firstArticleDate = null;
+      if (articlesCount > 0) {
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+        const randomTime = sixMonthsAgo.getTime() + Math.random() * (Date.now() - sixMonthsAgo.getTime());
+        firstArticleDate = new Date(randomTime);
+      }
       
       return {
         id: user.id,
