@@ -48,4 +48,14 @@ export class UserController {
     const user = { email, token, username, bio, image };
     return { user };
   }
+
+  @Get('roster')
+  async getRoster() {
+    const users = await this.userService.findAll();
+    return users.map(user => ({
+      id: user.id,
+      username: user.username,
+      email: user.email
+    }));
+  }
 }
