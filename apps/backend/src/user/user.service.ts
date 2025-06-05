@@ -20,16 +20,21 @@ export class UserService {
   async getRosterStatistics() {
     const users = await this.findAll();
     
-    return users.map((user) => {
+    return Promise.all(users.map(async (user) => {
+      const articles = await this.em.find(Article, { author: user.id });
+      const articlesCount = articles.length;
+      const totalFavorites = articles.reduce((sum, article) => sum + article.favoritesCount, 0);
+      const firstArticleDate = articlesCount > 0 ? articles[0].createdAt : null;
+
       return {
         id: user.id,
         username: user.username,
         email: user.email,
-        articlesCount: 0, // We'll fix this to get real data
-        totalFavorites: 0, // We'll fix this to get real data  
-        firstArticleDate: null // We'll fix this to get real data
+        articlesCount,
+        totalFavorites,
+        firstArticleDate
       };
-    });
+    }));
   }
 
   async findOne(loginUserDto: LoginUserDto): Promise<User> {
