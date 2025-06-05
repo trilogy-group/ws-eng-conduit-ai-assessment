@@ -1,14 +1,21 @@
-<table>
-  <thead>
-    <tr>
-      <th>Username</th>
-      <th>Email</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.username }}</td>
-      <td>{{ user.email }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="container page">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Conduit Roster</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users$ | async">
+            <td><a [routerLink]="['/profile', user.username]">{{ user.username }}</a></td>
+            <td>{{ user.email }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
