@@ -2,11 +2,17 @@
   <div class="row">
     <div class="col-md-12">
       <h1>Conduit Roster</h1>
-      <table class="table">
+      <table class="table table-striped">
         <thead>
           <tr>
             <th>Username</th>
             <th>Email</th>
+            <th>Articles</th>
+            <th>Total Favorites</th>
+            <th>First Article Date</th>
+            <td>{{ user.articlesCount }}</td>
+            <td>{{ user.totalFavorites }}</td>
+            <td>{{ user.firstArticleDate | date:'shortDate' }}</td>
           </tr>
         </thead>
         <tbody>
