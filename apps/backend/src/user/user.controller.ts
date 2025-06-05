@@ -4,6 +4,7 @@ import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 import { User } from './user.decorator';
 import { IUserRO } from './user.interface';
 import { UserService } from './user.service';
+import { EntityManager } from '@mikro-orm/core';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
@@ -11,7 +12,10 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @ApiTags('user')
 @Controller()
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly em: EntityManager
+  ) {}
 
   @Get('user')
   async findMe(@User('email') email: string): Promise<IUserRO> {
@@ -51,26 +55,6 @@ export class UserController {
 
   @Get('roster')
   async getRoster() {
-    const users = await this.userService.findAll();
-    
-    const usersWithStats = await Promise.all(
-      users.map(async (user) => {
-        const articles = await this.em.find('Article', { author: user.id });
-        const articlesCount = articles.length;
-        const totalFavorites = articles.reduce((sum, article) => sum + (article.favoritesCount || 0), 0);
-        const firstArticleDate = articles.length > 0 ? articles[0].createdAt : null;
-        
-        return {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          articlesCount,
-          totalFavorites,
-          firstArticleDate
-        };
-      })
-    );
-    
-    return usersWithStats;
+    return this.userService.getRosterStatistics();
   }
 }
