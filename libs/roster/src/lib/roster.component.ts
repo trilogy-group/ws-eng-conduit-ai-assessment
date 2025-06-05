@@ -8,6 +8,9 @@ interface RosterUser {
   id: number;
   username: string;
   email: string;
+  articlesCount: number;
+  totalFavorites: number;
+  firstArticleDate: string | null;
 }
 
 @Component({
