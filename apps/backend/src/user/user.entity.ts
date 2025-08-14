@@ -24,6 +24,15 @@ export class User {
   @Property()
   username: string;
 
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @Property({ type: 'enum', enum: ['admin', 'user'], default: 'user' })
+  role: 'admin' | 'user';
+
   @Property({ hidden: true })
   @IsEmail()
   email: string;
@@ -54,7 +63,7 @@ export class User {
   @ManyToMany(() => User, (u) => u.followers, { hidden: true })
   followed = new Collection<User>(this);
 
-  @OneToMany(() => Article, (article) => article.author, { hidden: true })
+  @OneToMany(() => Article, (article) => article.author, { hidden: true, cascade: ['remove'] })
   articles = new Collection<Article>(this);
 
   constructor(username: string, email: string, password: string) {

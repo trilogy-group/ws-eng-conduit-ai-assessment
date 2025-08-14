@@ -31,16 +31,16 @@ export class Article {
   @Property()
   body = '';
 
-  @Property({ type: 'date' })
-  createdAt = new Date();
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @Property({ type: ArrayType })
   tagList: string[] = [];
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { cascade: ['remove'] })
   author: User;
 
   @OneToMany(() => Comment, (comment) => comment.article, { eager: true, orphanRemoval: true })
@@ -48,6 +48,9 @@ export class Article {
 
   @Property({ type: 'number' })
   favoritesCount = 0;
+
+  @Property({ type: 'number', default: 0 })
+  views: number;
 
   constructor(author: User, title: string, description: string, body: string) {
     this.author = author;
