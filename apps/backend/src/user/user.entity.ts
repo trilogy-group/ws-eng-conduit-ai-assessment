@@ -1,86 +1,22 @@
-import { IsEmail } from 'class-validator';
-import crypto from 'crypto';
-import {
-  Collection,
-  Entity,
-  EntityDTO,
-  EntityRepositoryType,
-  ManyToMany,
-  OneToMany,
-  PrimaryKey,
-  Property,
-  wrap,
-} from '@mikro-orm/core';
-import { Article } from '../article/article.entity';
-import { UserRepository } from './user.repository';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
-@Entity({ customRepository: () => UserRepository })
+@Entity()
 export class User {
-  [EntityRepositoryType]?: UserRepository;
-
-  @PrimaryKey({ type: 'number' })
-  id: number;
+  @PrimaryKey()
+  id!: number;
 
   @Property()
-  username: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @Property({ type: 'enum', enum: ['admin', 'user'], default: 'user' })
-  role: 'admin' | 'user';
-
-  @Property({ hidden: true })
-  @IsEmail()
-  email: string;
+  name!: string;
 
   @Property()
-  bio = '';
+  email!: string;
 
   @Property()
-  image = '';
+  role: string = 'user';
 
-  @Property({ hidden: true })
-  password: string;
+  @Property({ onCreate: () => new Date() })
+  createdAt: Date = new Date();
 
-  @ManyToMany({ entity: () => Article, hidden: true })
-  favorites = new Collection<Article>(this);
-
-  @ManyToMany({
-    entity: () => User,
-    inversedBy: (u) => u.followed,
-    owner: true,
-    pivotTable: 'user_to_follower',
-    joinColumn: 'follower',
-    inverseJoinColumn: 'following',
-    hidden: true,
-  })
-  followers = new Collection<User>(this);
-
-  @ManyToMany(() => User, (u) => u.followers, { hidden: true })
-  followed = new Collection<User>(this);
-
-  @OneToMany(() => Article, (article) => article.author, { hidden: true, cascade: ['remove'] })
-  articles = new Collection<Article>(this);
-
-  constructor(username: string, email: string, password: string) {
-    this.username = username;
-    this.email = email;
-    this.password = crypto.createHmac('sha256', password).digest('hex');
-  }
-
-  toJSON(user?: User) {
-    const o = wrap<User>(this).toObject() as UserDTO;
-    o.image = this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg';
-    o.following = user && user.followers.isInitialized() ? user.followers.contains(this) : false; // TODO or followed?
-
-    return o;
-  }
-}
-
-interface UserDTO extends EntityDTO<User> {
-  following?: boolean;
+  @Property({ onUpdate: () => new Date() })
+  updatedAt: Date = new Date();
 }
