@@ -8,7 +8,7 @@ Please copy-paste the final answer that you obtained from the AI for each questi
 
 **Question**: What is the underlying issue that causes this problem to occur and from which component (file) of this project does this issue originate?
 
-**Answer**: *Please fill this in*
+**Answer**: The frontend currently treats the tags string as an array of characters instead of splitting by commas. This causes each character to display as a separate tag.
 
 
 ## Problem 2
@@ -17,5 +17,5 @@ Please copy-paste the final answer that you obtained from the AI for each questi
 
 **Question**: What is the underlying issue that causes this problem to occur and from which component (file) of this project does this issue originate?
 
-**Answer**: *Please fill this in*
+**Answer**: The backend does not properly save or return new tags to the frontend, so the Popular Tags section does not update after creating new tags.
 
