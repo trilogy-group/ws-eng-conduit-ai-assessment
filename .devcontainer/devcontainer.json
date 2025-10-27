@@ -3,9 +3,17 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
+  "settings": {
+    "chat.disableAIFeatures": true
+  },
   "customizations": {
     "vscode": {
-      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "cweijan.vscode-mysql-client2"]
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "cweijan.vscode-mysql-client2",
+        "saoudrizwan.claude-dev@3.34.0"
+      ]
     }
   },
   "forwardPorts": [3000, 3001, 3306],

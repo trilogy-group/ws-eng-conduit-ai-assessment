@@ -105,16 +105,34 @@ async function getSubmissionWarnings(diffPath: string): Promise<string[]> {
     warnings.push('⚠️ WARNING: Completeness - No screenshots found. Without visual proof of implementation, we cannot properly evaluate feature completeness.');
   }
 
-  const aiderFiles = ['.aider.chat.history.md', '.aider.input.history'];
-  for (const file of aiderFiles) {
+  const clineHistoryPath = await getClineHistoryPath();
+  if (clineHistoryPath) {
     try {
-      const stats = await fs.stat(file);
-      if (stats.size < 100) {
-        warnings.push(`⚠️ WARNING: AI Usage - ${file} is very small. This suggests limited AI interaction, which will affect your AI Usage score.`);
+      const tasks = await fs.readdir(clineHistoryPath);
+      const validTasks = [];
+      for (const taskId of tasks) {
+        const taskPath = path.join(clineHistoryPath, taskId);
+        const stat = await fs.stat(taskPath);
+        if (stat.isDirectory()) {
+          const apiHistoryPath = path.join(taskPath, 'api_conversation_history.json');
+          try {
+            const stats = await fs.stat(apiHistoryPath);
+            if (stats.size > 0) {
+              validTasks.push(taskId);
+            }
+          } catch (error) {
+            console.warn(`⚠️  Could not read ${apiHistoryPath}:`, error);
+          }
+        }
+      }
+      if (validTasks.length === 0) {
+        warnings.push('⚠️ WARNING: AI Usage - No Cline chat history found. Missing AI interaction history will result in 0 stars for AI Usage.');
       }
     } catch {
-      warnings.push(`⚠️ WARNING: AI Usage - ${file} not found. Missing AI interaction history will result in 0 stars for AI Usage.`);
+      warnings.push('⚠️ WARNING: AI Usage - Cannot access Cline history directory. Missing AI interaction history will result in 0 stars for AI Usage.');
     }
+  } else {
+    warnings.push('⚠️ WARNING: AI Usage - Cline history directory not found. Missing AI interaction history will result in 0 stars for AI Usage.');
   }
 
   try {
@@ -127,6 +145,43 @@ async function getSubmissionWarnings(diffPath: string): Promise<string[]> {
   }
 
   return warnings;
+}
+
+async function getClineHistoryPath(): Promise<string | null> {
+  const possiblePaths = [
+    process.env.HOME && path.join(process.env.HOME, '.vscode-remote', 'data', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'tasks'),
+    process.env.APPDATA && path.join(process.env.APPDATA, 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'tasks'),
+    process.env.HOME && path.join(process.env.HOME, 'Library', 'Application Support', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'tasks'),
+    process.env.HOME && path.join(process.env.HOME, '.config', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'tasks'),
+    process.env.HOME && path.join(process.env.HOME, '.vscode-server', 'data', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'tasks'),
+    process.env.HOME && path.join(process.env.HOME, '.vscode-remote', 'data', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'tasks'),
+  ].filter(Boolean) as string[];
+
+  for (const basePath of possiblePaths) {
+    try {
+      await fs.access(basePath);
+      const tasks = await fs.readdir(basePath);
+      for (const taskId of tasks) {
+        const taskPath = path.join(basePath, taskId);
+        const stat = await fs.stat(taskPath);
+        if (stat.isDirectory()) {
+          const apiHistoryPath = path.join(taskPath, 'api_conversation_history.json');
+          try {
+            const stats = await fs.stat(apiHistoryPath);
+            if (stats.size > 0) {
+              return basePath;
+            }
+          } catch (error) {
+            console.warn(`⚠️  Could not read ${apiHistoryPath}:`, error);
+          }
+        }
+      }
+    } catch (error) {
+      console.warn(`⚠️  Could not access ${basePath}:`, error);
+    }
+  }
+
+  return null;
 }
 
 async function confirmSubmission({ name, email, diffPath }: { name: string; email: string; diffPath: string }) {
@@ -181,14 +236,37 @@ async function addPlanMd(zip: JSZip): Promise<void> {
   }
 }
 
-async function addAiderFiles(zip: JSZip): Promise<void> {
-  const aiderFiles = ['.aider.chat.history.md', '.aider.input.history'];
-  for (const file of aiderFiles) {
-    try {
-      await addFileToZip(zip, file, file);
-    } catch {
-      console.warn(`⚠️ WARNING: ${file} not found in root directory`);
+async function addClineHistory(zip: JSZip): Promise<void> {
+  const historyPath = await getClineHistoryPath();
+  if (!historyPath) {
+    console.warn('⚠️ WARNING: Cline history directory not found');
+    return;
+  }
+
+  try {
+    const tasks = await fs.readdir(historyPath);
+    for (const taskId of tasks) {
+      const taskPath = path.join(historyPath, taskId);
+      const stat = await fs.stat(taskPath);
+      if (!stat.isDirectory()) continue;
+
+      const apiHistoryPath = path.join(taskPath, 'api_conversation_history.json');
+      const uiMessagesPath = path.join(taskPath, 'ui_messages.json');
+
+      try {
+        await addFileToZip(zip, apiHistoryPath, `cline_history/${taskId}/api_conversation_history.json`);
+      } catch (error) {
+        console.warn(`⚠️  Could not add ${apiHistoryPath} to zip:`, error);
+      }
+
+      try {
+        await addFileToZip(zip, uiMessagesPath, `cline_history/${taskId}/ui_messages.json`);
+      } catch (error) {
+        console.warn(`⚠️  Could not add ${uiMessagesPath} to zip:`, error);
+      }
     }
+  } catch (error) {
+    console.warn('⚠️ WARNING: Error reading Cline history:', error);
   }
 }
 
@@ -196,7 +274,7 @@ async function createZip(): Promise<Buffer> {
   console.log('');
   const zip = new JSZip();
   await addSubmissionFiles(zip);
-  await addAiderFiles(zip);
+  await addClineHistory(zip);
   const result = await zip.generateAsync({ type: 'nodebuffer' });
   console.log(`Submission archive size: ${result.byteLength} bytes`);
   console.log('');
