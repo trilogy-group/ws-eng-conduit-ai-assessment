@@ -9,7 +9,7 @@ In this assessment, you will work on a realistic task that closely resembles iss
 1. **Set Up GitHub Codespaces:**
 
    - Create a free GitHub account at [GitHub](https://github.com/signup).
-   - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/defect-resolution-v4&machine=standardLinux32gb).
+   - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/defect-resolution-v5&machine=standardLinux32gb).
    - Your environment will automatically install all dependencies, seed the database, and start both the backend and frontend servers.
    - Open [http://localhost:4200](http://localhost:4200).
      - Log in with: **Email:** jcosten0@purevolume.com **Password:** password
@@ -32,13 +32,13 @@ In this assessment, you will work on a realistic task that closely resembles iss
 
    - Check the [evaluation criteria](#evaluation-criteria) to know how your work will be graded.
 
-5. **Use Aider to analyze and fix the bug:**
+5. **Use Cline to analyze and fix the bug:**
 
-   - You must use the pre-installed Aider CLI for AI. You can check out the [Aider documentation](https://aider.chat/docs/usage/tutorials.html) to learn how to use it.
-   - You will use an assessment-specific Aider API key (provided on the Crossover page) which allows about 200 messages.
+   - You must use the pre-installed Cline VSCode extension for AI. You can check out the [Cline documentation](https://docs.cline.bot/) to learn how to use it.
+   - You will configure an assessment-specific API key (provided on the Crossover page) in Cline's settings.
    - First, write a root cause analysis to determine the underlying issue causing the bug, within the `root-causes.md` file.
    - Then, perform the necessary code adjustments to fix the bug per your root cause analysis.
-   - Use Aider to perform most of the research, troubleshooting, design, write new code, etc.
+   - Use Cline to perform most of the research, troubleshooting, design, write new code, etc.
 
 6. **Submit your work:**
    - Run the acceptance tests, capture the indicated screenshots and place them directly in the `submission` folder in your repository. In CodeSpaces, you can upload files to the repository by right clicking on the `submission` folder and selecting "Upload".
@@ -48,17 +48,17 @@ In this assessment, you will work on a realistic task that closely resembles iss
 ## Mandatory Rules
 
 - **Do Not Fork**: Work on the provided repository. The submission script will malfunction if you fork the repository and push to it.
-- **Use the Correct Branch**: Other assessment branches are in the repository. You must be on rwa/defect-resolution-v4.
-- **Single AI Tool**: Use Aider exclusively for AI interactions.
+- **Use the Correct Branch**: Other assessment branches are in the repository. You must be on rwa/defect-resolution-v5.
+- **Single AI Tool**: Use Cline exclusively for AI interactions.
 - **Do the RCA**: Write a root cause analysis within the `root-causes.md` file. If you submit without the RCA, you will get 0 stars.
 - **Include Screenshots**: Include screenshots of the acceptance tests passing. If you submit without screenshots, you'll get 0 stars.
-- **Preserve Aider Files**: Do not delete .aider.chat.history.md or .aider.input.history. If you submit without these files, you'll get 0 stars.
+- **Preserve Cline History**: Do not clear your Cline chat history. If you submit without Cline history, you'll get 0 stars.
 
 ## Notes
 
 - **API Docs:** You can find the API documentation at [http://localhost:3000/docs](http://localhost:3000/docs).
 - **Testing:** The project does not include tests. You don't need to write any tests for this task.
-- **Aider:** Think of Aider as a junior developer with good general knowledge but little context about the project. Provide clear instructions and reference specific files when asking for changes.
+- **Cline:** Think of Cline as a junior developer with good general knowledge but little context about the project. Provide clear instructions and reference specific files (using @mentions) when asking for changes.
 - **Tasks**: You can use the [Tasks](.vscode/tasks.json) ([docs](https://code.visualstudio.com/docs/editor/tasks)) and [Debug Launch Configurations](.vscode/launch.json) ([docs](https://code.visualstudio.com/docs/editor/debugging)) to start the app.
 - **Codespaces**:
   - Inactivity:Your codespace will stop after 30 minutes of inactivity. You can restart it from [here](https://github.com/codespaces) (your changes will be saved). It will be automatically deleted after 30 days of being stopped.
