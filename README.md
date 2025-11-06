@@ -4,6 +4,6 @@ This repository contains a full-stack TypeScript application consisting of a Nes
 
 Please checkout the branch corresponding to the assessment you are taking:
 
-- https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/defect-resolution-v4
-- https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/feature-development-v4
+- https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/defect-resolution-v5
+- https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/feature-development-v5
 - https://github.com/trilogy-group/ws-eng-conduit-ai-assessment/tree/rwa/design-and-implementation-v2
