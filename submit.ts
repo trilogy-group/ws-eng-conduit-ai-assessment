@@ -176,8 +176,8 @@ async function getClineHistoryPath(): Promise<string | null> {
           }
         }
       }
-    } catch (error) {
-      console.warn(`⚠️  Could not access ${basePath}:`, error);
+    } catch {
+      // no op - this will fail for non existent folders
     }
   }
 
