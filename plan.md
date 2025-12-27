@@ -9,7 +9,10 @@ High-level step by step plan of what you will do. For example:
 - Add a new table for chat messages,
 - Implement a repo, service and controller for reading and creating chat messages,
 - Update the React frontend to allow users to send and view messages,
+- 
 - ...
+- 1) - w
+     - 2
 
 ## Decisions
 
@@ -27,3 +30,4 @@ For example:
 ## Notes
 
 Any additional notes that you think are relevant to the plan. For example, do we need to perform any changes to the AWS architecture to support the new feature? Briefly describe the changes you would need to make.
+
