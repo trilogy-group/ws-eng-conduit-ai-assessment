@@ -90,3 +90,8 @@ Once you are ready, click the link on the Crossover assessment page to reveal th
 - 0:45: Implement the data model changes plus related frontend changes.
 - 1:30: Add the new technical pattern, with the related backend and frontend changes.
 - 0:15: Run the acceptance tests and submit your work.
+
+Frontend Changes:
+Based on the updated backend data model, the frontend will be adjusted to align with the new structure. 
+Relevant UI components and forms will be updated to display and capture the new fields correctly.
+State management and API integrations will be reviewed to ensure smooth data flow and a consistent user experience.
