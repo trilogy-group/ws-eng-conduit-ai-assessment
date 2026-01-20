@@ -8,6 +8,19 @@ The user story is around creating and editing articles, requiring you to change 
 
 In Production, this application is deployed on AWS following this architecture. Any changes you make must work within this architecture; otherwise, once your story is released, it will not work correctly.
 
+((## New Technical Pattern
+
+Based on my understanding and hands-on learning during this assessment, I propose a layered technical pattern to improve scalability, readability, and long-term maintainability of the system.
+
+### Backend Changes
+- Implemented clear separation between controller, service, and data access layers.
+- Introduced structured data models for consistent API responses.
+- Updated backend APIs to support the revised data flow.
+### Frontend Changes
+- Updated frontend components to consume the new backend API structure.
+- Aligned state management with the updated data model.
+- Made minor UI adjustments to support the new structured responses.))
+
 ![Architecture Diagram](./diagram.png)
 
 (Optional) You may watch this video to get an overview of the assessment: https://drive.google.com/file/d/1sVMJHExraDkgBiflrBc9MRm-rhWybRv-/view
