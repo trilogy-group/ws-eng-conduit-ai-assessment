@@ -1,29 +1,116 @@
 # Implementation Plan
 
-This document will contain the plan for the implementation of the user story, which you should fill BEFORE you start coding. Replace the placeholder/example text below with your actual plan, while retaining the structure.
-
 ## Plan
 
-High-level step by step plan of what you will do. For example:
+### Phase 1: Data Model (Backend)
 
-- Add a new table for chat messages,
-- Implement a repo, service and controller for reading and creating chat messages,
-- Update the React frontend to allow users to send and view messages,
-- ...
+1. **Create ArticleCoAuthor junction entity**
+   - Fields: articleId, userId, addedAt (timestamp)
+   - Proper MikroORM many-to-many relation
+   - Migration to create table
+
+2. **Create ArticleLock entity** (separate table for clean separation)
+   - Fields: id, articleId (unique), userId, acquiredAt, lastSeenAt
+   - One-to-one relation with Article
+   - Allows lock history if needed later
+
+### Phase 2: Backend Services & API
+
+3. **Create LockService** (dedicated service)
+   - `acquireLock(articleId, userId)` - Atomic acquisition with conflict check
+   - `releaseLock(articleId, userId)` - Explicit release
+   - `refreshLock(articleId, userId)` - Heartbeat update
+   - `isLocked(articleId, excludeUserId?)` - Check lock status
+   - `cleanupExpiredLocks()` - Called before any lock operation (5-min timeout)
+
+4. **Create LockGuard** (NestJS Guard)
+   - Applied to PUT /articles/:slug
+   - Verifies user holds the lock before allowing edit
+   - Returns 423 Locked status with lock holder info
+
+5. **Update ArticleService**
+   - Add/remove co-authors on create/update
+   - Check authorization: author OR co-author can edit
+
+6. **New API Endpoints**
+   - GET `/api/users` - List all users for dropdown
+   - POST `/api/articles/:slug/lock` - Acquire lock
+   - DELETE `/api/articles/:slug/lock` - Release lock
+   - PUT `/api/articles/:slug/lock` - Refresh lock (heartbeat)
+   - GET `/api/articles/:slug/lock` - Check lock status
+
+7. **Custom Exceptions**
+   - ArticleLockedException (423) - Article locked by another user
+   - LockExpiredException (409) - Your lock has expired
+
+### Phase 3: Frontend
+
+8. **Create UserService** 
+   - Fetch all users for dropdown
+
+9. **Update ArticleEditor component**
+   - Multi-select dropdown for co-authors
+   - On mount: Call acquire lock API
+   - On unmount/navigation: Call release lock API
+   - Heartbeat: Refresh lock every 30 seconds
+   - Handle lock errors with user-friendly messages
+
+10. **Redux Lock State**
+    - Track current lock status
+    - Handle lock acquisition/loss
+    - Show appropriate UI feedback
+
+### Phase 4: Testing & Screenshots
+
+11. Execute acceptance tests and capture screenshots
 
 ## Decisions
 
-The top 2-3 decisions you have taken, plus the alternatives and rationale for your choices. Each alternative listed must be feasible (i.e., do not list alternatives would not even work). 
+### Decision 1: Lock Storage Architecture
+- **Selected: Separate ArticleLock entity**
+- Alternative A: Add lock fields directly to Article entity
+- Alternative B: Separate ArticleLock table (SELECTED)
+- Alternative C: In-memory/Redis distributed lock
+- Rationale: 
+  - Separate entity provides clean separation of concerns
+  - Allows future extensibility (lock history, multiple lock types)
+  - No Redis in stack, so Alternative C requires infrastructure changes
+  - Alternative A mixes article data with transient lock state
 
-You should include a decision for cases where you either: change the data model, select a third-party library (or build something from scratch), or create a new mechanism/pattern. 
+### Decision 2: Lock Acquisition Strategy  
+- **Selected: Atomic check-and-set with cleanup**
+- Alternative A: Simple UPDATE with WHERE clause
+- Alternative B: SELECT FOR UPDATE with transaction (SELECTED)
+- Alternative C: Optimistic locking with version field
+- Rationale:
+  - SELECT FOR UPDATE prevents race condition when two users click edit simultaneously
+  - Cleanup of expired locks happens atomically in same transaction
+  - More robust than simple UPDATE which could have TOCTOU issues
 
-For example:
-
-- Decision: Use GitHub Codespaces for the development environment.
-  - Alternative: Use a local development environment.
-  - Alternative: Use Gitpod for the development environment.
-  - Rationale: Setting up a local environment is time-consuming and error-prone. Gitpod "Clasic" (hosted in the cloud) will be sunset on April 2025, and GitHub Codespaces allows leveraging Dev Containers - which can also be used locally if really needed. Hence we select GitHub Codespaces as it's the most future-proof and flexible option.
+### Decision 3: Co-author Selection UI
+- **Selected: Multi-select dropdown with user search**
+- Alternative A: Comma-separated email text input (BASIC only)
+- Alternative B: Multi-select dropdown from user list (SELECTED)
+- Alternative C: Autocomplete with user search
+- Rationale:
+  - Dropdown prevents typos in email addresses
+  - Shows only valid users who can actually be co-authors
+  - Better UX than free-text input
+  - Simpler than autocomplete while meeting requirements
 
 ## Notes
 
-Any additional notes that you think are relevant to the plan. For example, do we need to perform any changes to the AWS architecture to support the new feature? Briefly describe the changes you would need to make.
+### AWS Architecture
+- No changes needed - all changes within existing backend/frontend containers
+- Database schema changes handled by MikroORM migrations
+
+### Edge Cases Handled
+1. **Browser crash/close**: Lock expires after 5 minutes of no heartbeat
+2. **Network failure**: Heartbeat failure triggers warning to user; lock eventually expires
+3. **Race condition on edit**: SELECT FOR UPDATE ensures only one user gets lock
+4. **User loses lock while editing**: Next save attempt returns 423/409, user sees error with current article content
+
+### Performance Considerations
+- Lock cleanup runs lazily (before lock operations) to avoid cron job complexity
+- Heartbeat every 30 seconds balances responsiveness vs server load
+- User list cached on frontend (doesn't change during session)

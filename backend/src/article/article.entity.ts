@@ -4,6 +4,8 @@ import {
   Entity,
   EntityDTO,
   ManyToOne,
+  ManyToMany,
+  OneToOne,
   OneToMany,
   PrimaryKey,
   Property,
@@ -12,6 +14,7 @@ import {
 import slug from 'slug';
 
 import { User } from '../user/user.entity';
+import { ArticleLock } from './article-lock.entity';
 import { Comment } from './comment.entity';
 
 @Entity()
@@ -46,6 +49,12 @@ export class Article {
   @OneToMany(() => Comment, (comment) => comment.article, { eager: true, orphanRemoval: true })
   comments = new Collection<Comment>(this);
 
+  @ManyToMany(() => User)
+  coAuthors = new Collection<User>(this);
+
+  @OneToOne(() => ArticleLock, { nullable: true })
+  articleLock?: ArticleLock;
+
   @Property({ type: 'number', fieldName: 'favorites_count' })
   favoritesCount = 0;
 
@@ -61,6 +70,7 @@ export class Article {
     const o = wrap<Article>(this).toObject() as ArticleDTO;
     o.favorited = user && user.favorites.isInitialized() ? user.favorites.contains(this) : false;
     o.author = this.author.toJSON(user);
+    o.coAuthorEmails = this.coAuthors?.isInitialized() ? this.coAuthors.getItems().map(u => u.email) : [];
 
     return o;
   }
@@ -68,4 +78,5 @@ export class Article {
 
 export interface ArticleDTO extends EntityDTO<Article> {
   favorited?: boolean;
+  coAuthorEmails?: string[];
 }

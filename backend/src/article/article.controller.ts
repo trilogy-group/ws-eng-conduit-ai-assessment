@@ -4,12 +4,52 @@ import { User } from '../user/user.decorator';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { ArticleService } from './article.service';
 import { CreateArticleDto, CreateCommentDto } from './dto';
+import { LockService } from './lock.service';
 
 @ApiBearerAuth()
 @ApiTags('articles')
 @Controller('articles')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    private readonly lockService: LockService
+  ) {}
+
+  @Post(':slug/lock')
+  async acquireLock(@User('id') userId: number, @Param('slug') slug: string) {
+    const article = await this.articleService.findOne(userId, { slug });
+    if (!article.article) {
+      throw new Error('Article not found');
+    }
+    return this.lockService.acquireLock(article.article.id, userId);
+  }
+
+  @Delete(':slug/lock')
+  async releaseLock(@User('id') userId: number, @Param('slug') slug: string) {
+    const article = await this.articleService.findOne(userId, { slug });
+    if (!article.article) {
+      throw new Error('Article not found');
+    }
+    return this.lockService.releaseLock(article.article.id, userId);
+  }
+
+  @Put(':slug/lock')
+  async refreshLock(@User('id') userId: number, @Param('slug') slug: string) {
+    const article = await this.articleService.findOne(userId, { slug });
+    if (!article.article) {
+      throw new Error('Article not found');
+    }
+    return this.lockService.refreshLock(article.article.id, userId);
+  }
+
+  @Get(':slug/lock')
+  async getLockStatus(@Param('slug') slug: string) {
+    const article = await this.articleService.findOne(0, { slug });
+    if (!article.article) {
+      throw new Error('Article not found');
+    }
+    return this.lockService.getLockStatus(article.article.id);
+  }
 
   @ApiOperation({ summary: 'Get all articles' })
   @ApiResponse({ status: 200, description: 'Return all articles.' })
