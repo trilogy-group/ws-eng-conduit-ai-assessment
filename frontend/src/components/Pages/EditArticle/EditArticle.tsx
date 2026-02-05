@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getArticle, updateArticle } from '../../../services/conduit';
+import { getAllUsers, getArticle, heartbeatArticle, lockArticle, unlockArticle, updateArticle } from '../../../services/conduit';
 import { store } from '../../../state/store';
 import { useStore } from '../../../state/storeHooks';
 import { ArticleEditor } from '../../ArticleEditor/ArticleEditor';
-import { initializeEditor, loadArticle, startSubmitting, updateErrors } from '../../ArticleEditor/ArticleEditor.slice';
+import { initializeEditor, loadArticle, setCoAuthorIds, setUsers, startSubmitting, updateErrors } from '../../ArticleEditor/ArticleEditor.slice';
 
 export function EditArticle() {
   const { slug } = useParams<{ slug: string }>();
@@ -12,6 +12,17 @@ export function EditArticle() {
 
   useEffect(() => {
     _loadArticle(slug!);
+    return () => {
+      // Cleanup: clear heartbeat and unlock when leaving page
+      const anyWin = window as any;
+      if (anyWin.__articleLockInterval) {
+        clearInterval(anyWin.__articleLockInterval);
+        anyWin.__articleLockInterval = null;
+      }
+      if (slug) {
+        unlockArticle(slug).catch(() => void 0);
+      }
+    };
   }, [slug]);
 
   return <Fragment>{!loading && <ArticleEditor onSubmit={onSubmit(slug!)} />}</Fragment>;
@@ -20,14 +31,48 @@ export function EditArticle() {
 async function _loadArticle(slug: string) {
   store.dispatch(initializeEditor());
   try {
-    const { title, description, body, tagList, author } = await getArticle(slug);
-
-    if (author.username !== store.getState().app.user?.username) {
+    const article = await getArticle(slug);
+    const me = store.getState().app.user;
+    const isCoAuthor = article.coAuthors?.some((u) => u.username === me?.username);
+    if (article.author.username !== me?.username && !isCoAuthor) {
       location.hash = '#/';
       return;
     }
 
-    store.dispatch(loadArticle({ title, description, body, tagList }));
+    // Attempt to acquire lock
+    try {
+      await lockArticle(slug);
+    } catch (e) {
+      // If cannot acquire, show error and redirect
+      alert('This article is currently locked by another user. Please try again later.');
+      location.hash = `#/article/${slug}`;
+      return;
+    }
+
+    // Prefill article fields and coAuthorIds
+    store.dispatch(
+      loadArticle({ title: article.title, description: article.description, body: article.body, tagList: article.tagList }),
+    );
+    if (article.coAuthors?.length) {
+      store.dispatch(setCoAuthorIds(article.coAuthors.map((u) => u.id)));
+    }
+
+    // Load users for multi-select
+    getAllUsers().then((users) => store.dispatch(setUsers(users)));
+
+    // Start heartbeat
+    const interval = setInterval(
+      () =>
+        heartbeatArticle(slug).catch(() => {
+          alert('You lost the edit lock for this article. Redirecting to view page.');
+          clearInterval(interval);
+          location.hash = `#/article/${slug}`;
+        }),
+      30000,
+    );
+    (window as any).__articleLockInterval = interval;
+    // Release lock on unload
+    window.addEventListener('beforeunload', () => unlockArticle(slug));
   } catch {
     location.hash = '#/';
   }
@@ -43,6 +88,7 @@ function onSubmit(slug: string): (ev: React.FormEvent) => void {
     result.match({
       err: (errors) => store.dispatch(updateErrors(errors)),
       ok: ({ slug }) => {
+        unlockArticle(slug);
         location.hash = `#/article/${slug}`;
       },
     });

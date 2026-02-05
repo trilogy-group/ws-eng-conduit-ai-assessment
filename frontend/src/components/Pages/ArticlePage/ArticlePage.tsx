@@ -108,12 +108,17 @@ function ArticleMeta({
   metaSection: MetaSectionState;
   user: User | null;
 }) {
+  const isOwner = !!user && user.username === article.author.username;
+  const isCoAuthor = !!user && (article.coAuthors || []).some((u) => u.username === user.username);
+
   return (
     <div className='article-meta'>
       <ArticleAuthorInfo article={article} />
 
-      {user && user.username === article.author.username ? (
+      {isOwner ? (
         <OwnerArticleMetaActions article={article} deletingArticle={deletingArticle} />
+      ) : isCoAuthor ? (
+        <CoAuthorArticleMetaActions article={article} />
       ) : (
         <NonOwnerArticleMetaActions
           article={article}
@@ -241,6 +246,21 @@ function OwnerArticleMetaActions({
       >
         <i className='ion-heart'></i>
         &nbsp; Delete Article
+      </button>
+    </Fragment>
+  );
+}
+
+function CoAuthorArticleMetaActions({
+  article: { slug },
+}: {
+  article: Article;
+}) {
+  return (
+    <Fragment>
+      <button className='btn btn-outline-secondary btn-sm' onClick={() => redirect(`editor/${slug}`)}>
+        <i className='ion-plus-round'></i>
+        &nbsp; Edit Article
       </button>
     </Fragment>
   );

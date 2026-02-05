@@ -11,6 +11,7 @@ import { Tag } from './src/tag/tag.entity';
 import { Article } from './src/article/article.entity';
 import { Comment } from './src/article/comment.entity';
 import { InitialMigration } from './src/migrations/InitialMigration';
+import { CoAuthorsAndLockMigration } from './src/migrations/CoAuthorsAndLockMigration';
 
 export default defineConfig({
   host: 'db',
@@ -23,6 +24,10 @@ export default defineConfig({
       {
         name: 'InitialMigration',
         class: InitialMigration,
+      },
+      {
+        name: 'CoAuthorsAndLockMigration',
+        class: CoAuthorsAndLockMigration,
       },
     ],
   },

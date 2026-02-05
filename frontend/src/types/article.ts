@@ -1,4 +1,4 @@
-import { array, boolean, Decoder, number, object, string } from 'decoders';
+import { array, boolean, Decoder, number, object, string, either, hardcoded } from 'decoders';
 import { Profile, profileDecoder } from './profile';
 
 export interface Article {
@@ -12,6 +12,7 @@ export interface Article {
   favorited: boolean;
   favoritesCount: number;
   author: Profile;
+  coAuthors: UserRef[];
 }
 
 export const articleDecoder: Decoder<Article> = object({
@@ -25,6 +26,7 @@ export const articleDecoder: Decoder<Article> = object({
   favorited: boolean,
   favoritesCount: number,
   author: profileDecoder,
+  coAuthors: either(array(object({ id: number, username: string })), hardcoded([])),
 });
 
 export interface MultipleArticles {
@@ -42,6 +44,9 @@ export interface ArticleForEditor {
   description: string;
   body: string;
   tagList: string[];
+  // New optional fields to support co-authors
+  coAuthorIds?: number[];
+  coAuthorEmailsCsv?: string;
 }
 
 export interface ArticlesFilters {
@@ -55,4 +60,10 @@ export interface ArticlesFilters {
 export interface FeedFilters {
   limit?: number;
   offset?: number;
+}
+
+// Minimal user reference for co-authors/multi-select
+export interface UserRef {
+  id: number;
+  username: string;
 }

@@ -3,6 +3,7 @@ import {
   Collection,
   Entity,
   EntityDTO,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryKey,
@@ -12,6 +13,7 @@ import {
 import slug from 'slug';
 
 import { User } from '../user/user.entity';
+import type { UserDTO } from '../user/user.entity';
 import { Comment } from './comment.entity';
 
 @Entity()
@@ -49,6 +51,24 @@ export class Article {
   @Property({ type: 'number', fieldName: 'favorites_count' })
   favoritesCount = 0;
 
+  // Co-authors many-to-many (hidden from default serialization until API layer is updated)
+  @ManyToMany({
+    entity: () => User,
+    owner: true,
+    pivotTable: 'article_coauthors',
+    joinColumn: 'article_id',
+    inverseJoinColumn: 'user_id',
+    hidden: true,
+  })
+  coAuthors = new Collection<User>(this);
+
+  // Edit lock (ADVANCED): who holds the lock and until when
+  @ManyToOne(() => User, { nullable: true, fieldName: 'locked_by_id', hidden: true })
+  lockedBy?: User;
+
+  @Property({ type: 'date', nullable: true, fieldName: 'lock_expires_at', hidden: true })
+  lockExpiresAt?: Date;
+
   constructor(author: User, title: string, description: string, body: string) {
     this.author = author;
     this.title = title;
@@ -58,9 +78,14 @@ export class Article {
   }
 
   toJSON(user?: User) {
-    const o = wrap<Article>(this).toObject() as ArticleDTO;
+    const o = wrap<Article>(this).toObject() as ArticleDTO & { coAuthors?: UserDTO[] };
     o.favorited = user && user.favorites.isInitialized() ? user.favorites.contains(this) : false;
     o.author = this.author.toJSON(user);
+
+    // Expose co-authors (keep lock metadata internal to avoid DTO type conflicts)
+    if (this.coAuthors?.isInitialized()) {
+      o.coAuthors = this.coAuthors.getItems().map((u) => u.toJSON(user) as UserDTO);
+    }
 
     return o;
   }

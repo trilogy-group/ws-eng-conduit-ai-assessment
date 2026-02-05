@@ -100,4 +100,23 @@ export class ArticleController {
   async unFavorite(@User('id') userId: number, @Param('slug') slug: string) {
     return this.articleService.unFavorite(userId, slug);
   }
+
+  // ====== Locking ======
+  @ApiOperation({ summary: 'Acquire or refresh article lock' })
+  @Post(':slug/lock')
+  async lock(@User('id') userId: number, @Param('slug') slug: string) {
+    return this.articleService.lock(userId, slug);
+  }
+
+  @ApiOperation({ summary: 'Send heartbeat to extend article lock' })
+  @Post(':slug/heartbeat')
+  async heartbeat(@User('id') userId: number, @Param('slug') slug: string) {
+    return this.articleService.heartbeat(userId, slug);
+  }
+
+  @ApiOperation({ summary: 'Release article lock' })
+  @Post(':slug/unlock')
+  async unlock(@User('id') userId: number, @Param('slug') slug: string) {
+    return this.articleService.unlock(userId, slug);
+  }
 }

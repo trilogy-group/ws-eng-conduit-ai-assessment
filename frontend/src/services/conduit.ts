@@ -1,6 +1,6 @@
 import { Err, Ok, Result } from '@hqoss/monads';
 import axios, { AxiosError } from 'axios';
-import { array, object, string } from 'decoders';
+import { array, object, string, number } from 'decoders';
 import settings from '../config/settings';
 import {
   Article,
@@ -10,6 +10,7 @@ import {
   FeedFilters,
   MultipleArticles,
   multipleArticlesDecoder,
+  UserRef,
 } from '../types/article';
 import { Comment, commentDecoder } from '../types/comment';
 import { GenericErrors, genericErrorsDecoder } from '../types/error';
@@ -77,7 +78,8 @@ export async function signUp(user: UserForRegistration): Promise<Result<User, Ge
 
 export async function createArticle(article: ArticleForEditor): Promise<Result<Article, GenericErrors>> {
   try {
-    const { data } = await axios.post('articles', { article });
+    const payload = editorArticleToPayload(article);
+    const { data } = await axios.post('articles', { article: payload });
     return Ok(object({ article: articleDecoder }).verify(data).article);
   } catch (error) {
     const axiosError = error as AxiosError;
@@ -92,7 +94,8 @@ export async function getArticle(slug: string): Promise<Article> {
 
 export async function updateArticle(slug: string, article: ArticleForEditor): Promise<Result<Article, GenericErrors>> {
   try {
-    const { data } = await axios.put(`articles/${slug}`, { article });
+    const payload = editorArticleToPayload(article);
+    const { data } = await axios.put(`articles/${slug}`, { article: payload });
     return Ok(object({ article: articleDecoder }).verify(data).article);
   } catch (error) {
     const axiosError = error as AxiosError;
@@ -140,4 +143,37 @@ export async function createComment(slug: string, body: string): Promise<Comment
 
 export async function deleteArticle(slug: string): Promise<void> {
   await axios.delete(`articles/${slug}`);
+}
+
+// ===== Additional endpoints for user story =====
+export async function getAllUsers(limit = 1000): Promise<UserRef[]> {
+  const { data } = await axios.get(`users?limit=${limit}&offset=0`);
+  const decoded = object({ users: array(object({ id: number, username: string })), usersCount: number }).verify(data);
+  return decoded.users;
+}
+
+export async function lockArticle(slug: string): Promise<void> {
+  await axios.post(`articles/${slug}/lock`);
+}
+
+export async function heartbeatArticle(slug: string): Promise<void> {
+  await axios.post(`articles/${slug}/heartbeat`);
+}
+
+export async function unlockArticle(slug: string): Promise<void> {
+  await axios.post(`articles/${slug}/unlock`);
+}
+
+function editorArticleToPayload(article: ArticleForEditor): Record<string, unknown> {
+  const { coAuthorEmailsCsv, coAuthorIds, ...rest } = article;
+  const payload: Record<string, unknown> = { ...rest };
+  if (coAuthorIds && coAuthorIds.length > 0) {
+    payload.coAuthorIds = coAuthorIds;
+  } else if (coAuthorEmailsCsv && coAuthorEmailsCsv.trim().length > 0) {
+    payload.coAuthorEmails = coAuthorEmailsCsv
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+  }
+  return payload;
 }

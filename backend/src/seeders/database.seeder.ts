@@ -6,7 +6,6 @@ import { User } from '../user/user.entity';
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-
     if ((await em.count(User)) > 0) {
       console.warn('Database is not empty, skipping seed.');
       return;

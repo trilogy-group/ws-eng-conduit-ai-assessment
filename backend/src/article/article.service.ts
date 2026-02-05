@@ -1,7 +1,7 @@
 import { EntityManager, QueryOrder, wrap } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/mysql';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 
 import { User } from '../user/user.entity';
 import { Article } from './article.entity';
@@ -65,7 +65,7 @@ export class ArticleService {
     }
 
     const ids = (await qb.getResult()).map((a) => a.id);
-    const articles = await this.articleRepository.find({ id: { $in: ids } }, { populate: ['author'] });
+    const articles = await this.articleRepository.find({ id: { $in: ids } }, { populate: ['author', 'coAuthors'] });
     return { articles: articles.map((a) => a.toJSON(user!)), articlesCount };
   }
 
@@ -76,7 +76,7 @@ export class ArticleService {
     const res = await this.articleRepository.findAndCount(
       { author: { followers: userId } },
       {
-        populate: ['author'],
+        populate: ['author', 'coAuthors'],
         orderBy: { createdAt: QueryOrder.DESC },
         limit: +query.limit,
         offset: +query.offset,
@@ -91,7 +91,7 @@ export class ArticleService {
     const user = userId
       ? await this.userRepository.findOneOrFail(userId, { populate: ['followers', 'favorites'] })
       : undefined;
-    const article = await this.articleRepository.findOne(where, { populate: ['author'] });
+    const article = await this.articleRepository.findOne(where, { populate: ['author', 'coAuthors'] });
     return { article: article && article.toJSON(user) } as IArticleRO;
   }
 
@@ -155,9 +155,19 @@ export class ArticleService {
     );
     const article = new Article(user!, dto.title, dto.description, dto.body);
     article.tagList.push(...dto.tagList);
+    // resolve co-authors by ids first, then emails (basic mode)
+    if (dto.coAuthorIds?.length) {
+      const users = await this.userRepository.find({ id: { $in: dto.coAuthorIds } });
+      article.coAuthors.add(users);
+    } else if (dto.coAuthorEmails?.length) {
+      const users = await this.userRepository.find({ email: { $in: dto.coAuthorEmails } });
+      article.coAuthors.add(users);
+    }
     user?.articles.add(article);
     await this.em.flush();
 
+    // ensure coAuthors are initialized for serialization
+    await this.em.populate(article, ['author', 'coAuthors']);
     return { article: article.toJSON(user!) };
   }
 
@@ -166,14 +176,70 @@ export class ArticleService {
       { id: userId },
       { populate: ['followers', 'favorites', 'articles'] },
     );
-    const article = await this.articleRepository.findOne({ slug }, { populate: ['author'] });
-    wrap(article).assign(articleData);
+    const article = await this.articleRepository.findOne({ slug }, { populate: ['author', 'coAuthors'] });
+    // lock enforcement: if active lock is held by other user -> 423
+    if (this.isLockActive(article!) && article!.lockedBy!.id !== userId) {
+      throw new HttpException({ error: 'Article is currently locked by another user' }, 423);
+    }
+
+    // if DTO contains co-author fields, resolve and assign
+    type CoAuthorFields = { coAuthorIds?: number[]; coAuthorEmails?: string[] };
+    const { coAuthorIds, coAuthorEmails, ...rest } = articleData as Partial<Article> & CoAuthorFields;
+    if (coAuthorIds && Array.isArray(coAuthorIds)) {
+      const users = await this.userRepository.find({ id: { $in: coAuthorIds } });
+      article!.coAuthors.removeAll();
+      article!.coAuthors.add(users);
+    } else if (coAuthorEmails && Array.isArray(coAuthorEmails)) {
+      const users = await this.userRepository.find({ email: { $in: coAuthorEmails } });
+      article!.coAuthors.removeAll();
+      article!.coAuthors.add(users);
+    }
+    wrap(article).assign(rest);
     await this.em.flush();
 
+    await this.em.populate(article!, ['author', 'coAuthors']);
     return { article: article!.toJSON(user!) };
   }
 
   async delete(slug: string) {
     return this.articleRepository.nativeDelete({ slug });
+  }
+
+  // ========== Locking (ADVANCED) ==========
+  private isLockActive(article: Article | null | undefined): boolean {
+    if (!article || !article.lockedBy || !article.lockExpiresAt) return false;
+    return article.lockExpiresAt.getTime() > Date.now();
+  }
+
+  async lock(userId: number, slug: string) {
+    const article = await this.articleRepository.findOneOrFail({ slug }, { populate: ['lockedBy'] });
+    if (this.isLockActive(article) && article.lockedBy!.id !== userId) {
+      throw new HttpException({ error: 'Article is currently locked by another user' }, 423);
+    }
+    const user = await this.userRepository.findOneOrFail(userId);
+    article.lockedBy = user;
+    article.lockExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
+    await this.em.flush();
+    return { ok: true, lockExpiresAt: article.lockExpiresAt } as const;
+  }
+
+  async heartbeat(userId: number, slug: string) {
+    const article = await this.articleRepository.findOneOrFail({ slug }, { populate: ['lockedBy'] });
+    if (!this.isLockActive(article) || article.lockedBy!.id !== userId) {
+      throw new HttpException({ error: 'Lock not held or expired' }, 423);
+    }
+    article.lockExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
+    await this.em.flush();
+    return { ok: true, lockExpiresAt: article.lockExpiresAt } as const;
+  }
+
+  async unlock(userId: number, slug: string) {
+    const article = await this.articleRepository.findOneOrFail({ slug }, { populate: ['lockedBy'] });
+    if (article.lockedBy?.id === userId) {
+      article.lockedBy = undefined;
+      article.lockExpiresAt = undefined;
+      await this.em.flush();
+    }
+    return { ok: true } as const;
   }
 }

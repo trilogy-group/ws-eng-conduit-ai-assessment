@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ArticleForEditor } from '../../types/article';
+import { ArticleForEditor, UserRef } from '../../types/article';
 import * as R from 'ramda';
 import { GenericErrors } from '../../types/error';
 
@@ -9,6 +9,7 @@ export interface EditorState {
   submitting: boolean;
   errors: GenericErrors;
   loading: boolean;
+  users: UserRef[];
 }
 
 const initialState: EditorState = {
@@ -17,6 +18,7 @@ const initialState: EditorState = {
   submitting: false,
   errors: {},
   loading: true,
+  users: [],
 };
 
 const slice = createSlice({
@@ -26,20 +28,28 @@ const slice = createSlice({
     initializeEditor: () => initialState,
     updateField: (
       state,
-      { payload: { name, value } }: PayloadAction<{ name: keyof EditorState['article'] | 'tag'; value: string }>,
+      { payload: { name, value } }: PayloadAction<{
+        name: 'title' | 'description' | 'body' | 'tag' | 'coAuthorEmailsCsv';
+        value: string;
+      }>,
     ) => {
       if (name === 'tag') {
         state.tag = value;
         return;
       }
 
-      if (name !== 'tagList') {
-        state.article[name] = value;
-      }
+      // Simple string fields on the article
+      state.article[name] = value as unknown as never;
     },
     updateErrors: (state, { payload: errors }: PayloadAction<GenericErrors>) => {
       state.errors = errors;
       state.submitting = false;
+    },
+    setUsers: (state, { payload: users }: PayloadAction<UserRef[]>) => {
+      state.users = users;
+    },
+    setCoAuthorIds: (state, { payload: ids }: PayloadAction<number[]>) => {
+      state.article.coAuthorIds = ids;
     },
     startSubmitting: (state) => {
       state.submitting = true;
@@ -60,7 +70,7 @@ const slice = createSlice({
   },
 });
 
-export const { initializeEditor, updateField, startSubmitting, addTag, removeTag, updateErrors, loadArticle } =
+export const { initializeEditor, updateField, startSubmitting, addTag, removeTag, updateErrors, loadArticle, setUsers, setCoAuthorIds } =
   slice.actions;
 
 export default slice.reducer;

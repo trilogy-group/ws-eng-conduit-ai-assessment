@@ -1,12 +1,14 @@
 import { FormEvent, useEffect } from 'react';
-import { createArticle } from '../../../services/conduit';
+import { createArticle, getAllUsers } from '../../../services/conduit';
 import { store } from '../../../state/store';
 import { ArticleEditor } from '../../ArticleEditor/ArticleEditor';
-import { initializeEditor, startSubmitting, updateErrors } from '../../ArticleEditor/ArticleEditor.slice';
+import { initializeEditor, setUsers, startSubmitting, updateErrors } from '../../ArticleEditor/ArticleEditor.slice';
 
 export function NewArticle() {
   useEffect(() => {
     store.dispatch(initializeEditor());
+    // Load users for advanced co-author selection
+    getAllUsers().then((users) => store.dispatch(setUsers(users)));
   }, [null]);
 
   return <ArticleEditor onSubmit={onSubmit} />;
