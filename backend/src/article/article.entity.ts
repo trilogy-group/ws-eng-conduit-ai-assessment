@@ -4,6 +4,7 @@ import {
   Entity,
   EntityDTO,
   ManyToOne,
+  ManyToMany,
   OneToMany,
   PrimaryKey,
   Property,
@@ -43,7 +44,21 @@ export class Article {
   @ManyToOne(() => User, { fieldName: 'author_id' })
   author: User;
 
-  @OneToMany(() => Comment, (comment) => comment.article, { eager: true, orphanRemoval: true })
+  // ✅ NEW: Co-authors (BASIC feature)
+  @ManyToMany(() => User)
+  coAuthors = new Collection<User>(this);
+
+  // ✅ NEW: Lock fields (ADVANCED feature)
+  @ManyToOne(() => User, { nullable: true, fieldName: 'locked_by_id' })
+  lockedBy?: User;
+
+  @Property({ type: 'date', nullable: true, fieldName: 'locked_at' })
+  lockedAt?: Date;
+
+  @OneToMany(() => Comment, (comment) => comment.article, {
+    eager: true,
+    orphanRemoval: true,
+  })
   comments = new Collection<Comment>(this);
 
   @Property({ type: 'number', fieldName: 'favorites_count' })
@@ -54,13 +69,25 @@ export class Article {
     this.title = title;
     this.description = description;
     this.body = body;
-    this.slug = slug(title, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+    this.slug =
+      slug(title, { lower: true }) +
+      '-' +
+      ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
   }
 
   toJSON(user?: User) {
     const o = wrap<Article>(this).toObject() as ArticleDTO;
-    o.favorited = user && user.favorites.isInitialized() ? user.favorites.contains(this) : false;
+
+    o.favorited =
+      user && user.favorites.isInitialized()
+        ? user.favorites.contains(this)
+        : false;
+
     o.author = this.author.toJSON(user);
+
+    // ✅ Include lock info (ADVANCED)
+    o.lockedBy = this.lockedBy ? this.lockedBy.toJSON(user) : undefined;
+    o.lockedAt = this.lockedAt;
 
     return o;
   }
@@ -68,4 +95,6 @@ export class Article {
 
 export interface ArticleDTO extends EntityDTO<Article> {
   favorited?: boolean;
+  lockedBy?: any;
+  lockedAt?: Date;
 }
