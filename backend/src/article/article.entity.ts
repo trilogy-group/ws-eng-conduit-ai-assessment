@@ -4,6 +4,7 @@ import {
   Entity,
   EntityDTO,
   ManyToOne,
+  ManyToMany,
   OneToMany,
   PrimaryKey,
   Property,
@@ -40,10 +41,30 @@ export class Article {
   @Property({ type: ArrayType, fieldName: 'tag_list' })
   tagList: string[] = [];
 
+  // ✅ Original Author
   @ManyToOne(() => User, { fieldName: 'author_id' })
   author: User;
 
-  @OneToMany(() => Comment, (comment) => comment.article, { eager: true, orphanRemoval: true })
+  // ✅ Co-Authors (Many-to-Many)
+  @ManyToMany({
+    entity: () => User,
+    owner: true,
+    pivotTable: 'article_co_authors',
+  })
+  coAuthors = new Collection<User>(this);
+
+  // ✅ Lock Owner
+  @ManyToOne(() => User, { nullable: true, fieldName: 'locked_by_id' })
+  lockedBy?: User;
+
+  // ✅ Lock Timestamp
+  @Property({ type: 'date', nullable: true, fieldName: 'locked_at' })
+  lockedAt?: Date;
+
+  @OneToMany(() => Comment, (comment) => comment.article, {
+    eager: true,
+    orphanRemoval: true,
+  })
   comments = new Collection<Comment>(this);
 
   @Property({ type: 'number', fieldName: 'favorites_count' })
@@ -54,13 +75,25 @@ export class Article {
     this.title = title;
     this.description = description;
     this.body = body;
-    this.slug = slug(title, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+    this.slug =
+      slug(title, { lower: true }) +
+      '-' +
+      ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
   }
 
   toJSON(user?: User) {
     const o = wrap<Article>(this).toObject() as ArticleDTO;
-    o.favorited = user && user.favorites.isInitialized() ? user.favorites.contains(this) : false;
+
+    o.favorited =
+      user && user.favorites.isInitialized()
+        ? user.favorites.contains(this)
+        : false;
+
     o.author = this.author.toJSON(user);
+
+    o.coAuthors = this.coAuthors.isInitialized()
+      ? this.coAuthors.getItems().map((u) => u.toJSON(user))
+      : [];
 
     return o;
   }
@@ -68,4 +101,5 @@ export class Article {
 
 export interface ArticleDTO extends EntityDTO<Article> {
   favorited?: boolean;
+  coAuthors?: any[];
 }
