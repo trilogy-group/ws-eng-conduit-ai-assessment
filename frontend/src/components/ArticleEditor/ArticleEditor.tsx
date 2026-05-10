@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
+import { getUsers } from '../../services/conduit';
+import { User } from '../../types/user';
 import { store } from '../../state/store';
 import { useStore } from '../../state/storeHooks';
 import { buildGenericFormField } from '../../types/genericFormField';
@@ -8,6 +11,16 @@ import { addTag, EditorState, removeTag, updateField } from './ArticleEditor.sli
 
 export function ArticleEditor({ onSubmit }: { onSubmit: (ev: React.FormEvent) => void }) {
   const { article, submitting, tag, errors } = useStore(({ editor }) => editor);
+  const [users, setUsers] = useState<User[]>([]);
+  const [coAuthors, setCoAuthors] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const usersList = await getUsers();
+      setUsers(usersList);
+    }
+    fetchUsers();
+  }, []);
 
   return (
     <div className='editor-page'>
@@ -40,6 +53,18 @@ export function ArticleEditor({ onSubmit }: { onSubmit: (ev: React.FormEvent) =>
                 lg: false,
               }),
             ]}
+          />
+
+          <Select
+            isMulti
+            options={users.map(user => ({ value: user.email, label: user.username }))}
+            onChange={(selectedOptions: any) => setCoAuthors(selectedOptions.map((option: any) => option.value))}
+          />
+
+          <input
+            type="hidden"
+            name="coAuthorEmails"
+            value={coAuthors.join(',')}
           />
         </div>
       </ContainerPage>

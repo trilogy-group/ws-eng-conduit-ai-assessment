@@ -28,6 +28,24 @@ export async function getArticles(filters: ArticlesFilters = {}): Promise<Multip
   return multipleArticlesDecoder.verify((await axios.get(`articles?${objectToQueryString(finalFilters)}`)).data);
 }
 
+export async function getUsers(): Promise<User[]> {
+  const { data } = await axios.get('users');
+  return data.users;
+}
+
+export async function acquireLock(slug: string): Promise<{ success: boolean; lockedBy?: string; lock?: any }> {
+  const { data } = await axios.post(`articles/${slug}/lock`);
+  return data;
+}
+
+export async function releaseLock(slug: string): Promise<void> {
+  await axios.delete(`articles/${slug}/lock`);
+}
+
+export async function refreshLock(slug: string): Promise<void> {
+  await axios.put(`articles/${slug}/lock`);
+}
+
 export async function getTags(): Promise<{ tags: string[] }> {
   return object({ tags: array(string) }).verify((await axios.get('tags')).data);
 }

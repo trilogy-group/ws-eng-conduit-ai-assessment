@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { acquireLock, releaseLock } from '../../../services/conduit';
 import { useParams } from 'react-router-dom';
 import { getArticle, updateArticle } from '../../../services/conduit';
 import { store } from '../../../state/store';
@@ -9,12 +10,34 @@ import { initializeEditor, loadArticle, startSubmitting, updateErrors } from '..
 export function EditArticle() {
   const { slug } = useParams<{ slug: string }>();
   const { loading } = useStore(({ editor }) => editor);
+  const [lockAcquired, setLockAcquired] = useState(false);
+  const [lockError, setLockError] = useState<string | null>(null);
 
   useEffect(() => {
-    _loadArticle(slug!);
+    async function handleLock() {
+      const lockResponse = await acquireLock(slug!);
+      if (!lockResponse.success) {
+        setLockError(`This article is currently being edited by ${lockResponse.lockedBy}. Please try again later.`);
+        return;
+      }
+      setLockAcquired(true);
+      _loadArticle(slug!);
+    }
+
+    handleLock();
+    return () => {
+      if (lockAcquired) {
+        releaseLock(slug!);
+      }
+    };
   }, [slug]);
 
-  return <Fragment>{!loading && <ArticleEditor onSubmit={onSubmit(slug!)} />}</Fragment>;
+  return (
+    <Fragment>
+      {lockError && <div style={{ color: 'red', textAlign: 'center' }}>{lockError}</div>}
+      {!loading && lockAcquired && <ArticleEditor onSubmit={onSubmit(slug!)} />}
+    </Fragment>
+  );
 }
 
 async function _loadArticle(slug: string) {
