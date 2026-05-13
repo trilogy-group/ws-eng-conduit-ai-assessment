@@ -17,7 +17,7 @@ In Production, this application is deployed on AWS following this architecture. 
 Before starting the assessment, you should:
 
 1. **Set Up GitHub Codespaces:**
-
+   - For the best experience, we recommend using `Google Chrome` when working with GitHub Codespaces.
    - Create a free GitHub account at [GitHub](https://github.com/signup).
    - Open the Codespace using [this link](https://github.com/codespaces/new?repo=678723453&ref=rwa/design-and-implementation-v2&machine=standardLinux32gb).
    - Your environment will automatically install all dependencies, seed the database, and start both the backend and frontend servers.
