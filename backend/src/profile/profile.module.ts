@@ -5,12 +5,13 @@ import { User } from '../user/user.entity';
 import { UserModule } from '../user/user.module';
 import { ProfileController } from './profile.controller';
 import { ProfileService } from './profile.service';
+import { UserRepository } from '../user/user.repository';
 
 @Module({
   controllers: [ProfileController],
   exports: [],
   imports: [MikroOrmModule.forFeature({ entities: [User] }), UserModule],
-  providers: [ProfileService],
+  providers: [ProfileService, UserRepository],
 })
 export class ProfileModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

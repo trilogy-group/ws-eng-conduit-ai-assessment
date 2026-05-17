@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "types": ["node", "jest"],
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,

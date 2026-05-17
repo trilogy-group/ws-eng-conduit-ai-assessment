@@ -42,6 +42,7 @@ export interface ArticleForEditor {
   description: string;
   body: string;
   tagList: string[];
+  coAuthors?: string[];
 }
 
 export interface ArticlesFilters {

@@ -4,6 +4,7 @@ import {
   Entity,
   EntityDTO,
   ManyToOne,
+  ManyToMany,
   OneToMany,
   PrimaryKey,
   Property,
@@ -42,6 +43,9 @@ export class Article {
 
   @ManyToOne(() => User, { fieldName: 'author_id' })
   author: User;
+
+  @ManyToMany(() => User)
+  coAuthors = new Collection<User>(this);
 
   @OneToMany(() => Comment, (comment) => comment.article, { eager: true, orphanRemoval: true })
   comments = new Collection<Comment>(this);
