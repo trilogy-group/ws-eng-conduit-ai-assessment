@@ -155,22 +155,52 @@ export class ArticleService {
     );
     const article = new Article(user!, dto.title, dto.description, dto.body);
     article.tagList.push(...dto.tagList);
+
+    // Handle coAuthors (BASIC: emails, ADVANCED: user IDs/emails)
+    if (dto.coAuthors && dto.coAuthors.length > 0) {
+      // Remove duplicates
+      const uniqueCoAuthors = Array.from(new Set(dto.coAuthors)).filter(email => email !== user?.email);
+      // Find users by email
+      const coAuthorUsers = await this.userRepository.find({ email: { $in: uniqueCoAuthors } });
+      if (coAuthorUsers.length !== uniqueCoAuthors.length) {
+        throw new Error('One or more co-authors not found');
+      }
+      coAuthorUsers.forEach(coAuthor => article.coAuthors.add(coAuthor));
+    }
+
     user?.articles.add(article);
     await this.em.flush();
 
     return { article: article.toJSON(user!) };
   }
 
-  async update(userId: number, slug: string, articleData: Partial<Article>): Promise<IArticleRO> {
+  async update(userId: number, slug: string, articleData: CreateArticleDto): Promise<IArticleRO> {
     const user = await this.userRepository.findOne(
       { id: userId },
       { populate: ['followers', 'favorites', 'articles'] },
     );
-    const article = await this.articleRepository.findOne({ slug }, { populate: ['author'] });
-    wrap(article).assign(articleData);
+    const article = await this.articleRepository.findOne({ slug }, { populate: ['author', 'coAuthors'] });
+    if (!article) {
+      throw new Error('Article not found');
+    }
+
+    // Always exclude coAuthors from assignment to entity
+    const { coAuthors, ...rest } = articleData;
+
+    if (coAuthors) {
+      const uniqueCoAuthors = Array.from(new Set(coAuthors)).filter(email => email !== article.author.email);
+      const coAuthorUsers = await this.userRepository.find({ email: { $in: uniqueCoAuthors } });
+      if (coAuthorUsers.length !== uniqueCoAuthors.length) {
+        throw new Error('One or more co-authors not found');
+      }
+      article.coAuthors.removeAll();
+      coAuthorUsers.forEach(coAuthor => article.coAuthors.add(coAuthor));
+    }
+
+    wrap(article).assign(rest);
     await this.em.flush();
 
-    return { article: article!.toJSON(user!) };
+    return { article: article.toJSON(user!) };
   }
 
   async delete(slug: string) {

@@ -4,12 +4,13 @@ import { UserController } from './user.controller';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { UserRepository } from './user.repository';
 
 @Module({
   controllers: [UserController],
   exports: [UserService],
   imports: [MikroOrmModule.forFeature({ entities: [User] })],
-  providers: [UserService],
+  providers: [UserService, UserRepository],
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

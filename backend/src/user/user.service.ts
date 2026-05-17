@@ -61,10 +61,13 @@ export class UserService {
 
   async update(id: number, dto: UpdateUserDto) {
     const user = await this.userRepository.findOne(id);
-    wrap(user).assign(dto);
+    if (!user) {
+      throw new HttpException({ message: 'User not found' }, HttpStatus.NOT_FOUND);
+    }
+    wrap(user).assign(dto as object);
     await this.em.flush();
 
-    return this.buildUserRO(user!);
+    return this.buildUserRO(user);
   }
 
   async delete(email: string) {

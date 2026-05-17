@@ -14,7 +14,7 @@ import {
 import { Article } from '../article/article.entity';
 import { UserRepository } from './user.repository';
 
-@Entity({ customRepository: () => UserRepository })
+@Entity()
 export class User {
   [EntityRepositoryType]?: UserRepository;
 

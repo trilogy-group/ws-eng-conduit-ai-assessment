@@ -39,6 +39,12 @@ export function ArticleEditor({ onSubmit }: { onSubmit: (ev: React.FormEvent) =>
                 fieldType: 'list',
                 lg: false,
               }),
+              buildGenericFormField({
+                name: 'coAuthors',
+                placeholder: 'Co-Authors (comma-separated emails)',
+                fieldType: 'input',
+                lg: false,
+              }),
             ]}
           />
         </div>

@@ -34,7 +34,15 @@ const slice = createSlice({
       }
 
       if (name !== 'tagList') {
-        state.article[name] = value;
+        if (name === 'coAuthors') {
+          // Parse comma-separated emails into array, trim whitespace, filter empty
+          state.article.coAuthors = value
+            .split(',')
+            .map((email) => email.trim())
+            .filter((email) => email.length > 0);
+        } else {
+          state.article[name] = value;
+        }
       }
     },
     updateErrors: (state, { payload: errors }: PayloadAction<GenericErrors>) => {
