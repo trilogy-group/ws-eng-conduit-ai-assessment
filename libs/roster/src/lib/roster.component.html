@@ -1,1 +1,32 @@
-<p>TODO</p>
+<div class="roster-page">
+	<div class="container page">
+		<div class="row">
+			<div class="col-md-10 offset-md-1 col-xs-12">
+				<h1>Conduit Roster</h1>
+
+				<div *ngIf="roster$ | async as rosterResponse">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Author</th>
+								<th>Articles</th>
+								<th>Favorites Received</th>
+								<th>First Article</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let user of rosterResponse.roster">
+								<td>
+									<a [routerLink]="['/profile', user.username]">{{ user.username }}</a>
+								</td>
+								<td>{{ user.articlesCount }}</td>
+								<td>{{ user.favoritesReceived }}</td>
+								<td>{{ user.firstArticleAt ? (user.firstArticleAt | date:'mediumDate') : '' }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
