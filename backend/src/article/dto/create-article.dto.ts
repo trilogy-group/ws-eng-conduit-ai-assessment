@@ -3,4 +3,10 @@ export class CreateArticleDto {
   readonly description: string;
   readonly body: string;
   readonly tagList: string[];
+
+  
+  readonly coAuthorEmails?: string;
+
+
+  readonly coAuthorIds?: number[];
 }
