@@ -18,27 +18,145 @@ import { Profile, profileDecoder } from '../types/profile';
 import { User, userDecoder, UserForRegistration, UserSettings } from '../types/user';
 
 axios.defaults.baseURL = settings.baseApiUrl;
-
 export async function getArticles(filters: ArticlesFilters = {}): Promise<MultipleArticles> {
   const finalFilters: ArticlesFilters = {
     limit: 10,
     offset: 0,
     ...filters,
   };
-  return multipleArticlesDecoder.verify((await axios.get(`articles?${objectToQueryString(finalFilters)}`)).data);
+
+  return multipleArticlesDecoder.verify(
+    (await axios.get(`articles?${objectToQueryString(finalFilters)}`)).data,
+  );
 }
 
-export async function getTags(): Promise<{ tags: string[] }> {
-  return object({ tags: array(string) }).verify((await axios.get('tags')).data);
+export async function getArticle(slug: string): Promise<Article> {
+  const { data } = await axios.get(`articles/${slug}`);
+  return object({ article: articleDecoder }).verify(data).article;
 }
 
-export async function login(email: string, password: string): Promise<Result<User, GenericErrors>> {
+export async function createArticle(
+  article: ArticleForEditor,
+): Promise<Result<Article, GenericErrors>> {
   try {
-    const { data } = await axios.post('users/login', { user: { email, password } });
+    const { data } = await axios.post('articles', { article });
+    return Ok(object({ article: articleDecoder }).verify(data).article);
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    return Err(
+      object({ errors: genericErrorsDecoder }).verify(
+        axiosError.response?.data,
+      ).errors,
+    );
+  }
+}
+
+export async function updateArticle(
+  slug: string,
+  article: ArticleForEditor,
+): Promise<Result<Article, GenericErrors>> {
+  try {
+    const { data } = await axios.put(`articles/${slug}`, { article });
+    return Ok(object({ article: articleDecoder }).verify(data).article);
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    return Err(
+      object({ errors: genericErrorsDecoder }).verify(
+        axiosError.response?.data,
+      ).errors,
+    );
+  }
+}
+
+export async function deleteArticle(slug: string): Promise<void> {
+  await axios.delete(`articles/${slug}`);
+}
+export async function lockArticle(
+  slug: string,
+): Promise<Result<{ message: string }, GenericErrors>> {
+  try {
+    const { data } = await axios.post(`articles/${slug}/lock`);
+    return Ok(data);
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    return Err(
+      object({ errors: genericErrorsDecoder }).verify(
+        axiosError.response?.data ?? { errors: { body: ['Article is locked'] } },
+      ).errors,
+    );
+  }
+}
+
+export async function unlockArticle(
+  slug: string,
+): Promise<Result<{ message: string }, GenericErrors>> {
+  try {
+    const { data } = await axios.post(`articles/${slug}/unlock`);
+    return Ok(data);
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    return Err(
+      object({ errors: genericErrorsDecoder }).verify(
+        axiosError.response?.data ?? { errors: { body: ['Unlock failed'] } },
+      ).errors,
+    );
+  }
+}
+export async function getArticleComments(slug: string): Promise<Comment[]> {
+  const { data } = await axios.get(`articles/${slug}/comments`);
+  return object({ comments: array(commentDecoder) }).verify(data).comments;
+}
+
+export async function createComment(slug: string, body: string): Promise<Comment> {
+  const { data } = await axios.post(`articles/${slug}/comments`, {
+    comment: { body },
+  });
+
+  return object({ comment: commentDecoder }).verify(data).comment;
+}
+
+export async function deleteComment(slug: string, commentId: number): Promise<void> {
+  await axios.delete(`articles/${slug}/comments/${commentId}`);
+}
+export async function favoriteArticle(slug: string): Promise<Article> {
+  return object({ article: articleDecoder }).verify(
+    (await axios.post(`articles/${slug}/favorite`)).data,
+  ).article;
+}
+
+export async function unfavoriteArticle(slug: string): Promise<Article> {
+  return object({ article: articleDecoder }).verify(
+    (await axios.delete(`articles/${slug}/favorite`)).data,
+  ).article;
+}
+export async function getFeed(filters: FeedFilters = {}): Promise<MultipleArticles> {
+  const finalFilters: ArticlesFilters = {
+    limit: 10,
+    offset: 0,
+    ...filters,
+  };
+
+  return multipleArticlesDecoder.verify(
+    (await axios.get(`articles/feed?${objectToQueryString(finalFilters)}`)).data,
+  );
+}
+export async function login(
+  email: string,
+  password: string,
+): Promise<Result<User, GenericErrors>> {
+  try {
+    const { data } = await axios.post('users/login', {
+      user: { email, password },
+    });
+
     return Ok(object({ user: userDecoder }).verify(data).user);
   } catch (error) {
     const axiosError = error as AxiosError;
-    return Err(object({ errors: genericErrorsDecoder }).verify(axiosError.response?.data).errors);
+    return Err(
+      object({ errors: genericErrorsDecoder }).verify(
+        axiosError.response?.data,
+      ).errors,
+    );
   }
 }
 
@@ -47,59 +165,37 @@ export async function getUser(): Promise<User> {
   return object({ user: userDecoder }).verify(data).user;
 }
 
-export async function favoriteArticle(slug: string): Promise<Article> {
-  return object({ article: articleDecoder }).verify((await axios.post(`articles/${slug}/favorite`)).data).article;
-}
-
-export async function unfavoriteArticle(slug: string): Promise<Article> {
-  return object({ article: articleDecoder }).verify((await axios.delete(`articles/${slug}/favorite`)).data).article;
-}
-
-export async function updateSettings(user: UserSettings): Promise<Result<User, GenericErrors>> {
+export async function updateSettings(
+  user: UserSettings,
+): Promise<Result<User, GenericErrors>> {
   try {
     const { data } = await axios.put('user', user);
     return Ok(object({ user: userDecoder }).verify(data).user);
   } catch (error) {
     const axiosError = error as AxiosError;
-    return Err(object({ errors: genericErrorsDecoder }).verify(axiosError.response?.data).errors);
+    return Err(
+      object({ errors: genericErrorsDecoder }).verify(
+        axiosError.response?.data,
+      ).errors,
+    );
   }
 }
 
-export async function signUp(user: UserForRegistration): Promise<Result<User, GenericErrors>> {
+export async function signUp(
+  user: UserForRegistration,
+): Promise<Result<User, GenericErrors>> {
   try {
     const { data } = await axios.post('users', { user });
     return Ok(object({ user: userDecoder }).verify(data).user);
   } catch (error) {
     const axiosError = error as AxiosError;
-    return Err(object({ errors: genericErrorsDecoder }).verify(axiosError.response?.data).errors);
+    return Err(
+      object({ errors: genericErrorsDecoder }).verify(
+        axiosError.response?.data,
+      ).errors,
+    );
   }
 }
-
-export async function createArticle(article: ArticleForEditor): Promise<Result<Article, GenericErrors>> {
-  try {
-    const { data } = await axios.post('articles', { article });
-    return Ok(object({ article: articleDecoder }).verify(data).article);
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    return Err(object({ errors: genericErrorsDecoder }).verify(axiosError.response?.data).errors);
-  }
-}
-
-export async function getArticle(slug: string): Promise<Article> {
-  const { data } = await axios.get(`articles/${slug}`);
-  return object({ article: articleDecoder }).verify(data).article;
-}
-
-export async function updateArticle(slug: string, article: ArticleForEditor): Promise<Result<Article, GenericErrors>> {
-  try {
-    const { data } = await axios.put(`articles/${slug}`, { article });
-    return Ok(object({ article: articleDecoder }).verify(data).article);
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    return Err(object({ errors: genericErrorsDecoder }).verify(axiosError.response?.data).errors);
-  }
-}
-
 export async function getProfile(username: string): Promise<Profile> {
   const { data } = await axios.get(`profiles/${username}`);
   return object({ profile: profileDecoder }).verify(data).profile;
@@ -114,30 +210,8 @@ export async function unfollowUser(username: string): Promise<Profile> {
   const { data } = await axios.delete(`profiles/${username}/follow`);
   return object({ profile: profileDecoder }).verify(data).profile;
 }
-
-export async function getFeed(filters: FeedFilters = {}): Promise<MultipleArticles> {
-  const finalFilters: ArticlesFilters = {
-    limit: 10,
-    offset: 0,
-    ...filters,
-  };
-  return multipleArticlesDecoder.verify((await axios.get(`articles/feed?${objectToQueryString(finalFilters)}`)).data);
-}
-
-export async function getArticleComments(slug: string): Promise<Comment[]> {
-  const { data } = await axios.get(`articles/${slug}/comments`);
-  return object({ comments: array(commentDecoder) }).verify(data).comments;
-}
-
-export async function deleteComment(slug: string, commentId: number): Promise<void> {
-  await axios.delete(`articles/${slug}/comments/${commentId}`);
-}
-
-export async function createComment(slug: string, body: string): Promise<Comment> {
-  const { data } = await axios.post(`articles/${slug}/comments`, { comment: { body } });
-  return object({ comment: commentDecoder }).verify(data).comment;
-}
-
-export async function deleteArticle(slug: string): Promise<void> {
-  await axios.delete(`articles/${slug}`);
+export async function getTags(): Promise<{ tags: string[] }> {
+  return object({ tags: array(string) }).verify(
+    (await axios.get('tags')).data,
+  );
 }
