@@ -176,4 +176,50 @@ export class ArticleService {
   async delete(slug: string) {
     return this.articleRepository.nativeDelete({ slug });
   }
+async lockArticle(userId: number, slug: string) {
+  const user = await this.userRepository.findOneOrFail({ id: userId });
+
+  const article = await this.articleRepository.findOneOrFail(
+    { slug },
+    { populate: ['lockedBy'] },
+  );
+
+  if (
+    article.lockedBy &&
+    article.lockedBy.id !== user.id &&
+    this.isLockValid(article)
+  ) {
+    throw new ConflictException('Article is currently locked');
+  }
+
+  article.lockedBy = user;
+  article.lockedAt = new Date();
+
+  await this.em.flush();
+
+  return { message: 'Lock acquired' };
+}
+
+async unlockArticle(userId: number, slug: string) {
+  const article = await this.articleRepository.findOneOrFail(
+    { slug },
+    { populate: ['lockedBy'] },
+  );
+
+  if (article.lockedBy?.id === userId) {
+    article.lockedBy = undefined;
+    article.lockedAt = undefined;
+    await this.em.flush();
+  }
+
+  return { message: 'Lock released' };
+}
+
+private isLockValid(article: Article): boolean {
+  if (!article.lockedAt) return false;
+
+  const fiveMinutes = 5 * 60 * 1000;
+  return Date.now() - article.lockedAt.getTime() < fiveMinutes;
+}
+
 }
