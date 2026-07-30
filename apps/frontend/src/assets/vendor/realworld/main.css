@@ -1,0 +1,329 @@
+/* RealWorld (Conduit) minimal theme + essential Bootstrap-like utilities
+   This file provides enough CSS to render the app correctly using the markup
+   already present in the templates. */
+
+/* Base */
+html {
+  font-size: 16px;
+}
+body {
+  margin: 0;
+  color: #373a3c;
+  font-family: "Source Sans Pro","Merriweather Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  line-height: 1.5;
+  background-color: #fff;
+}
+a {
+  color: #5cb85c;
+  text-decoration: none;
+}
+a:hover {
+  color: #3d8b3d;
+  text-decoration: underline;
+}
+h1, h2, h3, h4, h5 {
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* Container and grid (bootstrap-like) */
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+[class^="col-"], [class*=" col-"] {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.col-xs-12 { flex: 0 0 100%; max-width: 100%; }
+@media (min-width: 768px) {
+  .col-md-12 { flex: 0 0 100%; max-width: 100%; }
+  .col-md-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+  .col-md-9  { flex: 0 0 75%; max-width: 75%; }
+  .col-md-3  { flex: 0 0 25%; max-width: 25%; }
+  .offset-md-1 { margin-left: 8.333333%; }
+}
+
+/* Navbar */
+.navbar {
+  position: relative;
+  padding: .5rem 1rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+.navbar-light .navbar-brand {
+  color: #5cb85c;
+  font-weight: 700;
+}
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navbar-brand { font-size: 1.25rem; }
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+.navbar-nav .nav-item { margin-left: .5rem; }
+.navbar-nav .nav-link {
+  display: block;
+  padding: .5rem;
+  color: rgba(0,0,0,.5);
+}
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+  color: rgba(0,0,0,.9);
+}
+.pull-xs-right { margin-left: auto; }
+
+/* Home banner */
+.home-page .banner {
+  background: #5cb85c;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  color: #fff;
+  text-align: center;
+}
+.logo-font {
+  font-family: "Titillium Web","Merriweather Sans",sans-serif;
+  font-weight: 700;
+}
+.home-page .banner .logo-font {
+  color: #fff;
+  font-size: 3.5rem;
+  margin-bottom: .5rem;
+}
+
+/* Page spacing */
+.page { margin-top: 2rem; }
+
+/* Pills (feed toggle, etc.) */
+.nav { padding-left: 0; margin-bottom: 0; list-style: none; }
+.nav-pills .nav-link {
+  border-radius: .25rem;
+  color: #5cb85c;
+}
+.nav-pills .nav-link.active {
+  color: #fff;
+  background-color: #5cb85c;
+}
+.outline-active .nav-link {
+  border: 1px solid transparent;
+}
+.outline-active .nav-link.active {
+  border: 1px solid #5cb85c;
+  background: none;
+  color: #5cb85c;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: all .15s ease-in-out;
+  background-color: transparent;
+  color: #5cb85c;
+  border-color: #5cb85c;
+}
+.btn:hover { text-decoration: none; opacity: .9; }
+.btn-sm { padding: .25rem .5rem; font-size: .75rem; border-radius: .2rem; }
+.btn-primary {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+.btn-outline-primary {
+  color: #5cb85c;
+  background-color: transparent;
+  background-image: none;
+  border-color: #5cb85c;
+}
+.btn-secondary {
+  color: #fff;
+  background-color: #373a3c;
+  border-color: #373a3c;
+}
+.btn-outline-secondary {
+  color: #373a3c;
+  background-color: transparent;
+  background-image: none;
+  border-color: #373a3c;
+}
+.action-btn { margin-left: .5rem; }
+
+/* Tag list */
+.tag-list {
+  padding-left: 0;
+  list-style: none;
+  display: inline-block;
+}
+.tag-list li {
+  display: inline-block;
+  border-radius: 10rem;
+  font-size: .8rem;
+  padding: .15rem .6rem;
+  margin-right: .3rem;
+  border: 1px solid #ddd;
+  color: #aaa;
+}
+.tag-default { background: #fff; }
+.tag-pill { border-radius: 10rem; }
+.tag-outline { border: 1px solid #ddd; }
+
+/* Article list preview */
+.article-preview {
+  border-top: 1px solid #e5e5e5;
+  padding: 1.5rem 0;
+}
+.article-meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+.article-meta .user-pic {
+  width: 32px;
+  height: 32px;
+  border-radius: 30px;
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: cover;
+  margin-right: .5rem;
+}
+.article-meta .info {
+  display: inline-block;
+  line-height: 1rem;
+}
+.article-meta .info .author {
+  display: block;
+  font-weight: 500;
+  color: #5cb85c;
+}
+.article-meta .date {
+  font-size: .8rem;
+  color: #bbb;
+}
+.preview-link h1 {
+  font-size: 1.5rem;
+  margin: 0 0 .25rem;
+}
+.preview-link p {
+  color: #999;
+  margin-bottom: .5rem;
+}
+.preview-link span { color: #bbb; }
+.preview-link .tag-list { float: right; }
+
+/* Profile */
+.user-info {
+  background: #f3f3f3;
+  padding: 2rem 0 1rem;
+  margin-bottom: 2rem;
+}
+.user-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto .5rem;
+  object-fit: cover;
+  background: #eee;
+}
+
+/* Sidebar */
+.sidebar {
+  background: #f3f3f3;
+  padding: .75rem .75rem 0;
+  border-radius: .25rem;
+}
+
+/* Tables */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
+}
+.table th, .table td {
+  padding: .75rem;
+  vertical-align: middle;
+  border-top: 1px solid #e5e5e5;
+}
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #e5e5e5;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0,0,0,.02);
+}
+.table-hover tbody tr:hover {
+  background-color: rgba(0,0,0,.03);
+}
+
+/* Utilities */
+.text-xs-center { text-align: center; }
+.pull-xs-right { float: right; }
+.mt-1 { margin-top: .25rem; }
+.mt-2 { margin-top: .5rem; }
+.mt-3 { margin-top: 1rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: .25rem; }
+.mb-2 { margin-bottom: .5rem; }
+.mb-3 { margin-bottom: 1rem; }
+
+/* Ionicons alignment within buttons/links */
+i[class^="ion-"], i[class*=" ion-"] { vertical-align: middle; }
+
+/* Footer */
+.footer {
+  position: relative;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  border-top: 1px solid #e5e5e5;
+  color: #bbb;
+}
+.footer .logo-font { color: #5cb85c; font-size: 1rem; }
+
+/* Banner and badges used by RealWorld examples */
+.banner p {
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  opacity: .85;
+}
+
+/* Ensure images are not larger than containers by default */
+img { max-width: 100%; height: auto; }

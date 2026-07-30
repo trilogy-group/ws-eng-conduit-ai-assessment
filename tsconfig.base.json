@@ -36,7 +36,8 @@
       "@realworld/settings/feature-settings": ["libs/settings/feature-settings/src/index.ts"],
       "@realworld/ui/components": ["libs/ui/components/src/index.ts"]
     },
-    "strict": true
+    "strict": true,
+    "ignoreDeprecations": "5.0"
   },
   "exclude": ["node_modules", "tmp"]
 }

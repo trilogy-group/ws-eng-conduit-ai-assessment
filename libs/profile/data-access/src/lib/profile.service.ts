@@ -9,6 +9,8 @@ export class ProfileService {
   constructor(private apiService: ApiService) {}
 
   getProfile(username: string): Observable<Profile> {
-    return this.apiService.get<ProfileResponse>('/profiles/' + username).pipe(map((data) => data.profile));
+    // Encode username to safely handle spaces and special characters in the route param
+    const encoded = encodeURIComponent(username);
+    return this.apiService.get<ProfileResponse>('/profiles/' + encoded).pipe(map((data) => data.profile));
   }
 }

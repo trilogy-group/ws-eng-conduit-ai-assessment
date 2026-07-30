@@ -50,7 +50,12 @@
           [routerLink]="['/profile', user.username]"
           routerLinkActive="active"
         >
-          <img [src]="user.image" *ngIf="user.image" class="user-pic" />
+          <img
+            class="user-pic"
+            [src]="user?.image || 'assets/img/default-avatar.svg'"
+            alt="{{ user?.username }}'s avatar"
+            (error)="onImgError($event)"
+          />
           {{ user.username }}
         </a>
       </li>

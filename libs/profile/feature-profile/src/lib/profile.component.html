@@ -3,7 +3,12 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-md-10 offset-md-1">
-          <img [src]="(profile$ | async)?.image" class="user-img" />
+          <img
+            class="user-img"
+            [src]="(profile$ | async)?.image || 'assets/img/default-avatar.svg'"
+            alt="{{ (profile$ | async)?.username }}'s avatar"
+            (error)="onImgError($event)"
+          />
           <h4 data-e2e-id="article-author-profile" [hidden]="(profile$ | async)?.loading">
             {{ (profile$ | async)?.username }}
           </h4>
