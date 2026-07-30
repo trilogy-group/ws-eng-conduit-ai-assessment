@@ -1,1 +1,51 @@
-<p>TODO</p>
+<div class="container page">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="logo-font">Conduit Roster</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <ng-container *ngIf="!(loading$ | async); else loadingTpl">
+        <ng-container *ngIf="(roster$ | async)?.length; else emptyTpl">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th class="text-xs-center">Articles</th>
+                  <th class="text-xs-center">Favorites</th>
+                  <th>First Article Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of roster$ | async; trackBy: trackById">
+                  <td>
+                    <a [routerLink]="['/profile', item.username]">{{ item.username }}</a>
+                  </td>
+                  <td class="text-xs-center">{{ item.articles }}</td>
+                  <td class="text-xs-center">{{ item.favorites }}</td>
+                  <td>
+                    <ng-container *ngIf="item.firstArticleDate; else noDate">
+                      {{ item.firstArticleDate | date: 'mediumDate' }}
+                    </ng-container>
+                    <ng-template #noDate>-</ng-template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+
+        <ng-template #emptyTpl>
+          <div>No users to display yet.</div>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #loadingTpl>
+        <div>Loading roster...</div>
+      </ng-template>
+    </div>
+  </div>
+</div>

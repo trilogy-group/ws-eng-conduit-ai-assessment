@@ -1,7 +1,12 @@
 <div class="article-preview">
   <div class="article-meta">
-    <a>
-      <img [src]="article.author.image" />
+    <a [routerLink]="['/profile', article.author.username]">
+      <img
+        class="user-pic"
+        [src]="article.author.image || 'assets/img/default-avatar.svg'"
+        alt="{{ article.author.username }}'s avatar"
+        (error)="onImgError($event)"
+      />
     </a>
     <div class="info">
       <a data-e2e-id="article-author" class="author" [routerLink]="['/profile', article.author.username]">

@@ -23,4 +23,11 @@ export class ArticleListItemComponent {
       this.favorite.emit(article.slug);
     }
   }
+  onImgError(evt: Event) {
+    const img = (evt?.target as HTMLImageElement) || null;
+    if (img) {
+      img.onerror = null; // prevent infinite loop if fallback fails
+      img.src = 'assets/img/default-avatar.svg';
+    }
+  }
 }

@@ -1,5 +1,47 @@
-/* You can add global styles to this file, and also import other style files */
+/* Minimal global styles. Rely on RealWorld main.css for layout/theme. */
 
+/* Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+}
+
+/* Links */
 a {
   cursor: pointer;
+}
+
+/* Images: ensure visibility and proper scaling */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Common RealWorld utilities that are safe to duplicate */
+.text-xs-center {
+  text-align: center;
+}
+
+
+/* Ensure responsiveness helpers exist even if vendor CSS changes */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Keep logo weight only; color handled by vendor CSS */
+.logo-font {
+  font-weight: 700;
 }

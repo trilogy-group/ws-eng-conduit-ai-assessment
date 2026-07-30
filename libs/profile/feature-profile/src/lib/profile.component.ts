@@ -46,4 +46,12 @@ export class ProfileComponent implements OnInit {
       this.store.dispatch(profileActions.follow({ id: this.username }));
     }
   }
+
+  onImgError(evt: Event) {
+    const img = (evt?.target as HTMLImageElement) || null;
+    if (img) {
+      img.onerror = null; // prevent loop if fallback also fails
+      img.src = 'assets/img/default-avatar.svg';
+    }
+  }
 }

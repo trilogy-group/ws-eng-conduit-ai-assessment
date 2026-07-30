@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+
+/* Keep spacing consistent with RealWorld pages */
+h1.logo-font {
+  margin: 0 0 1rem;
+}
+
+/* Ensure table is responsive within RealWorld grid */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+/* Light tweaks for consistency with RealWorld theme */
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f5f5f5;
+}

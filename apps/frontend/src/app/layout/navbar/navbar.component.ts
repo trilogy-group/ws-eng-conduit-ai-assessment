@@ -14,4 +14,12 @@ import { User } from '@realworld/core/api-types';
 export class NavbarComponent {
   @Input() user!: User;
   @Input() isLoggedIn!: boolean;
+
+  onImgError(evt: Event) {
+    const img = (evt?.target as HTMLImageElement) || null;
+    if (img) {
+      img.onerror = null; // prevent loop if fallback also 404s
+      img.src = 'assets/img/default-avatar.svg';
+    }
+  }
 }
