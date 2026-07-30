@@ -26,6 +26,10 @@ export class RosterComponent {
         finalize(() => this.loading$.next(false)),
         shareReplay(1),
       );
+    // Subscribe eagerly: the template gates the roster$ async pipe behind
+    // `!(loading$ | async)`, so if nothing subscribes until loading is
+    // false, the request (and the finalize that clears loading) never runs.
+    this.roster$.subscribe();
   }
 
   trackById(index: number, item: RosterItem): number {
