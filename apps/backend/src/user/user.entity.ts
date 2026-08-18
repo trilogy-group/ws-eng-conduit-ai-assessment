@@ -65,7 +65,7 @@ export class User {
 
   toJSON(user?: User) {
     const o = wrap<User>(this).toObject() as UserDTO;
-    o.image = this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg';
+    o.image = this.image || 'https://api.dicebear.com/9.x/initials/svg?seed=U';
     o.following = user && user.followers.isInitialized() ? user.followers.contains(this) : false; // TODO or followed?
 
     return o;

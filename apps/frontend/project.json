@@ -19,7 +19,7 @@
         "polyfills": "apps/frontend/src/polyfills.ts",
         "tsConfig": "apps/frontend/tsconfig.app.json",
         "aot": true,
-        "assets": ["apps/frontend/src/favicon.ico", "apps/frontend/src/assets"],
+        "assets": ["apps/frontend/src/favicon.ico", "apps/frontend/src/assets", "apps/frontend/src/conduit.css"],
         "styles": ["apps/frontend/src/styles.scss"],
         "scripts": []
       },
