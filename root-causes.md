@@ -8,7 +8,7 @@ Please copy-paste the final answer that you obtained from the AI for each questi
 
 **Question**: What is the underlying issue that causes this problem to occur and from which component (file) of this project does this issue originate?
 
-**Answer**: *Please fill this in*
+**Answer**: The backend was building the article’s tag list by spreading the incoming `tagList` value: `article.tagList.push(...dto.tagList)`. When clients send `tagList` as a string, the spread operator splits it into single characters, which then render as individual characters in the UI. This originates in apps/backend/src/article/article.service.ts (create; update had similar risk).
 
 
 ## Problem 2
@@ -17,5 +17,4 @@ Please copy-paste the final answer that you obtained from the AI for each questi
 
 **Question**: What is the underlying issue that causes this problem to occur and from which component (file) of this project does this issue originate?
 
-**Answer**: *Please fill this in*
-
+**Answer**: The “Popular Tags” endpoint (`GET /tags`) reads from the `Tag` table (apps/backend/src/tag). New article tags were never upserted into this table when creating/updating articles, so recently added tags never appeared after refresh. Root cause is missing tag upsert logic in apps/backend/src/article/article.service.ts and the Article module not wiring the Tag entity, fixed by adding Tag to apps/backend/src/article/article.module.ts and upserting tags during create/update in the service.

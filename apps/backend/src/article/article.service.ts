@@ -7,6 +7,7 @@ import { User } from '../user/user.entity';
 import { Article } from './article.entity';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { Comment } from './comment.entity';
+import { Tag } from '../tag/tag.entity';
 import { CreateArticleDto, CreateCommentDto } from './dto';
 
 @Injectable()
@@ -19,6 +20,8 @@ export class ArticleService {
     private readonly commentRepository: EntityRepository<Comment>,
     @InjectRepository(User)
     private readonly userRepository: EntityRepository<User>,
+    @InjectRepository(Tag)
+    private readonly tagRepository: EntityRepository<Tag>,
   ) {}
 
   async findAll(userId: number, query: Record<string, string>): Promise<IArticlesRO> {
@@ -154,7 +157,28 @@ export class ArticleService {
       { populate: ['followers', 'favorites', 'articles'] },
     );
     const article = new Article(user!, dto.title, dto.description, dto.body);
-    article.tagList.push(...dto.tagList);
+
+    // Normalize incoming tags to an array to avoid character-splitting when a string is sent
+    const inputTags =
+      Array.isArray((dto as any).tagList)
+        ? (dto as any).tagList
+        : typeof (dto as any).tagList === 'string'
+        ? (dto as any).tagList.split(',').map((t: string) => t.trim()).filter(Boolean)
+        : [];
+
+    // Assign tags directly (do not spread a possible string)
+    article.tagList = inputTags;
+
+    // Upsert tags into the Tag repository so /tags reflects new tags
+    for (const t of inputTags) {
+      const exists = await this.tagRepository.findOne({ tag: t });
+      if (!exists) {
+        const tag = new Tag();
+        tag.tag = t;
+        this.em.persist(tag);
+      }
+    }
+
     user?.articles.add(article);
     await this.em.flush();
 
@@ -168,6 +192,28 @@ export class ArticleService {
     );
     const article = await this.articleRepository.findOne({ slug }, { populate: ['author'] });
     wrap(article).assign(articleData);
+
+    // If tagList provided, normalize and upsert any new Tag records
+    if (articleData && 'tagList' in articleData) {
+      const inputTags =
+        Array.isArray((articleData as any).tagList)
+          ? (articleData as any).tagList
+          : typeof (articleData as any).tagList === 'string'
+          ? (articleData as any).tagList.split(',').map((t: string) => t.trim()).filter(Boolean)
+          : [];
+
+      article!.tagList = inputTags;
+
+      for (const t of inputTags) {
+        const exists = await this.tagRepository.findOne({ tag: t });
+        if (!exists) {
+          const tag = new Tag();
+          tag.tag = t;
+          this.em.persist(tag);
+        }
+      }
+    }
+
     await this.em.flush();
 
     return { article: article!.toJSON(user!) };
