@@ -13,16 +13,19 @@ import { CreateArticleDto, CreateCommentDto } from './dto';
 @Injectable()
 export class ArticleService {
   constructor(
-    private readonly em: EntityManager,
-    @InjectRepository(Article)
-    private readonly articleRepository: EntityRepository<Article>,
-    @InjectRepository(Comment)
-    private readonly commentRepository: EntityRepository<Comment>,
-    @InjectRepository(User)
-    private readonly userRepository: EntityRepository<User>,
-    @InjectRepository(Tag)
-    private readonly tagRepository: EntityRepository<Tag>,
-  ) {}
+  private readonly em: EntityManager,
+
+  @InjectRepository(Article)
+  private readonly articleRepository: EntityRepository<Article>,
+
+  @InjectRepository(Comment)
+  private readonly commentRepository: EntityRepository<Comment>,
+  @InjectRepository(User)
+  private readonly userRepository: EntityRepository<User>,
+
+  @InjectRepository(Tag)
+  private readonly tagRepository: EntityRepository<Tag>,
+) {}
 
   async findAll(userId: number, query: Record<string, string>): Promise<IArticlesRO> {
     const user = userId
